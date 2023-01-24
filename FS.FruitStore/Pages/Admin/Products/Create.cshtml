@@ -1,0 +1,124 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Products.CreateModel
+
+<div class="container">
+
+    <div class="row">
+
+        @Html.Partial("_Panel")
+
+        <div class="col-lg-9 col-12">
+            <div class="card my-5 pb-4 text-center p-2">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Product.UserId" />
+                    <div class="row p-3">
+                        <div class="col-lg-6 col-12">
+                            <h6 class="text-right my-3"> نام محصول </h6>
+                            <input asp-for="Product.Name" id="product-name"
+                                   placeholder="نام محصول را وارد کنید . . . " class="form-control mt-2">
+                            <span asp-validation-for="Product.Name" class="text-danger"></span>
+
+                            <h6 class="text-right my-3"> تعداد </h6>
+                            <input asp-for="Product.Count" id="product-name"
+                                   placeholder="تعداد محصول را وارد کنید . . . " class="form-control mt-2">
+                            <span asp-validation-for="Product.Count" class="text-danger"></span>
+
+                            <div class="d-flex mt-3">
+                                <h6 class="text-right mb-3"> وضعیت </h6>
+
+                                <input asp-for="Product.isVerified" class="form-control w-75">
+
+                            </div>
+
+                            <h6 class="text-right my-3"> توضیحات </h6>
+                            <textarea asp-for="Product.Description" id="discription" cols="30" rows="10"
+                                      placeholder="توضیحات محصول را وارد کنید" class="form-control"></textarea>
+                            <span asp-validation-for="Product.Description" class="text-danger"></span>
+
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+
+                            <h6 class="text-right my-3"> قیمت محصول </h6>
+                            <input asp-for="Product.Price" id="product-name"
+                                   placeholder="قیمت محصول را وارد کنید . . . " class="form-control mt-2">
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+
+                            <h6 class="text-right my-3"> واحد محصول </h6>
+                            <p class="text-dark font-weight-bold">واحد فعلی : @Model.CurrentUnit</p>
+                            <select class="custom-select" asp-for="SelectedUnit" asp-items="Model.Units">
+                            </select>
+
+                            <div class="custom-file my-3">
+                                <h6 class="custom-file-label text-right"> عکس محصول </h6>
+                                <input id="imgUp" class="custom-file-input" type="file" name="imgUp">
+                            </div>
+
+                            <div class="custom-file mb-3">
+                                <h6 class="custom-file-label text-right"> عکس محصول </h6>
+                                <input id="imgUp1" class="custom-file-input" type="file" name="imgUp1">
+                            </div>
+
+                            <div class="d-flex">
+                                <img width="170px" class="mx-1" height="150px" id="imgPreview" />
+                                <img width="170px" class="mx-1" height="150px" id="imgPreview1" />
+                            </div>
+
+
+                        </div>
+
+                        <input type="submit" class="btn btn-success btn-block w-75 mx-auto d-block mt-3" value="تایید !">
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $("#imgUp").change(function() {
+            readURL(this);
+        });
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var reader1 = new FileReader();
+
+                reader1.onload = function (e) {
+                    $('#imgPreview1').attr('src', e.target.result);
+                }
+
+                reader1.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $("#imgUp1").change(function () {
+            readURL1(this);
+        });
+
+        //نمایش اسم عکس روی اینپوت
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    }

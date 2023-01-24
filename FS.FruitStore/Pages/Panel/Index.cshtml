@@ -1,0 +1,53 @@
+﻿@page
+@model FS.FruitStore.Pages.Panel.IndexModel
+@{
+}
+<div class="row">
+
+    @Html.Partial("_Panel")
+
+    <div class="col-lg-9 col-12">
+
+        <div class="card my-5 pb-4 text-center">
+            <div class="card-header">
+                <h4 class="h4"> اطلاعات شخصی </h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-light table-striped">
+                    <tbody>
+                        <tr>
+                            <td> نام: @Model.ApplicationUser.Name</td>
+                            <td> نام خانوادگی: @Model.ApplicationUser.LastName</td>
+                        </tr>
+                        <tr>
+                            <td> شماره تلفن:  @Model.ApplicationUser.PhoneNumber</td>
+                            <td> ایمیل: @Html.Raw(Model.retString(Model.ApplicationUser.Email))</td>
+                        </tr>
+                        <tr>
+                            <td>  تاریخ ثبت نام: @Model.ApplicationUser.reg_Date.ToShamsi()</td>
+                            <td> آدرس: @Html.Raw(Model.retString(Model.ApplicationUser.Address))</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>  استان: @Html.Raw(Model.retString(Model.ApplicationUser.State))</td>
+                            <td>  شهر: @Html.Raw(Model.retString(Model.ApplicationUser.City))</td>
+                        </tr>
+                        <tr>
+                            <td> کد پستی: @Html.Raw(Model.retString(Model.ApplicationUser.PostalCode))</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+
+                <div>
+                    <a asp-page="Edit" asp-route-userId="@Model.ApplicationUser.Id" class="btn btn-danger m-auto px-5">
+                        ویرایش
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

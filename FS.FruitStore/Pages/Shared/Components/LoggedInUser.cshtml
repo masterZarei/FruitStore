@@ -1,0 +1,24 @@
+﻿@using FS.Models.ViewModels
+
+@model LoggedInUserViewModel
+
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="d-flex justify-content-between">
+        <a href="/Panel"><h2 class="text-white h4 pt-2 ml-3 text-right text-white text-shadow"> سلام @Model.Name ! </h2></a>
+
+
+        <a href="/Payment/ShoppingCart" class="btn h-40 bg-customPrimary">
+            @if (Model.Factor != null)
+            {
+
+                <span class="badge badge-pill text-white bg-coral">@Model.Factor.FactorDetails.Count</span>
+            }
+            <i class="fa fa-shopping-cart text-white fs-25"></i>
+        </a>
+
+
+    </div>
+}

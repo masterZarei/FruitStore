@@ -1,0 +1,90 @@
+﻿@page
+@model FS.FruitStore.Pages.Payments.ShoppingCartModel
+
+@{
+}
+<style>
+    td{
+        text-align : center !important;
+        margin: auto;
+    }
+</style>
+
+<div class="d-block mx-auto" id="shopping-basket">
+    <div class="card my-5 pb-4 text-center">
+        <div class="card-header bg-transparent">
+            <h4 class="h4"> سبد خرید </h4>
+        </div>
+        <form method="post">
+            <input type="hidden" asp-for="@Model.Factor.FactorId" />
+            <div class="card-body">
+                @if (Model.Factor != null)
+                {
+                    <button type="submit" asp-route-OrderId="@Model.Factor.FactorId" asp-page-handler="RemoveAllCart" class="btn btn-outline-danger mt-2 float-left"> حذف همه </button>
+                    <table style="display:table;" class="table table-light mt-5 table-responsive-md table-responsive-xs table-striped table-hover">
+
+                        <br>
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"> محصولات شما </th>
+                                <th class="text-center"> تعداد </th>
+                                <th class="text-center"> قیمت کل </th>
+                                <th class="text-center"> حذف </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.Factor.FactorDetails)
+                            {
+
+
+                                <tr>
+                                    <td class="d-flex text-center">
+                                        <img src="~/ProductImages/@item.Product.ProductPic" alt="product" width="75px" height="50px">
+                                        <span style="font-size: medium; " class="mt-3 mx-3 fs-sm-smaller"> <a href="../Product-Details?Id=@item.Product.ProductId">  @item.Product.Name </a> </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="input-group" style="width: 110px;">
+                                            <div class="input-group-prepend">
+                                                <button type="submit" asp-page-handler="RemoveCart" asp-route-DetailId="@item.DetailId" class="btn"> - </button>
+                                            </div>
+                                            <input class="form-control text-center" type="text" value="@item.Count" disabled onkeypress="return isNumberKey(event)">
+                                            <div class="input-group-append">
+                                                <button type="submit" asp-page-handler="AddToCart" asp-route-DetailId="@item.DetailId"  class="btn"> + </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center fs-sm-smaller"><br> @((item.Count*item.Price).ToToman()) </td>
+                                    <td> <button type="submit" asp-page-handler="RemoveThisCart" asp-route-DetailId="@item.DetailId"  class="btn btn-danger text-center fs-sm-smaller mt-3"> &times; </button> </td>
+                                </tr>
+
+
+
+                            }
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-12">
+                            <p class="m-auto mt-2 d-block text-center"> @Model.Factor.FactorDetails.Count کالا در سبد خرید </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12">
+                            <div class="alert alert-primary">
+                                زودترین تاریخ ارسال سفارش : 4مرداد
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="h4 text-left"> قیمت کل: @(Model.Factor.FactorDetails.Sum((s=>s.Count * s.Price)).ToToman()) </h5>
+                    <hr>
+                    <a asp-page="ConfirmInformation" asp-route-Id="@Model.Factor.FactorId" class="btn btn-info float-left mt-3"> ادامه ثبت سفارش | <i class="fa fa-solid fa-chevron-left align-middle mx-1"></i></a>
+                }
+                else
+                {
+                    <div class="alert alert-dark text-center h5 "> سبد خرید شما خالی است :(</div>
+                }
+
+
+            </div>
+        </form>
+
+    </div>
+</div>

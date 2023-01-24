@@ -1,0 +1,33 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.CommentManagement.CommentDetailsModel
+
+@using Utilities.Roles;
+@{
+  //  ViewData[PD.PanelViewData] = PD.Comments;
+}
+<div class="row">
+    @Html.Partial("_Panel")
+
+    <div class="col-12 col-lg-8 col-md-8 mt-5">
+        <form method="post">
+            <h4> کامنت های @Model.Comments.Product.Name </h4>
+
+            <div class="border mt-3 border-dark p-4">
+                <p>
+                    @Model.Comments.Text
+                </p>
+            </div>
+            <h4 class="my-4"> جواب : </h4>
+            <textarea asp-for="Comments.Answer" class="form-control mb-2"></textarea>
+            <div class="d-flex  mt-1">
+
+                <button type="submit" asp-route-Id="@Model.Comments.Id" class="btn btn-success btn-block mx-1 mt-1"> ثبت </button>
+                @if (User.IsInRole(SD.AdminEndUser))
+                {
+
+                    <button type="submit" asp-page-handler="RemoveCmt" asp-route-Id="@Model.Comments.Id" class="btn btn-danger btn-block mx-1 mt-1"> حذف </button>
+                }
+            </div>
+        </form>
+    </div>
+</div>

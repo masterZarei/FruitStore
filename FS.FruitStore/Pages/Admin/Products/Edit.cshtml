@@ -1,0 +1,167 @@
+﻿@page
+@using Utilities.Convertors;
+@model FS.FruitStore.Pages.Admin.Products.EditModel
+
+@{
+
+    string Xicon;
+    Xicon = @"
+<i class='fa fa-trash' style='color:orange; background:gray; border-radius:2px;'></i>";
+}
+
+<div class="container">
+
+    <div class="row">
+
+            @Html.Partial("_Panel")
+
+        <div class="col-lg-9 col-12">
+            <div class="card my-5 pb-4 text-center p-2">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Product.ProductId" />
+                    <input type="hidden" asp-for="Product.ProductPic" />
+                    <input type="hidden" asp-for="Product.UserId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row p-3">
+                        <div class="col-lg-6 col-12">
+                            <h6 class="text-right my-3"> نام محصول </h6>
+                            <input asp-for="Product.Name" id="product-name"
+                                   placeholder="نام محصول را وارد کنید . . . " class="form-control mt-2">
+                            <span asp-validation-for="Product.Name" class="text-danger"></span>
+
+                            <h6 class="text-right my-3"> تعداد </h6>
+                            <input asp-for="Product.Count" id="product-name"
+                                   placeholder="تعداد محصول را وارد کنید . . . " class="form-control mt-2">
+                            <span asp-validation-for="Product.Count" class="text-danger"></span>
+
+                            <h6 class="text-right my-3"> تاریخ ثبت </h6>
+                            <input value="@Model.Product.CreateDate.ToShamsi()" disabled class="form-control mt-2">
+                            <br />
+                            <div class="d-flex ">
+                                <h6 class="text-right mb-3"> وضعیت </h6>
+                                <input asp-for="Product.isVerified" class="form-control w-75">
+                            </div>
+
+                            <h6 class="text-right my-3"> توضیحات </h6>
+                            <textarea asp-for="Product.Description" id="discription" cols="15" rows="5"
+                                      placeholder="توضیحات محصول را وارد کنید" class="form-control"></textarea>
+
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+
+                            <h6 class="text-right my-3"> قیمت محصول </h6>
+                            <input asp-for="Product.Price" id="product-name"
+                                   placeholder="قیمت محصول را وارد کنید . . . " class="form-control mt-2">
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+
+                            <h6 class="text-right my-3"> واحد محصول </h6>
+                            @if (Model.CurrentUnit == null)
+                            {
+                                <p class="text-danger font-weight-bold">*واحدی برای محصول انتخاب نشده است*</p>
+                            }
+                            <select class="custom-select" asp-for="SelectedUnit" asp-items="Model.Units">
+                            </select>
+
+                            <h6 class="text-right my-3"> دسته بندی محصول </h6>
+                            <div class="input-group my-3">
+                                <!-- سلکت اپشن انتخاب کتگوری -->
+                                <select class="custom-select" asp-for="SelectedCat" asp-items="Model.Cats">
+                                </select>
+                                <div class="input-group-append">
+                                    <!-- دکمه اضافه کردن -->
+                                    <button asp-page-handler="AddCat" type="submit" class="btn btn-secondary"> اضافه کردن </button>
+                                </div>
+                            </div>
+                            @foreach (var item in Model.ProdCats)
+                            {
+
+                                <button style="font-size: 0.9rem; padding:5px !important" type="submit" asp-page-handler="RemoveCat" asp-route-Id="@item.Id" class="btn btn-secondary my-2">
+                                    @item.Name @Html.Raw(Xicon)
+                                </button>
+                            }
+
+                            <div class="custom-file my-3">
+                                <h6 class="custom-file-label text-right"> عکس محصول </h6>
+                                <input id="imgUp" class="custom-file-input" type="file" name="imgUp">
+                            </div>
+                            <div class="custom-file my-3">
+                                <h6 class="custom-file-label text-right"> عکس محصول </h6>
+                                <input id="imgUp1" class="custom-file-input" type="file" name="imgUp1">
+                            </div>
+                            @*<span asp-validation-for="Product.ProductPic" class="text-danger"></span>*@
+                            <div class="d-flex">
+                                <img src="~/ProductImages/@Model.Product.ProductPic" class="mx-1" width="170px" height="150px" id="imgPreview" />
+                                <img src="~/ProductImages/@Model.Product.ProductPic2" class="mx-1" width="170px" height="150px" id="imgPreview1" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-12">
+
+                            <input type="submit" value="ثبت اطلاعات !" class="btn btn-block btn-success mx-auto d-block mt-3">
+
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <a asp-page="Index" class="btn btn-secondary btn-block mx-auto d-block mt-3">
+                                بازگشت !
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $("#imgUp").change(function () {
+            readURL(this);
+        });
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var reader1 = new FileReader();
+
+                reader1.onload = function (e) {
+                    $('#imgPreview1').attr('src', e.target.result);
+                }
+
+                reader1.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $("#imgUp1").change(function () {
+            readURL1(this);
+        });
+
+        //نمایش اسم عکس روی اینپوت
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    }

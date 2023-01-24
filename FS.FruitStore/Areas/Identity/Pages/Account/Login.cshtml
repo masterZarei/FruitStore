@@ -1,0 +1,25 @@
+﻿@page
+@model LoginModel
+
+
+@{
+    ViewData["Title"] = "ورود";
+}
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="register">
+        <h1> ورود به سایت </h1>
+        <hr>
+        <input asp-for="Input.PhoneNumber" placeholder="شماره تلفن همراه خود را وارد کنید . . .">
+
+        <input asp-for="Input.Password" placeholder=" رمز عبور خود را وارد کنید . . . ">
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+        <button class="vertical">
+            <span class="text-white" style="text-shadow:2px 2px rgba(0,0,0,0.5)"> ورود </span>
+        </button>
+    </div>
+
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

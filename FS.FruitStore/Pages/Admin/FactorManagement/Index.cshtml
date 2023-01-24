@@ -1,0 +1,50 @@
+﻿@page
+@model Mahshop.Pages.FactorManagement.IndexModel
+@using Utilities.Roles;
+@{
+   // ViewData[PD.PanelViewData] = PD.FactorManagement;
+}
+<div class="row">
+    @Html.Partial("_Panel")
+    <div class="col-lg-9 col-md-6 col-12">
+        <h3 class="h3 text-center">مدیریت فاکتورها</h3>
+        <table class="table table-light mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center">شماره فاکتور</th>
+                    <th class="text-center">مبلغ کل</th>
+                    <th class="text-center">تاریخ ایجاد</th>
+                    <th class="text-center"> مدیریت  </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Factors.Any())
+                {
+                    @foreach (var item in Model.Factors)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @item.FactorId
+                            </td>
+                            <td class="text-center">
+                                @((item.FactorDetails.Sum(s => s.Count * s.Price)).ToToman())
+                                
+                            </td>
+                            <td class="text-center">
+                                @item.CreateDate.ToShamsi()
+                            </td>
+                            <td class="text-center">
+                                <a asp-page="Details" asp-route-Id="@item.FactorId"> جزئیات </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <h3 class="h3 text-center alert alert-info">فاکتوری موجود نیست</h3>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

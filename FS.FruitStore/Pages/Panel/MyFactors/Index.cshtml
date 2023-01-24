@@ -1,0 +1,38 @@
+﻿@page
+@model FS.FruitStore.Pages.Panel.MyFactors.MyFactorsModel
+
+<div class="row">
+    @Html.Partial("_Panel")
+    <div class="col-lg-9 col-md-6 col-12">
+        <h3 class="h3 text-center">فاکتورهای من</h3>
+        <table class="table table-light mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center">تاریخ ایجاد</th>
+                    <th class="text-center">   </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Order.Any())
+                {
+                    @foreach (var item in Model.Order)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @item.CreateDate.ToShamsi()
+                            </td>
+                            <td class="text-center">
+                                <a asp-page="Factor-Details" asp-route-Id="@item.FactorId"> جزئیات </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <h3 class="h3 text-center">فاکتوری موجود نیست</h3>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

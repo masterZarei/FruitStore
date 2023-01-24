@@ -1,0 +1,34 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <div class="register">
+        <h1> ثبت نام </h1>
+        <hr>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="d-flex">
+            <input asp-for="Input.Name" placeholder=" نام خود را وارد کنید . . . " id="inp">
+            <input asp-for="Input.LastName" placeholder=" نام خانوادگی را وارد کنید . . . " id="inp">
+
+        </div>
+        <input asp-for="Input.PhoneNumber" placeholder="شماره تلفن همراه خود را وارد کنید . . .">
+        <input asp-for="Input.Password" placeholder="رمز عبور  را وارد کنید . . . ">
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+        <input asp-for="Input.ConfirmPassword" placeholder=" تکرار رمز عبور . . . ">
+        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+        <button type="submit" class="vertical">
+            <span>
+                ثبت نام
+            </span>
+        </button>
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    }

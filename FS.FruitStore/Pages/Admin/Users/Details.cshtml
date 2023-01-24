@@ -1,0 +1,72 @@
+﻿@page
+@model FS.FruitStore.Pages.Users.DetailsModel
+
+
+<div class="container">
+
+    <form method="post">
+        <input type="hidden" asp-for="ApplicationUser.Id" />
+        <div class="row">
+            @Html.Partial("_Panel")
+            <div class="col-lg-9 col-12">
+
+                <div class="card my-5 pb-4 text-center">
+                    <div class="card-header">
+                        <h4 class="h4"> جزئیات اطلاعات کاربر "@Model.ApplicationUser.LastName"   </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-12">
+                                <h6 for="name" class="my-3 text-right"> نام : </h6>
+                                <input disabled type="text" id="name" asp-for="ApplicationUser.Name" class="form-control mt-2">
+                                <span asp-validation-for="ApplicationUser.Name"></span>
+
+                                <h6 for="phon-number" class="my-3 text-right"> شماره تلفن : </h6>
+                                <input disabled type="text" asp-for="ApplicationUser.PhoneNumber" id="phon-number" class="form-control mt-2">
+                                <span asp-validation-for="ApplicationUser.PhoneNumber"></span>
+
+                                <h6 for="email" class="my-3 text-right"> ایمیل : </h6>
+                                <input disabled type="text" id="email" class="form-control mt-2"
+                                       asp-for="ApplicationUser.Email">
+                                <span asp-validation-for="ApplicationUser.Email"></span>
+
+
+                                <h6 for="email" class="my-3 text-right"> نقش کاربر : </h6>
+
+                                <select disabled asp-for="SelectedRole" asp-items="Model.Roles" class="custom-select"></select>
+                                <span class="mr-2">@Model.isSeller</span>
+
+
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <h6 for="last-name" class="my-3 text-right"> نام خانوادگی : </h6>
+                                <input disabled type="text" asp-for="ApplicationUser.LastName" id="last-name" class="form-control mt-2">
+                                <span asp-validation-for="ApplicationUser.LastName"></span>
+
+                                <h6 for="date-sign-up" class="my-3 text-right"> تاریخ ثبت نام </h6>
+                                <div disabled id="date-sign-up" class="form-control mt-2">@Model.ApplicationUser.reg_Date.ToShamsi()</div>
+
+                                <h6 for="address" class="my-3 text-right"> آدرس </h6>
+                                <textarea disabled cols="8" rows="5" class="form-control mt-2"
+                                          asp-for="ApplicationUser.Address"></textarea>
+                                <span asp-validation-for="ApplicationUser.Address"></span>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-6 col-12">
+                                <a class="btn btn-info btn-block text-white" asp-page="Edit" asp-route-userId="@Model.ApplicationUser.Id" onclick="enter()">
+                                    ویرایش اطلاعات
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <a asp-page="Index" class="btn btn-danger btn-block">
+                                    بازگشت
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

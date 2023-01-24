@@ -1,0 +1,51 @@
+﻿@page
+@model FS.FruitStore.Pages.Payments.ConfirmInformationModel
+@{
+}
+<div class="card-body">
+    <form method="post">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-12">
+                <label class="my-2"> گیرنده : </label>
+                <label class="text-muted form-control form-control-information w-75 mt-2"> @Model.apUser.Name @Model.apUser.LastName </label>
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <span class="text-danger font-weight-bold"></span>
+                <label class="my-2"> آدرس : </label> <span class="text-danger d-inline">*</span>
+                <textarea requierd asp-for="apUser.Address" class="form-control form-control-information"
+                          cols="5"> explicabo quis quo optio. </textarea>
+            </div>
+            <div class="col-lg-6 col-12 my-sm-2 my-lg-0 col-md-6">
+                <label class="my-2"> تلفن همراه : </label> <span class="text-danger d-inline">*</span>
+                <input requierd asp-for="apUser.PhoneNumber" type="text" class="form-control form-control-information w-75"
+                       placeholder="01235447891">
+            </div>
+            <div class="col-lg-6 col-12 my-sm-2 my-lg-0 col-md-6">
+                <label class="my-2 "> کد پستی : </label> <span class="text-danger d-inline">*</span>
+                <input requierd asp-for="apUser.PostalCode" type="text" class="form-control form-control-information w-75" placeholder="558585">
+            </div>
+        </div>
+
+        <div class="my-3">
+            <button type="submit" class="btn btn-block btn-info d-block m-auto btn-info-information">
+                ثبت اطلاعات و ادامه
+                خرید
+            </button>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-12">
+                <label class="my-2"> نوع پست </label>
+                <select asp-for="postType" class="custom-select">
+                    <option> پست معمولی (12000) </option>
+                    <option> پست پیشتاز (18000) </option>
+                </select>
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <label class="my-2"> توضیحات برای سفارش </label>
+                <textarea asp-for="Description" class="form-control form-control-information" rows="8"></textarea>
+            </div>
+
+            <a class="btn btn-danger mt-3" href="shopping-basket.html"> بازگشت به سبد خرید </a>
+    </form>
+</div>

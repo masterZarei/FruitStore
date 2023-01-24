@@ -1,0 +1,61 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row">
+    <!-- #region پنل-->
+    @Html.Partial("_Panel")
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12">
+        <form method="post">
+            <div class="card">
+                <div class="card-header d-flex">
+                        <!-- به صفحه اضافه کردن راه های ارتباطی ...>>>  -->
+                    <a asp-page="Create" class="btn btn-primary text-right"> <i class="fa fa-plus"></i> افزودن </a>
+                    <h4 class="text-center mx-auto font-weight-bold title-text"> راه های ارتباطی </h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered ttable-hover table-stript table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-center"> نام </th>
+                                <th class="text-center"> آدرس </th>
+                                <th class="text-center"> نمایه </th>
+                                <th class="text-center"> مدیریت </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.ContactWays)
+                            {
+                                <tr>
+                                    <td class="text-center"> @item.Name </td>
+                                    <td class="text-center"> @item.Address </td>
+                                    <td class="text-center text-primary"> <i class="@item.Icon"></i> </td>
+                                    <td class=" text-center">
+                                        <button asp-page-handler="Remove" type="submit" class="align-middle btn " asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+
+                                        <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle btn ">
+                                            <i class="fa fa-list"></i>
+                                        </a>
+                                        <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle btn ">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+
+
+                </div>
+        </form>
+
+    </div>
+</div>
+</div>
+

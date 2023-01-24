@@ -1,0 +1,33 @@
+﻿@page
+@model FS.FruitStore.Pages.Panel.MyFactors.Factor_DetailsModel
+@using Utilities.Convertors
+<div class="row">
+    @Html.Partial("_Panel")
+    <div class="col-lg-9 col-md-6 col-12">
+        <h4 class="h4 mt-3">شماره فاکتور: @Model.FactorDetail[0].FactorId</h4>
+        <table class="table table-light mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center"> نام محصول </th>
+                    <th class="text-center"> تعداد </th>
+                    <th class="text-center">  قیمت کل </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.FactorDetail)
+                {
+                    <tr>
+                        <td class="text-center"> @item.Product.Name </td>
+                        <td class="text-center"> @item.Count </td>
+                        <td class="text-center">
+                            @((item.Price * item.Count).ToToman())
+                            
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <h5 class="h5 text-left"> پرداخت شده: @Model.FactorDetail.Sum(s=>s.Count * s.Price).ToToman() </h5>
+    </div>
+</div>

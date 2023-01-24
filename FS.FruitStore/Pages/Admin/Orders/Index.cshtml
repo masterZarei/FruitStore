@@ -1,0 +1,65 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Orders.IndexModel
+@{
+    string btnClass = "btn-purple";
+}
+
+
+<div class="row">
+    @Html.Partial("_Panel")
+
+
+    <div class="col-lg-9 col-12">
+        <div class="card mt-5">
+            <div class="card-header bg-transparent d-flex ">
+                <a asp-page="History" class="btn btn-secondary"> تاریخچه سفارشات</a>
+                <h4 class="h4 text-center m-auto"> سفارشات </h4>
+            </div>
+            <form method="post">
+
+                <div class="card-body">
+                    @if (Model.Model.Any())
+                    {
+                        @foreach (var item in Model.Model)
+                        {
+
+                            <div class="card mb-3 shadow">
+                                <div class="card-body d-lg-flex">
+
+                                    <div class="col-lg-6 col-12">
+                                        <span> سفارش دهنده : @item.FullName </span><br><br>
+                                        <p class="mt-3 h5"> تعداد : @item.OrderCount </p>
+                                    </div>
+                                    <div class="col-lg-4 col-12 d-block">
+                                        <p class="d-block"> کد سفارش : @item.ID.Substring(3,3) </p>
+                                        @if (item.ReadyToDeliver == true) { btnClass = "btn-success"; }
+
+
+                                        <button asp-page-handler="ReadyToSend" asp-route-Id="@item.OrderId" type="submit" class="btn @btnClass mt-3 d-block">
+                                            @(item.ReadyToDeliver==false?"در انتظار آماده سازی":"آماده ارسال")
+                                            @(item.ReadyToDeliver==true?Html.Raw("<i class='fa fa-check''></i>"):Html.Raw("<i class='fa-solid fa-x'></i>"))
+                                        </button>
+
+                                    </div>
+                                        <button asp-page-handler="OrderCompleted" asp-route-Id="@item.OrderId" class="btn h-25 btn-info text-center mt-5" style="margin-right:-100px; z-inedx:999" >اتمام سفارش</button>
+                                    <a asp-page="Details" class="btn btn-info text-center d-block h-50 mt-5 mr-1" asp-route-Id="@item.ID">جزئیات</a>
+                                </div>
+                            </div>
+
+
+
+                        }
+                    }
+                    else
+                    {
+                        <h4 class="h4 alert alert-info text-center"> سفارشی موجود نیست </h4>
+
+                    }
+
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+﻿@using Utilities.Roles;
+
+<style>
+    .BlackText {
+        color: black
+    }
+</style>
+
+<div class="col-12 col-lg-3">
+    <div class="text-right mt-5">
+        <div class="list-group p-0 mb-5">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a href="/Panel" class="list-group-item list-group-item-action BlackText">
+                    اطلاعات شخصی <i class="fas fa-info-circle"></i>
+                </a>
+
+                if (!User.IsInRole(SD.AdminEndUser))
+                {
+                    <a href="/Panel/MyFactors" class="list-group-item list-group-item-action BlackText">
+                        فاکتورهای من <i class="fa-solid fa-table-list"></i>
+                    </a>
+
+                }
+
+                if (User.IsInRole(SD.AdminEndUser))
+                {
+                    <a href="/Admin/Products" class="list-group-item list-group-item-action BlackText">
+                        مدیریت محصول <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    </a>
+                    <a href="/Admin/Orders" class="list-group-item list-group-item-action BlackText">
+                        سفارشات <i class="fa fa-ballot"></i>
+                    </a>
+                    <a href="/Admin/CommentManagement" class="list-group-item list-group-item-action BlackText">
+                        کامنت ها <i class="fa fa-comments" aria-hidden="true"></i>
+                    </a>
+                    <a href="/Admin/FactorManagement" class="list-group-item list-group-item-action BlackText">
+                        مدیریت فاکتورها <i class="fas fa-file-invoice-dollar"></i>
+
+                    </a>
+                    <a href="/Admin/Categories" class="list-group-item list-group-item-action BlackText">
+                        مدیریت دسته بندی ها <i class="fa-solid fa-filter-list"></i>
+                    </a>
+                    <a href="/Admin/Units" class="list-group-item list-group-item-action BlackText">
+                        مدیریت واحد ها <i class="fa-solid fa-filter-list"></i>
+                    </a>
+                    <a href="/Admin/Users" class="list-group-item list-group-item-action BlackText">
+                        مدیریت کاربران <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                    <a href="/Admin/Preferences/Slider-Management/" class="list-group-item list-group-item-action BlackText">
+                        مدیریت اسلایدر <i class="fas fa-paint-brush"></i>
+                    </a>
+                    <a href="/Admin/Preferences/AboutUs-Management/AboutUs-mgmt" class="list-group-item list-group-item-action BlackText">
+                        مدیریت صفحه درباره ما <i class="fas fa-paint-brush"></i>
+                    </a>
+                    <a href="/Admin/Preferences/ContactWays-Management/" class="list-group-item list-group-item-action BlackText">
+                        مدیریت راه های ارتباطی <i class="fas fa-paint-brush"></i>
+                    </a>
+                }
+
+                <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" class="list-group-item list-group-item-action ">
+                    <input class="btn btn-danger" type="submit" value="خروج">
+                </a>
+
+            }
+        </div>
+    </div>
+</div>

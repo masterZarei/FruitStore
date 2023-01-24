@@ -1,0 +1,81 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="row">
+    @Html.Partial("_Panel")
+
+    <div class="col-lg-9 col-12">
+
+
+        <div class="card-body">
+
+            <div class="card mb-5 mt-2 pb-4 text-center">
+                <div class="card-header d-flex">
+                    <a href="Products/Create">
+                        <button class="btn btn-primary text-right">
+                            <i class="fa fa-plus"></i> اضافه
+                            کردن محصول
+                        </button>
+                    </a>
+                    <h4 class="h4 text-center m-auto"> مدیریت محصول </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row my-1">
+                        <div class="col-lg-4 col-md-4 col-12">
+                            <input type="text" name="searchName" placeholder="نام"
+                                   class="form-control my-sm-1 my-lg-0" />
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-12">
+                            <input type="email" name="searchEmail" placeholder="قیمت"
+                                   class="form-control my-sm-1 my-lg-0" />
+                        </div>
+                        <button type="submit" name="submit"
+                                class="btn btn-info col-lg-3 col-md-3 col-12 my-sm-1 my-lg-0">
+                            بیاب
+                        </button>
+                    </div>
+                    <table class="table table-bordered text-center table-hover mt-4 table-responsive-sm">
+                        <thead class="thead-light">
+                            <tr>
+                                <th> عکس </th>
+                                <th> نام </th>
+                                <th> قیمت </th>
+                                <th> تعداد </th>
+                                <th> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Product.Any())
+                            {
+                                @foreach (var item in Model.Product)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="~/ProductImages/@item.ProductPic" alt="product-image" width="50px" height="50px">
+                                        </td>
+                                        <td> @item.Name </td>
+                                        <td> @item.Price.ToToman() </td>
+                                        <td> @item.Count </td>
+                                        <td>
+
+                                            <a asp-page="Delete" asp-route-Id="@item.ProductId"> <i class="fa fa-trash"></i> </a>
+                                            <a asp-page="Edit" asp-route-Id="@item.ProductId"> <i class="fa fa-edit"></i> </a>
+                                            <a asp-page="Details" asp-route-Id="@item.ProductId"> <i class="fa fa-list"></i> </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

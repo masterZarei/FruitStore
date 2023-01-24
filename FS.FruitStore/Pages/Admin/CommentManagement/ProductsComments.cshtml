@@ -1,0 +1,42 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.CommentManagement.ProductsCommentsModel
+@using Utilities.Roles;
+@{
+   // ViewData[PD.PanelViewData] = PD.Comments;
+}
+<div class="row">
+    @Html.Partial("_Panel")
+    <div class="col-12 col-lg-8 col-md-8 mt-5">
+
+        <h4 class="h4 text-center">کامنت ها محصول @Model.Comments[0].Product.Name</h4>
+
+        <table class="table table-light table-bordered table-striped mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center">ارسال کننده</th>
+                    <th class="text-center">تاریخ ارسال</th>
+                    <th class="text-center">مرور</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model.Comments != null && @Model.Comments.Any())
+                {
+                    @foreach (var item in Model.Comments)
+                    {
+                        <tr>
+                            <td class="text-center"><a asp-page="/User/Details" asp-route-userId="@item.User_Id"> @Model.getInfo.GetInfoById(@item.User_Id).Name @Model.getInfo.GetInfoById(@item.User_Id).LastName</a> </td>
+                            <td class="text-center"> @item.CreateDate </td>
+                            <td class="text-center"> <a asp-page="CommentDetails" asp-route-Id="@item.Id"> مرور </a> </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <h4 class="alert alert-info h5"> کامنتی برای این محصول موجود نیست </h4>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@page
+@model FS.FruitStore.Pages.AboutUsModel
+@{
+}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-12">
+            <h1 class="text-dark font-weight-bold mt-2 mb-4"> درباره ما </h1>
+            <p>
+                @Model.AboutUs.Text
+            </p>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12">
+            <img src="~/Preferences/@Model.AboutUs.Img" alt="logo" class="rounded about-pic" height="400px" width="450px">
+        </div>
+    </div>
+</div>
+
+
+
+<!-- #region ContactUs -->
+<div class="contactUS">
+
+    <div class="row d-flex justify-content-lg-center flex-wrap services-box">
+        @foreach (var item in Model.ContactWays)
+        {
+            <div class="d-flex mx-3 justify-content-center align-items-center">
+                <i class="@item.Icon"></i>
+                <h6 class="mx-1">@((item.IsLink) ? Html.Raw($"<a href='{item.Address}'>{item.Name}</a>") : Html.Raw($"<span>{item.Name}: {item.Address} </span>"))</h6>
+            </div>
+        }
+
+
+    </div>
+</div>
+<!-- #endregion -->

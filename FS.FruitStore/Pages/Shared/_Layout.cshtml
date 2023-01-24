@@ -1,0 +1,189 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> @ViewData["Title"] </title>
+        <link rel="stylesheet" href="~/css/all.min.css">
+        <link rel="stylesheet" href="~/css/bootstrap-rtl.css">
+        <link rel="stylesheet" href="~/css/bootstrap.css">
+        <link rel="stylesheet" href="~/css/styles.css">
+        <link rel="stylesheet" href="~/FontAwesome.Pro.6.1.2/Web/css/all.min.css">
+    </head>
+</head>
+
+<body>
+
+
+    <!-- #region Top Header-->
+    <div class="top-header container">
+        <div class="searchBox">
+            <div class="input-group">
+                <input class="form-control form-control-topH" type="search" name="searchInp" placeholder="جست و جو ...">
+                <div class="input-group-append input-group-append-topH">
+                    <a href="#" class="input-group-text" id="my-addon">
+                        <i class="fas fa-search text-muted"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="logoBox">
+            <img src="../cv/image/1.jpg" class="rounded-circle" width="100px" height="100px">
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            <div class="left-box-top d-flex">
+                <ul class="d-flex justify-content-between">
+                    <li> <a href="/Panel" class="text-dark"> پنل کاربری </a> </li>
+                    <li> <a href="/Identity/Account/Logout" class="text-dark"> خروج </a> </li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="left-box-top d-flex">
+                <ul class="d-flex justify-content-between">
+                    <li> <a href="/Identity/Account/Login" class="text-dark"> ورود </a> </li>
+                    <li> <a href="/Identity/Account/Register"> ثبت نام </a> </li>
+                </ul>
+                <div class="icons">
+                    <i class="text-dark fa fa-user mx-2"></i>
+                    <span class="badge badge-pill badge-danger badge-topH"> 2 </span>
+                    <i class="text-dark fa fa-shopping-basket mx-2"></i>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- #endregion -->
+    <!-- #region Header-->
+    <div class="header">
+        <header>
+            <nav class="navbar navbar-expand-md navbar-light bg-light header-navbar">
+                <button class="navbar-toggler" data-target="#my-nav" data-toggle="collapse" aria-controls="my-nav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="my-nav" class="collapse navbar-collapse container">
+                    <ul class="navbar-nav header-navItems">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="~/Index"> خانه </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="~/AllProducts"> محصولات </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="~/AboutUs"> درباره ما </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+    </div>
+
+    <div class="container">
+
+    @RenderBody()
+    </div>
+
+    <!-- #endregion -->
+    <!-- #region Our Services-->
+    <div class="our-services">
+        <div class="container">
+            <div class="row d-flex justify-content-lg-between flex-wrap services-box">
+                <div class="d-flex mx-3 justify-content-center align-items-center">
+                    <img src="/image/car.png" width="40px" height="40px">
+                    <h6> ارسال رایگان </h6>
+                </div>
+                <div class="d-flex mx-3 justify-content-center align-items-center">
+                    <img src="/image/shopping-cart.png" class="bg-warning p-1" width="40px" height="40px">
+                    <h6 class="mx-1"> سفارش آماده </h6>
+                </div>
+                <div class="d-flex mx-3 justify-content-center align-items-center">
+                    <img src="/image/footer-phone.png" width="40px" height="40px">
+                    <h6 class="mx-1"> مشاوره رایگان </h6>
+                </div>
+                <div class="d-flex mx-3 justify-content-center align-items-center">
+                    <img src="/image/pin.png" class="bg-warning p-1" width="40px" height="40px">
+                    <h6 class="mx-1"> با صرفه و اقتصادی </h6>
+                </div>
+                <div class="d-flex mx-3 justify-content-center align-items-center">
+                    <img src="/image/medal.png" width="40px" height="40px">
+                    <h6> تضمین کیفیت </h6>
+                </div>
+                <div class="d-flex mx-3 justify-content-center align-items-center">
+                    <img src="/image/discount.png" width="40px" height="40px">
+                    <h6> تخفیف </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region footer-->
+    <div class="top-footer mt-5">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-12">
+                <h4 class="text-dark text-center"> اهداف ما </h4>
+                <ul class="mr-5 ">
+                    <li> لورم ایپسوم متن ساختگی با تولید از صنعت چاپ و با استفاده از طراحان گرافیک است </li>
+
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12">
+                <h3 class="text-center mt-4 mb-1"> نماد های اعتماد </h3>
+                <div class="text-center d-flex justify-content-center align-items-center">
+                    <img src="image/enamad.png" alt="">
+                    <div class="border border-dark p-2 center-box-namads"></div>
+                    <img src="image/samandehi.png" alt="">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 mt-4">
+                <h3 class="text-right text-dark contact-title"> راه‌های ارتباطی </h3>
+                <div class="ml-5 contact-foot">
+                    <h6>
+                        <i class="fa fa-check"></i>
+                        مشهد، خیابان گاز پلاک 45
+                    </h6>
+                    <h6>
+                        <i class="fa fa-check"></i>
+                        تهران، خیابان دندون پلاک 5
+                    </h6>
+                    <h6 class="d-flex">
+                        <i class="fa fa-phone-alt"></i>
+                        01234567890
+                    </h6>
+                    <div class="d-flex">
+                        <i class="fab fa-instagram bg-danger p-2 rounded-circle text-white mx-1"
+                           style="font-size: 50px;"></i>
+                        <i class="fab fa-telegram bg-primary p-2 rounded-circle text-white mx-1"
+                           style="font-size: 50px;"></i>
+                        <i class="fab fa-facebook bg-info p-2 rounded-circle text-white mx-1"
+                           style="font-size: 50px;"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- #endregion -->
+
+
+    <script src="~/js/all.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery-3.3.1.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/Script.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

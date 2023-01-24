@@ -1,0 +1,22 @@
+﻿@page
+@model FS.FruitStore.Pages.Verification.VerifyPhonenumberModel
+@{
+}
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ApplicationUser.Id" />
+
+    <div class="card bg-white shadow p-2 d-block login-card card-pill">
+        <img src="/image/001.jpg" class="my-2 img-fluid d-block m-auto rounded-circle" alt="logo" width="100px"
+             height="100px">
+        <h5 class="text-dark text-center font-weight-bold my-2"> کد یکبار مصرف </h5>
+        <p class="text-dark text-center my-2"> کد ارسالی به شماره @Model.ApplicationUser.PhoneNumber را وارد کنید</p>
+
+        <p> کد ارسالی </p>
+        <input class="form-control my-2 form-control-topH" asp-for="EnteredCode">
+        <button type="submit" class="btn btn-success my-2 btn-block"> ادامه </button>
+
+        <p class="my-2 text-center mt-3"> تا ارسال مجدد کد  :  <span class="text-orange"> 59 : 01 </span> </p>
+
+    </div>
+</form>

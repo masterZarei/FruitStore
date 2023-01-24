@@ -1,0 +1,52 @@
+﻿@page
+@model Mahshop.Pages.FactorManagement.DetailsModel
+@using Utilities.Roles;
+@{
+  // ViewData[PD.PanelViewData] = PD.FactorManagement;
+}
+<div class="row">
+    @Html.Partial("_Panel")
+    <div class="col-lg-9 col-md-6 col-12">
+        <h3 class="h3 text-center">مدیریت فاکتورها</h3>
+        <table class="table table-bordered table-light mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center">نام محصول</th>
+                    <th class="text-center">قیمت</th>
+                    <th class="text-center">تعداد</th>
+                    <th class="text-center"> قیمت کل</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Factor.FactorDetails)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @item.Product.Name
+                        </td>
+                        <td class="text-center">
+                            @item.Price
+
+                        </td>
+                        <td class="text-center">
+                            @item.Count
+                        </td>
+                        <td class="text-center">
+                            @(item.Price * item.Count)
+                        </td>
+
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+            <h6 class="h6">
+               خریدار : <a href="../User/Details?userId=@Model.Factor.UserId">@Model.GetInfo.GetInfoById(Model.Factor.UserId).Name @Model.GetInfo.GetInfoById(Model.Factor.UserId).LastName </a>
+
+            </h6>
+                <h5 class="h5 text-left"> مبلغ کل: @Model.Factor.FactorDetails.Sum(s=>s.Count * s.Price).ToToman() </h5>
+
+    </div>
+</div>

@@ -1,0 +1,49 @@
+﻿@page
+@model FS.FruitStore.Pages.Users.DeleteModel
+
+
+<div class="container">
+
+        <form method="post">
+    <div class="row">
+            @Html.Partial("_Panel")
+
+            <div class="col-lg-9 col-12">
+                <div class="card my-5 pb-4 text-center">
+                    <div class="card-header">
+                        <h4 class="h4"> غیرفعال کردن کاربر '@Model.ApplicationUser.Name' </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-12">
+                                <h6 for="name" class="my-3 text-right"> نام و نام خانوادگی : </h6>
+                                <input type="text" id="name" value="@Model.ApplicationUser.Name @Model.ApplicationUser.LastName" class="form-control mt-2" disabled>
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <h6 for="last-name" class="my-3 text-right"> شماره تلفن : </h6>
+                                <input type="text" id="last-name" asp-for="ApplicationUser.PhoneNumber" class="form-control mt-2" disabled>
+                            </div>
+                            <div class="d-flex mt-3" style="width:290px">
+                                <h6 class="text-right mb-3"> وضعیت مسدودیت </h6>
+                                <input asp-for="ApplicationUser.isDisabled" class="form-control">
+                            </div>
+
+                        </div>
+                        <input type="hidden" asp-for="ApplicationUser.Id" />
+                        <div class="row mt-3">
+                            <div class="col-lg-6 col-12">
+                                <input type="submit" class="btn btn-primary btn-block" onclick="deleteUser()" value="تایید " />
+                            </div>
+                            <div class="col-lg-6 col-12">
+                                <a asp-page="Index" class="btn btn-secondary btn-block">
+                                    بازگشت
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+        </form>
+</div>

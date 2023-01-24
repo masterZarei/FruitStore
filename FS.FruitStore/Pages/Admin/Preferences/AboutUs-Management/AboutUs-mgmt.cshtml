@@ -1,0 +1,76 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management.AboutUs_mgmtModel
+<div class="row">
+    <!-- #region پنل-->
+    @Html.Partial("_Panel")
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12">
+        <div class="card mb-5 mt-2 pb-4 text-center">
+            <form method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="AboutUs.Id" />
+                <input type="hidden" asp-for="AboutUs.Img" />
+                <div class="card-header">
+                    <h4 class="text-center mx-auto font-weight-bold title-text"> مدیریت درباره ما </h4>
+                </div>
+                <div class="card-body p-3">
+                    <h5 class="text-center text-dark mb-2"> متن </h5>
+                    <textarea class="m-auto d-block form-control" asp-for="AboutUs.Text" cols="30" rows="10"></textarea>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <h6 class="text-dark  my-1 mr-3">لطفا عکس را انتخاب کنید.</h6>
+                        <div class="custom-file my-3 mr-3">
+                            <h6 class="custom-file-label text-center"> عکس محصول </h6>
+                            <input id="imgUp" class="custom-file-input" class="custom-file-input" type="file" name="imgUp">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <div class="image-preview" id="imagePreview">
+
+                            <img src="~/Preferences/@Model.AboutUs.Img" id="imgPreview" class="img-prev" />
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <input type="submit" value="ثبت اطلاعات !" class="btn btn-block btn-success mx-auto d-block mt-3">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#imgUp").change(function () {
+            readURL(this);
+        });
+
+
+        //نمایش اسم عکس روی اینپوت
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}

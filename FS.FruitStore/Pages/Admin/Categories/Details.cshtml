@@ -1,0 +1,47 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Categories.DetailsModel
+@using Utilities.Roles
+@{
+    //ViewData[PD.PanelViewData] = PD.Category;
+}
+<div class="container">
+
+    <div class="row">
+
+        @Html.Partial("_Panel")
+
+        <div class="col-lg-9 col-12">
+            <div class="card my-5 pb-4 text-center p-2">
+                <h3>جزئیات دسته بندی "@Model.Category.Name"</h3>
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Category.Id" />
+                    <div class="row p-3">
+                      
+                            <h6 class="text-right my-3"> نام دسته بندی </h6>
+                            <input asp-for="Category.Name" class="form-control mt-2" disabled>
+                           
+
+                            <h6 class="text-right my-3"> توضیحات </h6>
+                            <textarea asp-for="Category.Description" id="discription" cols="15" rows="5" disabled  class="form-control"></textarea>
+                           
+
+                      <div class="d-flex mt-3">
+
+                        <a asp-page="Edit" asp-route-Id="@Model.Category.Id" class="btn btn-info text-white mx-2" >ویرایش اطلاعات</a>
+                        <a asp-page="Index" class="btn btn-secondary mx-2" >بازگشت</a>
+                      </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

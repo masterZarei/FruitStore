@@ -1,0 +1,56 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Orders.HistoryModel
+@{
+    string btnClass = "btn-purple";
+}
+
+
+<div class="row">
+    @Html.Partial("_Panel")
+
+
+    <div class="col-lg-9 col-12">
+        <div class="card mt-5">
+            <div class="card-header bg-transparent d-flex ">
+                <a asp-page="Index" class="btn btn-secondary"> بازگشت</a>
+                <h4 class="h4 text0center m-auto"> تاریخچه سفارشات </h4>
+            </div>
+            <form method="post">
+
+                <div class="card-body">
+                    @if (Model.Model.Any())
+                    {
+                        @foreach (var item in Model.Model)
+                        {
+
+                            <div class="card mb-3 shadow">
+                                <div class="card-body d-lg-flex">
+
+                                    <div class="col-lg-6 col-12">
+                                        <span> سفارش دهنده : @item.FullName </span><br><br>
+                                        <p class="mt-3 h5"> تعداد : @item.OrderCount </p>
+                                    </div>
+                                    <div class="col-lg-4 col-12 d-block">
+                                        <p class="d-block"> کد سفارش : @item.ID.Substring(new Random().Next(0,5),new Random().Next(3,6)) </p>
+                                    </div>
+                                    <a asp-page="Details" class="btn btn-info text-center d-block h-50 mt-5 mr-1" asp-route-Id="@item.ID" asp-route-isIndex="false">جزئیات</a>
+                                </div>
+                            </div>
+
+
+
+                        }
+                    }
+                    else
+                    {
+                        <h4 class="h4 alert alert-info text-center"> سفارشی موجود نیست </h4>
+
+                    }
+
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

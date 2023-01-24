@@ -1,0 +1,127 @@
+
+/* page register ****************** */
+
+.register {
+    box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    max-width: 500px;
+    margin: auto;
+    margin-top: 40px;
+    border-radius: 15px;
+    background-color: transparent !important;
+}
+
+.register h1 {
+    color: #3d3e46;
+    font-size: 34px;
+    text-align: center;
+}
+
+.register input {
+    font-family: vazir;
+    display: block;
+    background: #f5f5f5;
+    margin: 15px;
+    width: 90%;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #8f8f8f6b !important;
+    transition: all ease-in-out .3s;
+}
+
+.register input:focus {
+    background: #eee;
+}
+
+.form-btn {
+    position: relative;
+    border: 0;
+    background-color: #e1e1e1;
+    font-size: 24px;
+    outline: none;
+    cursor: pointer;
+    padding: 20px;
+    margin: 20px;
+    overflow: hidden;
+}
+
+.form-btn span {
+    position: relative;
+    z-index: 999999;
+    transition: 0.4s color;
+}
+
+
+.vertical {
+    position: relative;
+    border: 0;
+    background-color: #6de480;
+    font-size: 18px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;    
+    padding: 10px;
+    overflow: hidden;
+    border-radius: 5px;
+    display: block;
+    width: 82%;
+    margin: 10px auto;
+    margin-right: 43px !important;
+    text-align: center;
+
+}
+
+.vertical span {
+    position: relative;
+    z-index: 2 ;
+    transition: 0.4s color;
+}
+
+
+.vertical:hover span {
+    position: relative;
+    z-index: 4 ;
+    color: #fff;
+}
+
+.vertical::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #1ba93d;
+    left: 0;
+    top: -100%;
+    transition: 0.4s top;
+}
+
+.vertical:hover::before , .vertical:hover::after {
+    top: 0;
+}
+
+.vertical::after {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #1ba93d;
+    right: 0;
+    top: 100%;
+    transition: 0.4s top;
+}  
+
+.vertical:hover::before , .vertical:hover::after {
+    top: 0;
+}    
+
+
+/* PAGE PANEL */
+.email-user {
+    margin-right: 65px;
+}
+
+.last-name-user {
+    margin-right: 173px;
+}

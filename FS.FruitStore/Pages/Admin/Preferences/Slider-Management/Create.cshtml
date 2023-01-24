@@ -1,0 +1,85 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.Slider_Management.CreateModel
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+<h1 class="mt-3 text-center h3"> مدیریت قالب سایت </h1>
+<div class="row">
+    @Html.Partial("_Panel")
+
+
+    <div class="col-lg-9 col-12">
+        <div class="card mt-4">
+            <div class="card-header d-flex">
+                <h4 class="h4 text-center m-auto"> ایجاد اسلایدر </h4>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label class="my-2"> کپشن </label>
+                            <input asp-for="Slider.Caption" type="text" class="d-inline form-control">
+
+                            <label class="my-2"> لینک </label>
+                            <input asp-for="Slider.Link" type="text" class="d-inline form-control">
+
+                            <label class="my-2"> عکس </label>
+                            <div class="custom-file">
+                                <input class="custom-file-input" type="file" id="ImgUp" name="ImgUp">
+                                <label class="custom-file-label"> عکس محصول را وارد کنید </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+
+                            <img width="250px" class="mr-5" height="250px" id="imgPreview" />
+
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <button type="submit" class="btn btn-success btn-block my-1"> تایید </button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <a asp-page="Index" class="btn btn-warning btn-block my-1"> بازگشت </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#ImgUp").change(function() {
+            readURL(this);
+        });
+
+
+        //نمایش اسم عکس روی اینپوت
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    }

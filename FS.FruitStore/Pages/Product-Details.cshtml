@@ -1,0 +1,204 @@
+﻿@page
+@model FS.FruitStore.Pages.Product_DetailsModel
+@using Utilities.Convertors
+@using Utilities.Roles;
+
+<div class="shop-det mt-4">
+    <div class="row">
+
+
+
+        <div class="col-lg-4 col-12 col-right-det-product">
+            <img src="~/ProductImages/@Model.Product.ProductPic" alt="product" style="width:290px !important; height:300px !important;" class="img-fluid w-100 h-100 mt-5 ">
+            <!-- عکس محصول -->
+        </div>
+        <div class="col-lg-5 ml-n5 col-md-6 col-12 mb-md-5">
+            <form method="Post">
+                <input type="hidden" asp-for="Product.ProductId" />
+                <input type="hidden" asp-for="Product.ProductPic" />
+                <input type="hidden" asp-for="Product.Price" />
+                <!-- اسم محصول -->
+                <h2 class="h4 my-4"> @Model.Product.Name </h2>
+                <!-- یه متن کوچیک درباره محصول -->
+                <h5 class="h5 text-muted font-weight-lighter">  تعداد موجود : @Model.Product.Count  </h5>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <!-- قیمت محصول -->
+                    <h4 class="h5 text-danger text-right">
+                        @Model.Product.Price.ToToman()
+
+                    </h4>
+                    <button class="btn btn-secondary mx-1 ml-5 mt-mdSize-2"> تخفیف : 27,000 </button>
+                </div>
+                <!-- تعداد محصول -->
+                <div class="input-group width-lg-25 w-lg-25 w-25">
+                    <div class="input-group-prepend">
+                        <input type="button" onclick="Increse()" class="btn input-group-text" value="+">
+                    </div>
+                    <input id="countHolder" asp-for="Product.Count" class="form-control text-center" type="text" placeholder="1">
+                    <div class="input-group-append">
+                        <input type="button" value="-" onclick="Decrese()" class="btn input-group-text">
+                    </div>
+                </div>
+                <hr>
+
+                <!-- دکمه افزودن به سبد خرید -->
+                <input type="submit" onclick="AddProductToSC()" class="mt-5 btn btn-danger px-4 " asp-route-ProductId="@Model.Product.ProductId" value=" افزودن به سبد خرید" />
+                <input type="submit" asp-page-handler="AddToInterests" asp-route-ProductId="@Model.Product.ProductId" class="mt-5 btn btn-info" value=" افزودن به علاقه مندی ها ">
+
+
+            </form>
+
+
+        </div>
+        <!-- مزیت های خرید محصول -->
+        <div class="col-lg-3 col-md-6 col-12 mt-md-5 mr-5">
+            <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio iure quia accusamus beatae incidunt voluptatum, dolor ipsam libero ratione eveniet eos facere. Nam numquam harum nemo. Omnis impedit fuga architecto!
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio iure quia accusamus beatae incidunt voluptatum, dolor ipsam libero ratione eveniet eos facere. Nam numquam harum nemo. Omnis impedit fuga architecto!
+            </p>
+        </div>
+    </div>
+</div>
+
+<br>
+</div>
+<div class="container">
+    <hr size="1px" color="#ccc">
+    <!-- توضیحات کامل درباره محصول -->
+    <p class="my-4 information-product">
+        <h4 class="h4 text-right">توضیحات محصول</h4>
+        @Model.Product.Description
+    </p>
+    <div class="shadow p-3 mt-3">
+        <h5 class="h5 text-dark">برچسب ها</h5>
+
+        @if (Model.ProdCats.Any())
+        {
+
+            @foreach (var item in Model.ProdCats)
+            {
+
+                <label style="font-size: 0.9rem; padding:5px !important" class="btn btn-secondary my-2">
+                    @item.Name
+                </label>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info my-2">
+
+                <h6 class="text-right my-3"> دسته بندی ای برای محصول انتخاب نشده است</h6>
+            </div>
+
+        }
+
+    </div>
+    <hr size="1px" color="#ccc">
+    <!-- محصولات پیشنهادی -->
+    <h1 class="h4 my-4"> محصولات پیشنهادی </h1>
+    <div class="row">
+        @if (Model.SuggestProduct.Any())
+        {
+            @foreach (var item in Model.SuggestProduct)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6 col-12">
+                    <a asp-page="Product-Details" asp-route-id="@item.ProductId">
+                        <div class="product-child">
+                            <div>
+                                <img src="~/ProductImages/@item.ProductPic" alt="product" width="100%" height="280">
+                            </div>
+                            <div class="mb-4 pb-2 px-1">
+                                <h6 style="font-weight: 900 !important" class="mt-2">
+                                    @item.Name
+                                </h6>
+                                <h6> @item.Price.ToToman() </h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+
+    </div>
+    <form method="post">
+
+        <!-- نظرات درباره محصول -->
+        <div id="javascript" class="tab-content">
+            <textarea class="form-control m-2" asp-for="Comments.Text" placeholder="نظر شما !" cols="15" rows="5"></textarea>
+            <span asp-validation-for="Product.Name" class="text-danger"></span>
+
+            <button asp-page-handler="AddCmt" asp-route-ProductId="@Model.Product.ProductId" class="btn btn-success btn-block d-block mx-auto w-75">ثبت</button>
+        </div>
+        @if (@Model.lstComments != null && @Model.lstComments.Any())
+        {
+            @foreach (var item in Model.lstComments)
+            {
+                <div class="media border p-3 mt-3">
+                    <img src="img/zan.png" alt="img-user" class="mr-3 mt-3 rounded-circle" width="60">
+                    <div class="media-body mr-2">
+                        <div class="d-flex user-info-text">
+                            <h4 class="user-name"> @Model.GetInfo.GetInfoById(@item.User_Id).Name @Model.GetInfo.GetInfoById(@item.User_Id).LastName </h4>
+                            <small class="text-muted comment-date mr-2"> <i>@item.CreateDate.ToShamsi() </i> </small>
+                        </div>
+                        <p>
+                            @item.Text
+                        </p>
+                        @if (User.IsInRole(SD.AdminEndUser))
+                        {
+                            @if (item.Answer == null)
+                            {
+
+                                <a asp-page="CommentManagement/CommentDetails" asp-route-Id="@item.Id" class="btn btn-outline-secondary"> پاسخ </a>
+                            }
+                        }
+
+                        <!-- جواب -->
+                        @if (item.Answer != null)
+                        {
+                            <div class="media p-3">
+                                <img src="img/mard.png" alt="user-image" width="60" class="mr-3 rounded-circle mt-3">
+                                <div class="media-body mr-2">
+                                    <div class="d-flex user-info-text">
+                                        <!--چیپس-->        <h4 class="user-name"> @item.Responder  </h4>
+                                    </div>
+                                    <p>
+                                        @item.Answer
+                                    </p>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+        }
+
+    </form>
+
+
+
+
+</div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+    <script>
+        function Increse() {
+            var val = document.getElementById("countHolder").value;
+            val++;
+            document.getElementById("countHolder").value = val;
+        }
+        function Decrese() {
+            var val = document.getElementById("countHolder").value;
+            if (val > 1) {
+                val--;
+            }
+            document.getElementById("countHolder").value = val;
+        }
+
+        document.getElementById("countHolder").value = "1";
+    </script>

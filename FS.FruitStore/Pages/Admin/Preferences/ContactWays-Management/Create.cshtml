@@ -1,0 +1,66 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management.CreateModel
+
+@{
+    ViewData["Title"] = "ایجاد راه های ارتباطی";
+}
+
+<div class="row">
+    <!-- #region پنل-->
+    @Html.Partial("_Panel")
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12 mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-dark text-center h4 font-weight-bold"> ایجاد راه های ارتباطی </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="name" class="my-2"> نام : </label>
+                            <input asp-for="ContactWays.Name" id="name" class="form-control" placeholder="نام را وارد کنید">
+                            <span asp-validation-for="ContactWays.Name" class="text-danger"></span>
+
+                            <label for="name" class="my-2"> نمایه : </label>
+                            <select class="custom-select" asp-for="SelectedIcon" asp-items="Model.Icons">
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <label for="address" class="my-2"> آدرس : </label>
+                            <input asp-for="ContactWays.Address" id="address" class="form-control" placeholder="آدرس را وارد کنید">
+                            <span asp-validation-for="ContactWays.Address" class="text-danger"></span>
+                            <div class="d-flex mt-3 ">
+
+                                <img src="" class="rounded-circle mt-4 " width="70px" height="70px" alt="">
+
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="text-right mb-3"> آیا لینک است؟ </h6>
+                                    <input class="form-control" asp-for="ContactWays.IsLink" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12 mt-3">
+                            <button type="submit" class="btn btn-block btn-success"> تایید </button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 mt-3">
+                            <button asp-page="Index" class="btn btn-block btn-secondary"> بازگشت </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

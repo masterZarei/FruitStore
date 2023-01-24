@@ -1,0 +1,67 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.Slider_Management.IndexModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<div class="row">
+    @Html.Partial("_Panel")
+
+
+    <div class="col-lg-9 col-12">
+        <div class="card mt-4">
+            <div class="card-header d-flex">
+                <a href="Create">
+                    <button class="btn btn-purple text-right"> <i class="fa fa-plus"></i> ایجاد </button>
+                </a>
+                <h4 class="h4 text-center m-auto"> مدیریت اسلایدر </h4>
+            </div>
+            <form method="post">
+                <div class="card-body">
+
+                    <table class="table table-light table-striped table-border table-responsive-sm">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"> عکس </th>
+                                <th class="text-center"> کپشن </th>
+                                <th class="text-center"> لینک </th>
+                                <th class="text-center">  مدیریت </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Slider.Any())
+                            {
+                                @foreach (var item in @Model.Slider)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="~/img/@item.Img" width="50px" height="50px"
+                                         class="img-fluid d-block m-auto">
+                                        </td>
+                                        <td class="text-center"> @item.Caption </td>
+                                        <td class="text-center"> @item.Link </td>
+                                        <td class=" text-center">
+                                           <button asp-page-handler="Remove" type="submit" class="align-middle btn " asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+
+                                            <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle btn ">
+                                                <i class="fa fa-list"></i>
+                                            </a>
+                                            <a asp-page="Edit"  asp-route-Id="@item.Id" class="align-middle btn ">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <h1 class="h1 alert alert-info text-center">موردی وجود ندارد</h1>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Products.DetailsModel
+@{
+    string CS = null;
+}
+
+<div class="container">
+
+    <div class="row">
+        @Html.Partial("_Panel")
+
+        <div class="col-lg-9 col-12">
+            <div class="card my-5 pb-4 text-center p-2">
+                <div class="card-header">
+                    <h4 class="h4">جزئیات محصول "@Model.Product.Name"</h4>
+                </div>
+                <form method="get">
+
+                    <div class="row p-3">
+                        <div class="col-lg-6 col-12">
+                            <h6 class="text-right my-3"> نام محصول </h6>
+                            <input asp-for="Product.Name" id="product-name"
+                                   class="form-control mt-2" disabled>
+
+
+                            <h6 class="text-right my-3"> تعداد </h6>
+                            <input asp-for="Product.Count" id="product-name"
+                                   class="form-control mt-2" disabled>
+
+                            <h6 class="text-right my-3"> تاریخ ثبت </h6>
+                            <input value="@Model.Product.CreateDate.ToShamsi()" disabled class="form-control mt-2">
+                            <br />
+                            <div class="d-flex">
+                                <h6 class="text-right my-3 ">
+                                    وضعیت  :  @{
+                                        if (Model.Product.isVerified.Equals(true)) { CS = "<h5 class='h5 btn btn-success mr-4 mt-2'>تایید شده</h5>"; }
+                                        else { CS = "<h5 class='h5 btn btn-info mr-4 mt-2'>تایید نشده</h5>"; }
+                                    }   @Html.Raw(@CS)
+                                </h6>
+                            </div>
+
+                            <h6 class="text-right my-3"> توضیحات </h6>
+                            <textarea asp-for="Product.Description" id="discription" cols="20" rows="5"
+                                      class="form-control" disabled></textarea>
+
+
+
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+
+                            <h6 class="text-right my-3"> قیمت محصول </h6>
+                            <div id="product-name"
+                                 class="form-control mt-2" disabled>
+                                @Model.Product.Price.ToToman()
+                            </div>
+
+                            <h6 class="text-right my-3"> واحد محصول </h6>
+
+                            @if (Model.ProductUnit == "0")
+                            {
+                                <div class="alert alert-info my-2">
+
+                                    <h6 class="text-right my-3"> واحدی برای محصول انتخاب نشده است</h6>
+                                </div>
+                            }
+                            else
+                            {
+                               <div class="form-control mt-2"> @Model.ProductUnit </div>
+                            }
+
+
+                            <h6 class="text-right my-3"> دسته بندی های محصول </h6>
+                            @if (Model.ProdCats.Any())
+                            {
+
+                                @foreach (var item in Model.ProdCats)
+                                {
+
+                                    <label style="font-size: 0.9rem; padding:5px !important" class="btn btn-secondary my-2">
+                                        @item.Name
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-info my-2">
+
+                                    <h6 class="text-right my-3"> دسته بندی ای برای محصول انتخاب نشده است</h6>
+                                </div>
+
+                            }
+
+
+                            <h6 class=" text-right"> عکس محصول </h6>
+                            <div class="d-flex my-3">
+                                <img src="~/ProductImages/@Model.Product.ProductPic" class="mx-1" width="170px" height="150px" id="imgPreview" />
+                                <img src="~/ProductImages/@Model.Product.ProductPic2" class="mx-1" width="170px" height="150px" id="imgPreview" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-12">
+
+                            <a asp-route-Id="@Model.Product.ProductId" asp-page="Edit" class="btn btn- btn-block btn-info mx-auto d-block mt-3">
+                                ویرایش اطلاعات !
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <a asp-page="Index" class="btn btn-secondary btn-block mx-auto d-block mt-3">
+                                بازگشت !
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }

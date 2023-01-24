@@ -1,0 +1,70 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Orders.DetailsModel
+@{
+    string btnClass = "btn-purple";
+}
+
+
+<div class="row">
+    @Html.Partial("_Panel")
+
+
+    <div class="col-lg-9 col-12">
+        <div class="card mt-5">
+            <div class="card-header bg-transparent">
+                <h4 class="h4">  <a asp-page="Index">سفارشات</a>  " @Model.Order[0].User.Name @Model.Order[0].User.LastName "</h4>
+            </div>
+            <form method="post">
+
+                <div class="card-body">
+                    @if (Model.Order.Any())
+                    {
+                        @foreach (var item in Model.Order)
+                        {
+                            @foreach (var fd in item.FactorDetails)
+                            {
+
+                                <div class="card mb-3 shadow">
+                                    <div class="card-body d-lg-flex">
+                                        <div class="col-lg-2 col-12 ml-2">
+                                            <img src="~/ProductImages/@fd.Product.ProductPic" width="125px" height="100px" class="rounded">
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <span> محصول : @fd.Product.Name </span><br><br>
+                                            <p class="mt-3 h5"> تعداد : @fd.Count </p>
+                                        </div>
+                                        <div class="col-lg-4 col-12 d-block">
+                                            <p class="d-block"> کد سفارش : @item.UserId.Substring(3,3) </p>
+
+                                            @if (item.isCompleted)
+                                            {
+                                                <span class="btn btn-success mt-4 d-block">
+                                                    ارسال شده
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="btn btn-warning mt-4 d-block">
+                                                    در انتظار آماده سازی
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        <h4 class="h4 alert alert-info"> سفارشی موجود نیست </h4>
+
+                    }
+
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

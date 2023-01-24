@@ -1,0 +1,45 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.CommentManagement.IndexModel
+@using Utilities.Roles;
+@{
+  //  ViewData[PD.PanelViewData] = PD.Comments;
+}
+<div class="row">
+    @Html.Partial("_Panel")
+
+    <div class="col-12 col-lg-8 col-md-8 mt-5">
+
+        <h4 class="h4 text-center">مدیریت کامنت ها</h4>
+
+        <table class="table table-light table-bordered table-striped mt-3">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center">نام</th>
+                    <th class="text-center">جزئیات</th>
+                    <th class="text-center">تعداد</th>
+                    <th class="text-center">مرور</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model.Comments.Any())
+                {
+                    @foreach (var item in Model.Comments)
+                    {
+                        <tr>
+                            <td class="text-center"> @item.Name </td>
+                            <td class="text-center"> <a asp-page="/Products/Details" asp-route-Id="@item.productId"> جزئیات </a> </td>
+                            <td class="text-center"> @item.CommentsCount </td>
+                            <td class="text-center"> <a asp-page="ProductsComments" asp-route-Id="@item.productId"> مرور </a> </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                   <h4 class="h5 alert alert-info text-center">نظری موجود نیست</h4>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>

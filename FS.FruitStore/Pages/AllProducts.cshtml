@@ -1,0 +1,58 @@
+﻿@page
+@model FS.FruitStore.Pages.AllProductsModel
+@{
+}
+
+<div class="shop-header">
+    <i class="fa fa-home shop-home-icon"></i>
+    <a href="index.html"> خانه </a>
+    <span> > </span>
+    <a href="shop.html"> فروشگاه </a>
+    <hr size="2px" color="gray">
+    <form method="post">
+        <div class="input-group my-3">
+            <!-- سلکت اپشن انتخاب کتگوری -->
+            <select class="custom-select" asp-for="SelectedCat" asp-items="Model.Cats">
+            </select>
+            <div class="input-group-append">
+                <!-- دکمه اضافه کردن -->
+                <button asp-page-handler="FilCat" type="submit" class="btn btn-secondary"> فیلتر </button>
+            </div>
+        </div>
+
+        @if (Model.Product.Any())
+        {
+
+            <div class="row">
+                @foreach (var item in Model.Product)
+                {
+
+
+                    <div class="col-lg-3 col-md-3 col-12 my-1">
+                        <a asp-page="Product-Details" asp-route-Id="@item.ProductId">
+                            <div class="card product-box">
+                                <div class="mother-imageBox">
+                                    <img class="card-img-top" src="~/ProductImages/@item.ProductPic" alt="this is a img" height="250px">
+                                </div>
+                                <div class="card-body product-box-body">
+                                    <h5 class="card-title h5 text-dark" style="font-size: 18px; font-weight: 600;">
+                                        @item.Name
+                                    </h5>
+                                    <p class="h6 text-dark" style="font-weight: 600"> @item.Price.ToToman() </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                }
+            </div>
+        }
+        else
+        {
+            <h4 class="m-auto alert alert-warning"> محصولی وجود ندارد </h4>
+        }
+    </form>
+
+
+
+</div>
