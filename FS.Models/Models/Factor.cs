@@ -21,6 +21,8 @@ namespace FS.Models.Models
         //
         public string Post_Type { get; set; }
         //
+        public string Payment_Type { get; set; }
+        //
         public DateTime Send_Date { get; set; }
         //
         public DateTime WillDeliver_Date { get; set; }

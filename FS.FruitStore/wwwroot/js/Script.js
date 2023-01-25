@@ -1,76 +1,77 @@
-const toTop = document.querySelector('.to-top');
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 400) {
-        toTop.classList.add('active');
-    } else {
-        toTop.classList.remove('active');
-    }
-});
-const $dropdown = $(".dropdown");
-const $dropdownToggle = $(".dropdown-toggle");
-const $dropdownMenu = $(".dropdown-menu");
-const showClass = "show";
-$(window).on("load resize", function () {
-    if (this.matchMedia("(min-width: 768px)").matches) {
-        $dropdown.hover(
-            function () {
-                const $this = $(this);
-                $this.addClass(showClass);
-                $this.find($dropdownToggle).attr("aria-expanded", "true");
-                $this.find($dropdownMenu).addClass(showClass);
-            },
-            function () {
-                const $this = $(this);
-                $this.removeClass(showClass);
-                $this.find($dropdownToggle).attr("aria-expanded", "false");
-                $this.find($dropdownMenu).removeClass(showClass);
-            }
-        );
-    } else {
-        $dropdown.off("mouseenter mouseleave");
-    }
-});
-// slider products
-let thumbnail = document.getElementsByClassName('thumbnail');
-let slider = document.getElementById('slider');
-let leftButton = document.getElementById('left-slide');
-let rightButton = document.getElementById('right-slide');
-leftButton.addEventListener('click', function () {
-    slider.scrollLeft -= 125;
+// Slider
+const slides = document.querySelector('.slider').children;
+console.log(slides);
+const next = document.querySelector('.next');
+const prev = document.querySelector('.prev');
+const indicator = document.querySelector('.indicator');
+let index = 0;
+prev.addEventListener('click', function () {
+    prevSlide();
+    updateCircleIndicator();
+    resetTimer();
 })
-rightButton.addEventListener('click', function () {
-    slider.scrollLeft += 125;
+next.addEventListener('click', function () {
+    nextSlide();
+    updateCircleIndicator();
+    resetTimer();
 })
-const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
-function autoPlay() {
-    if (slider.scrollLeft > (maxScrollLeft - 1)) {
-        slider.scrollLeft -= maxScrollLeft;
-    } else {
-        slider.scrollLeft += 1
+function circleIndicator() {
+    for (let i = 0; i < slides.length; i++) {
+        const div = document.createElement('div');
+        div.innerHTML = i + 1;
+        div.setAttribute('onclick', 'indicatorSlide(this)');
+        div.id = i
+        if (i == 0) {
+            div.className = "active"
+        }
+        indicator.appendChild(div)
     }
 }
-let play = setInterval(autoPlay, 50)
-for (let i = 0; i < thumbnail.length; i++) {
-    thumbnail[i].addEventListener('mouseover', () => {
-        clearInterval(play)
-    })
-    thumbnail[i].addEventListener('mouseout', () => {
-        return play = setInterval(autoPlay, 50);
-    })
+circleIndicator();
+function updateCircleIndicator() {
+    for (let i = 0; i < indicator.children.length; i++) {
+        indicator.children[i].classList.remove('active')
+    }
+    indicator.children[index].classList.add('active');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
+function indicatorSlide(element) {
+    index = element.id;
+    changeSlide();
+    updateCircleIndicator();
+    resetTimer();
+}
+function prevSlide() {
+    if (index == 0) {
+        index = slides.length - 1;
+    } else {
+        index--
+    }
+    console.log
+    changeSlide()
+}
+function nextSlide() {
+    if (index == slides.length - 1) {
+        index = 0
+    } else {
+        index++
+    }
+    changeSlide();
+}
+function changeSlide() {
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.remove('active')
+    }
+    slides[index].classList.add('active')
+}
+function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(autoplay, 4000);
+}
+function autoplay() {
+    nextSlide();
+    updateCircleIndicator();
+}
+let timer = setInterval(autoplay, 4000);
 
 const detProImg = document.querySelectorAll('.detPro-img');
 const active_img = document.querySelector('.active-image');

@@ -2,7 +2,7 @@
 @model FS.FruitStore.Pages.Panel.MyFactors.Factor_DetailsModel
 @using Utilities.Convertors
 <div class="row">
-    @Html.Partial("_Panel")
+    <partial name="_Panel" />
     <div class="col-lg-9 col-md-6 col-12">
         <h4 class="h4 mt-3">شماره فاکتور: @Model.FactorDetail[0].FactorId</h4>
         <table class="table table-light mt-3">
