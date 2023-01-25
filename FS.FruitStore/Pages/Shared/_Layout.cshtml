@@ -30,10 +30,12 @@
                 </div>
             </div>
         </div>
-
-        <div class="logoBox">
-            <img src="../cv/image/1.jpg" class="rounded-circle" width="100px" height="100px">
-        </div>
+        <a href="/">
+            <div class="logoBox">
+                <img src="/image/car.png" class="rounded-circle" width="100px" height="100px">
+            </div>
+        </a>
+        
         @if (User.Identity.IsAuthenticated)
         {
 
@@ -42,10 +44,14 @@
                     <li> <a href="/Panel" class="text-dark"> پنل کاربری </a> </li>
                     <li> <a href="/Identity/Account/Logout" class="text-dark"> خروج </a> </li>
 
-                    <div class="icons">
+                    @*<div class="icons">
                         <span class="badge badge-pill badge-danger badge-topH"> 2 </span>
                         <i class="text-dark fa fa-shopping-basket mx-2"></i>
-                    </div>
+                    </div>*@
+                    @*محل قرار گیری سبد خرید و نام*@
+                    @if (User.Identity.IsAuthenticated)
+                        @await Component.InvokeAsync("LoggedInUser")
+
 
                 </ul>
             </div>
