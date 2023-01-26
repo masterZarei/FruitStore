@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FS.Models.Models
+namespace Utilities
 {
-    public class Icons
+    public class Dictionary
     {
-
         public string Name { get; set; }
         public string Value { get; set; }
-
     }
 }

@@ -1,11 +1,15 @@
 ﻿using FS.DataAccess;
-using FS.Models.Models;
+using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Utilities;
+using Utilities.Convertors;
 
 namespace FS.FruitStore.Pages.Payments
 {
@@ -19,60 +23,69 @@ namespace FS.FruitStore.Pages.Payments
             _db = db;
         }
         [BindProperty]
-        public User apUser { get; set; }
+        public ConfirmInformationVM CIModel { get; set; }
 
-        [BindProperty]
-        public string postType { get; set; }
-        [BindProperty]
-        public string Description { get; set; }
+
+
         public async Task<IActionResult> OnGet(int Id)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
-                return Redirect("/Identity/Account/Login");
-            var userId = claim.Value;
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
             if (Id == 0)
                 return NotFound();
             var factor = _db.Factors
                 .Where(a => a.FactorId == Id &&
                 a.UserId == userId && !a.IsFinally &&
-                a.FactorDetails.Count>1)
+                a.FactorDetails.Count > 1)
                 .FirstOrDefault();
 
-             apUser = _db.Users.Where(a => a.Id == userId).FirstOrDefault();
+            
+            CIModel = new ConfirmInformationVM()
+            {
+                ApplicationUser = _db.Users
+                .Where(a => a.Id == userId)
+                .FirstOrDefault()
+            };
+            var AllPostTypes = PostTypes.GetTypes;
+            var AllPaymentTypes = PayWays.GetWays;
+            CIModel.PostTypes = new SelectList(AllPostTypes, "Value", "Name");
+            CIModel.PaymentTypes = new SelectList(AllPaymentTypes, "Value", "Name");
 
             return Page();
 
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
-                return Redirect("/Identity/Account/Login");
-            var userId = claim.Value;
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
-            var currentUser = _db.Users.FirstOrDefault(a=>a.Id == userId);
+            var currentUser = _db.Users.FirstOrDefault(a => a.Id == userId);
+
+
 
             var factor = _db.Factors
                 .Where(a => a.UserId == userId && !a.IsFinally)
                 .FirstOrDefault();
 
-            if (string.IsNullOrEmpty(apUser.PostalCode)
-                || (string.IsNullOrEmpty(apUser.Address)))
+            if (string.IsNullOrEmpty(CIModel.ApplicationUser.PostalCode)
+                || (string.IsNullOrEmpty(CIModel.ApplicationUser.Address)))
             {
+                ModelState.AddModelError(string.Empty, "لطفا کد پستی را وارد کنید!");
+                ModelState.AddModelError(string.Empty, "لطفا آدرس را وارد کنید!");
                 return RedirectToPage("ConfirmInformation", new { Id = factor.FactorId });
+
             }
             else
             {
-                currentUser.PostalCode = apUser.PostalCode;
-                currentUser.Address = apUser.PostalCode;
-                currentUser.PostalCode = apUser.PostalCode;
+                currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+                currentUser.Address = CIModel.ApplicationUser.PostalCode;
+                currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
-                factor.Post_Type = postType;
-                factor.Description = Description;
+                factor.Post_Type = CIModel.SelectedPostType;
+                factor.Payment_Type = CIModel.SelectedPaymentType;
+                factor.Description = CIModel.Description;
+                factor.WillDeliver_Date = DateTime.Now.AddDays(10);
+                factor.Send_Date = DateTime.Now.AddDays(2);
+
 
                 _db.Update(currentUser);
                 _db.Update(factor);

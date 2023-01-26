@@ -101,7 +101,7 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     Name = Input.Name,
                     PhoneNumber = Input.PhoneNumber,
                     LastName = Input.LastName,
-                    VerificationCode = Generator.RandomNumber()
+                    VerificationCode = Generator.RandomNumber(0,255)
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

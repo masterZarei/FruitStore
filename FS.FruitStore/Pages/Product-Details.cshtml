@@ -40,6 +40,143 @@
                         <input type="button" value="-" onclick="Decrese()" class="btn input-group-text">
                     </div>
                 </div>
+               @* <div class="d-flex justify-content-center align-content-center" id="box">
+                    <button id="button1"><i class="fas fa-star star-icon"></i></button>
+                    <button id="button2"><i class="fas fa-star star-icon"></i></button>
+                    <button id="button3"><i class="fas fa-star star-icon"></i></button>
+                    <button id="button4"><i class="fas fa-star star-icon"></i></button>
+                    <button id="button5"><i class="fas fa-star star-icon"></i></button>
+                </div>
+
+                <div class="alert-box" id="alert1"> خیلی بد </div>
+                <div class="alert-box" id="alert2"> بد </div>
+                <div class="alert-box" id="alert3"> خوب </div>
+                <div class="alert-box" id="alert4"> خیلی خوب </div>
+                <div class="alert-box" id="alert5"> عالی </div>
+
+
+
+                <style>
+                    .alert-box {
+                        width: 91px;
+                        height: 30px;
+                        background-color: #ddd;
+                        margin-bottom: 100px;
+                        display: block;
+                        margin: 10px auto 30px;
+                        padding-top: 5px;
+                        border-radius: -3px;
+                        color: #ad2c2c;
+                        font-size: 14px;
+                        text-align: center;
+                        font-weight: 600;
+                        display: none;
+                    }
+
+                    .star-icon {
+                        color: #ddd;
+                        border: none;
+                        outline: none;
+                        background: unset !important;
+                    }
+
+                        .star-icon:hover {
+                            color: #ffe554;
+                        }
+
+                        .star-icon.active {
+                            color: #ffe554;
+                        }
+                </style>*@
+
+
+
+                <div class="d-flex justify-content-center align-content-center" id="box">
+                    <button id="button1"><i class="fas fa-star"></i></button>
+                    <button id="button2"><i class="fas fa-star"></i></button>
+                    <button id="button3"><i class="fas fa-star"></i></button>
+                    <button id="button4"><i class="fas fa-star"></i></button>
+                    <button id="button5"><i class="fas fa-star"></i></button>
+                </div>
+
+                <div class="boxxxxx" id="alert1"> خیلی بد </div>
+                <div class="boxxxxx" id="alert2"> بد </div>
+                <div class="boxxxxx" id="alert3"> خوب </div>
+                <div class="boxxxxx" id="alert4"> خیلی خوب </div>
+                <div class="boxxxxx" id="alert5"> عالی </div>
+                <style>
+                    .boxxxxx {
+                        width: 91px;
+                        height: 30px;
+                        background-color: #ddd;
+                        margin-bottom: 100px;
+                        display: block;
+                        margin: 10px auto 30px;
+                        padding-top: 5px;
+                        border-radius: -3px;
+                        color: #ad2c2c;
+                        font-size: 14px;
+                        text-align: center;
+                        font-weight: 600;
+                        display: none;
+                    }
+
+                    button {
+                        color: #ddd;
+                        border: none;
+                        outline: none;
+                        background: unset !important;
+                    }
+
+                        button:hover {
+                            color: #ffe554;
+                        }
+
+                        button.active {
+                            color: #ffe554;
+                        }
+                </style>
+
+                <script>
+                    let Alerts = ['alert1', 'alert2', 'alert3', 'alert4', 'alert5'];
+                    let Buttons = ['button1', 'button2', 'button3', 'button4', 'button5'];
+
+                    for (let i = 0; i < 5; i++) {
+                        Alerts[i] = document.getElementById(Alerts[i]);
+                        Buttons[i] = document.getElementById(Buttons[i]);
+
+                    }
+
+
+                    for (let i = 0; i < 5; i++) {
+                        Buttons[i].addEventListener('mouseover', function () {
+                            Alerts[i].style.display = 'block';
+                        });
+                        Buttons[i].addEventListener('mouseout', function () {
+                            Alerts[i].style.display = 'none';
+                        });
+                    }
+
+                    // button2.addEventListener('mousemove', function () {
+                    //     alert2.style.display = 'block';
+                    // });
+                    // button3.addEventListener('mousemove', function () {
+                    //     alert3.style.display = 'block';
+                    // });
+                    // button4.addEventListener('mousemove', function () {
+                    //     alert4.style.display = 'block';
+                    // });
+                    // button5.addEventListener('mousemove', function () {
+                    //     alert5.style.display = 'block';
+                    // });
+
+
+
+                </script>
+
+
+
+
                 <hr>
 
                 <!-- دکمه افزودن به سبد خرید -->
@@ -186,19 +323,47 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     }
-    <script>
-        function Increse() {
-            var val = document.getElementById("countHolder").value;
-            val++;
-            document.getElementById("countHolder").value = val;
+<script>
+    function Increse() {
+        var val = document.getElementById("countHolder").value;
+        val++;
+        document.getElementById("countHolder").value = val;
+    }
+    function Decrese() {
+        var val = document.getElementById("countHolder").value;
+        if (val > 1) {
+            val--;
         }
-        function Decrese() {
-            var val = document.getElementById("countHolder").value;
-            if (val > 1) {
-                val--;
-            }
-            document.getElementById("countHolder").value = val;
-        }
+        document.getElementById("countHolder").value = val;
+    }
 
-        document.getElementById("countHolder").value = "1";
-    </script>
+    document.getElementById("countHolder").value = "1";
+
+
+
+
+
+    let Alerts = ['alert1', 'alert2', 'alert3', 'alert4', 'alert5'];
+    let Buttons = ['button1', 'button2', 'button3', 'button4', 'button5'];
+
+    for (let i = 0; i < 5; i++) {
+        Alerts[i] = document.getElementById(Alerts[i]);
+        Buttons[i] = document.getElementById(Buttons[i]);
+
+    }
+
+
+    for (let i = 0; i < 5; i++) {
+        Buttons[i].addEventListener('mouseover', function () {
+            Alerts[i].style.display = 'block';
+        });
+        Buttons[i].addEventListener('mouseout', function () {
+            Alerts[i].style.display = 'none';
+        });
+    }
+
+               
+            
+
+
+</script>

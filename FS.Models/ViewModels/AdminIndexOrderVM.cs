@@ -9,6 +9,6 @@ namespace FS.Models.ViewModels
         public int OrderCount { get; set; }
         public DateTime OrderCreateDate { get; set; }
         public string ID { get; set; }
-        public bool ReadyToDeliver { get; set; }
+        public byte DeliverState { get; set; }
     }
 }

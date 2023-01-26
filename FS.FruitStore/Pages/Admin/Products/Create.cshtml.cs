@@ -111,8 +111,7 @@ namespace FS.FruitStore.Pages.Admin.Products
             var newUnit = new UnitToProduct()
             {
                 ProductId = Product.ProductId,
-                UnitId = UnitToAssign.Id,
-                IsDeleted = false
+                UnitId = UnitToAssign.Id
 
             };
             _db.Add(newUnit);

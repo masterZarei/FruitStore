@@ -763,3 +763,83 @@ html {
         width: 100%;
         height: 100%;
     }
+
+.display-lg-flex {
+    display: flex !important;
+}
+
+@media only screen and (max-width: 495px) {
+    .display-md-block {
+        display: block !important;
+    }
+
+    .title-text {
+        font-size: 25px;
+    }
+}
+
+.btnBox-md {
+    display: none !important;
+}
+
+@media only screen and (max-width: 992px) {
+    .btnBox-lg {
+        display: none !important;
+    }
+
+    .btnBox-md {
+        display: block !important;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .btnBox-md {
+        display: none !important;
+    }
+
+    .btnBox-lg {
+        display: block !important;
+    }
+}
+
+@media only screen and (max-width: 318px) {
+    .btnBox-lg button {
+        display: block !important;
+    }
+}
+
+.order-boxs {
+    display: grid !important;
+    margin: auto !important;
+    align-content: center;
+    justify-content: center;
+}
+
+.alert-box {
+    width: 91px;
+    height: 30px;
+    background-color: #ddd;
+    margin-bottom: 100px;
+    display: block;
+    margin: 10px auto 30px;
+    padding-top: 5px;
+    border-radius: -3px;
+    color: #ad2c2c;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 600;
+    display: none;
+}
+
+
+
+.star-icon {
+    color: #ddd;
+    border: none;
+    outline: none;
+    background: unset !important;
+}
+
+    .star-icon:hover {
+        color: #ffe554;
+    }

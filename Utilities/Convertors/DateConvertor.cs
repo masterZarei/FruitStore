@@ -7,10 +7,19 @@ namespace Utilities.Convertors
     {
         public static string ToShamsi(this DateTime value)
         {
-            PersianCalendar pc = new PersianCalendar();
-            return pc.GetYear(value) + "/" +
-                   pc.GetMonth(value).ToString("00") + "/" +
-                   pc.GetDayOfMonth(value).ToString("00");
+            try
+            {
+                PersianCalendar pc = new PersianCalendar();
+                return pc.GetYear(value) + "/" +
+                       pc.GetMonth(value).ToString("00") + "/" +
+                       pc.GetDayOfMonth(value).ToString("00");
+            }
+            catch (Exception)
+            {
+
+                return "فرمت تاریخ اشتباه است";
+            }
+            
         }
     }
 }

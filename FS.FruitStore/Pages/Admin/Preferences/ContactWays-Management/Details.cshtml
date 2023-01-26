@@ -2,48 +2,40 @@
 @model FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "اطلاعات";
 }
+<div class="row">
 
-<h1>Details</h1>
+    <!-- #region پنل-->
+    <partial name="_Panel" />
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12">
+        <div class="card">
+            <div class="card-header d-flex">
+                <h4 class="text-center mx-auto font-weight-bold title-text"> اطلاعات راه های ارتباطی </h4>
+            </div>
+            <div class="card-body">
+                <label for="name" class="my-2"> نام : </label>
+                <input asp-for="ContactWays.Name" class="form-control" disabled value="نام محصول">
 
-<div>
-    <h4>ContactWays</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ContactWays.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ContactWays.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ContactWays.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ContactWays.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ContactWays.Icon)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ContactWays.Icon)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ContactWays.IsDeleted)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ContactWays.IsDeleted)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ContactWays.CreateDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ContactWays.CreateDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.ContactWays.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+                <label for="name" class="my-2"> آدرس : </label>
+                <input asp-for="ContactWays.Address" class="form-control" disabled value="t.me/mrZarei">
+
+                <label for="name" class="my-2"> نمایه : </label>
+                <br />
+                <i style="font-size:32px;" class="mx-2 @Model.ContactWays.Icon"></i> 
+
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <button asp-page="Edit" asp-route-Id="@Model.ContactWays.Id" class="btn btn-block btn-info"> ویرایش </button>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <button asp-page="Index" class="btn btn-block btn-secondary"> بازگشت </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

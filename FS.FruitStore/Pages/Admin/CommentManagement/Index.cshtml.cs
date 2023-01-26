@@ -1,5 +1,5 @@
 using FS.DataAccess;
-using FS.Models.Models;
+using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

@@ -9,6 +9,7 @@
   <ItemGroup>
     <Content Remove="Pages\AboutUs.cshtml" />
     <Content Remove="Pages\AllProducts.cshtml" />
+    <Content Remove="Pages\Wallet\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +42,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\AboutUs.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\AllProducts.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Wallet\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,10 +51,15 @@
     <None Include="Pages\Admin\Orders\History.cshtml" />
     <None Include="Pages\Admin\Orders\Index.cshtml" />
     <None Include="Pages\AllProducts.cshtml" />
+    <None Include="Pages\Wallet\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\AboutUs.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Wallet\Index.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FS.Models.Models
+﻿namespace FS.Models.Models
 {
     public class AboutUs
     {

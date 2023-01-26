@@ -26,5 +26,6 @@ namespace FS.DataAccess
         public DbSet<AboutUs> AboutUs { get; set; }
         public DbSet<ContactWays> ContactWays { get; set; }
         public DbSet<CategoryToProduct> CategoryToProducts { get; set; }
+        public DbSet<WalletHistory> WalletHistories { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FS.Models.Models
@@ -55,6 +54,9 @@ namespace FS.Models.Models
         [Display(Name = "(حسابی با نام خودتان) شماره کارت")]
         [MaxLength(16)]
         public string CartNumber { get; set; }
+        //
+        [Display(Name = "مقدار کیف پول")]
+        public double WalletAmount  { get; set; }
         //
         public bool isDisabled { get; set; }
         //

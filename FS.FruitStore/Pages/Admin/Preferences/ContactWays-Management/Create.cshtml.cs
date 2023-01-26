@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FS.DataAccess;
+using FS.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using FS.DataAccess;
-using FS.Models.Models;
+using System.Threading.Tasks;
 using Utilities;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management

@@ -51,10 +51,8 @@ namespace FS.FruitStore.Pages.Admin.Orders
                     FullName = $"{item.User.Name} {item.User.LastName}",
                     OrderCount = Order.Count,
                     OrderId = item.FactorId,
-                    ReadyToDeliver = item.isReadyToDeliver
-                }
-
-                );
+                    //DeliverState = item.DeliverState
+                });
             }
 
             return Page();

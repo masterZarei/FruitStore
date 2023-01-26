@@ -1,9 +1,15 @@
-﻿namespace Utilities
+﻿using System.Collections.Generic;
+
+namespace Utilities
 {
     public static class PayWays
     {
-        public static string OnTheSpot_Payment = "پرداخت در محل";
-        public static string Internet_Payment = "پرداخت اینترنتی";
-        public static string Wallet_Payment = "پرداخت با کیف پول";
+
+        public static List<Dictionary> GetWays = new List<Dictionary>()
+        {
+            new Dictionary{Name ="پرداخت در محل", Value="OnTheSpot_Payment"},
+            new Dictionary{Name ="پرداخت اینترنتی", Value="Internet_Payment"},
+            new Dictionary{Name ="پرداخت با کیف پول", Value="Wallet_Payment"}
+        };
     }
 }

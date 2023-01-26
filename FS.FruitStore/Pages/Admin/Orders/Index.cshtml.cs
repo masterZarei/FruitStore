@@ -41,7 +41,6 @@ namespace FS.FruitStore.Pages.Admin.Orders
                  .Include(a => a.FactorDetails)
                  .ThenInclude(a => a.Product).ToList();
 
-
             foreach (var item in Order)
             {
                 Model.Add(new AdminIndexOrderVM
@@ -50,10 +49,9 @@ namespace FS.FruitStore.Pages.Admin.Orders
                     FullName = $"{item.User.Name} {item.User.LastName}",
                     OrderCount = Order.Count,
                     OrderId = item.FactorId,
-                    ReadyToDeliver = item.isReadyToDeliver
-                }
-
-                );
+                    DeliverState = item.DeliverState,
+                    OrderCreateDate = item.CreateDate
+                });
             }
 
             return Page();
@@ -68,10 +66,10 @@ namespace FS.FruitStore.Pages.Admin.Orders
                  .Where(a => a.FactorId == Id)
                  .FirstOrDefault();
 
-            if (selectedOrder == null || selectedOrder.isReadyToDeliver == true)
+            if (selectedOrder == null || selectedOrder.DeliverState > 0)
                 return RedirectToPage("Index");
 
-            selectedOrder.isReadyToDeliver = true;
+            selectedOrder.DeliverState = 0;
             _db.Update(selectedOrder);
             _db.SaveChanges();
 

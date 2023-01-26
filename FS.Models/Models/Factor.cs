@@ -28,8 +28,10 @@ namespace FS.Models.Models
         public DateTime WillDeliver_Date { get; set; }
         //
         public List<FactorDetail> FactorDetails { get; set; }
-        //
-        public bool isReadyToDeliver { get; set; }
+        // -1=در حال آماده سازی
+        //  0= اماده ارسال
+        //  1= ارسال شده
+        public byte DeliverState { get; set; }
         //
         public bool isCompleted { get; set; }
         //

@@ -1,6 +1,5 @@
 ﻿using FS.Models.BaseEntities;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FS.Models.Models
 {

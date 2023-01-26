@@ -1,6 +1,5 @@
 using FS.DataAccess;
 using FS.Models.Models;
-using Utilities.Roles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Convertors;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.CommentManagement
 {

@@ -12,9 +12,9 @@
                 <a asp-page="Index" class="btn btn-secondary"> بازگشت</a>
                 <h4 class="h4 text0center m-auto"> تاریخچه سفارشات </h4>
             </div>
-            <form method="post">
 
-                <div class="card-body">
+            <div class="card-body">
+                <form method="post">
                     @if (Model.Model.Any())
                     {
                         @foreach (var item in Model.Model)
@@ -23,14 +23,11 @@
                             <div class="card mb-3 shadow">
                                 <div class="card-body d-lg-flex">
 
-                                    <div class="col-lg-6 col-12">
-                                        <span> سفارش دهنده : @item.FullName </span><br><br>
+                                    <div class="d-flex justify-contrnt-between align-items-center">
+                                        <span> سفارش دهنده : @item.FullName </span>
                                         <p class="mt-3 h5"> تعداد : @item.OrderCount </p>
+                                        <a asp-page="Details" class="btn btn-info text-center d-block h-50 mt-5 mr-1" asp-route-Id="@item.ID" asp-route-isIndex="false">جزئیات</a>
                                     </div>
-                                    <div class="col-lg-4 col-12 d-block">
-                                        <p class="d-block"> کد سفارش : @item.ID.Substring(new Random().Next(0,5),new Random().Next(3,6)) </p>
-                                    </div>
-                                    <a asp-page="Details" class="btn btn-info text-center d-block h-50 mt-5 mr-1" asp-route-Id="@item.ID" asp-route-isIndex="false">جزئیات</a>
                                 </div>
                             </div>
 
@@ -45,8 +42,8 @@
                     }
 
 
-                </div>
-            </form>
+                </form>
+            </div>
 
         </div>
     </div>

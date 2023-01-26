@@ -1,19 +1,17 @@
 ﻿@using FS.Models.ViewModels
 @model LoggedInUserViewModel
 
-
-
 @if (User.Identity.IsAuthenticated)
 {
     <div class="d-flex justify-content-between">
-        <a href="/Panel"><h2 class="h4 pt-2 ml-3 text-right"> سلام @Model.Name ! </h2></a>
+        <a class="text-dark h5" href="/Panel"><h2> سلام @Model.Name ! </h2></a>
 
         <a class="icons" href="/Payments/ShoppingCart">
             @if (Model.Factor != null)
             {
                 <span class="badge badge-pill badge-danger badge-topH"> @Model.Factor.FactorDetails.Count </span>
             }
-            <i class="text-dark fa fa-shopping-basket mx-2"></i>
+            <i class="text-primary fa fa-shopping-cart mx-2"></i>
         </a>
     </div>
 }

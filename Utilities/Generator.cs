@@ -4,12 +4,10 @@ namespace Utilities
 {
     public static class Generator
     {
-        public static string RandomNumber()
+        public static string RandomNumber(int first, int second)
         {
-            string Code = new Random().Next(0,255).ToString("D5");
+            string Code = new Random().Next(first, second).ToString();
             return Code;
         }
-
-
     }
 }
