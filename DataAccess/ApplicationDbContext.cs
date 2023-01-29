@@ -1,9 +1,6 @@
 ﻿using FS.Models.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FS.DataAccess
 {
@@ -27,5 +24,6 @@ namespace FS.DataAccess
         public DbSet<ContactWays> ContactWays { get; set; }
         public DbSet<CategoryToProduct> CategoryToProducts { get; set; }
         public DbSet<WalletHistory> WalletHistories { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
     }
 }

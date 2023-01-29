@@ -1,5 +1,6 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -34,7 +35,8 @@ namespace FS.FruitStore.Pages
         #endregion
 
         public GetUserInfo GetInfo { get; set; }
-
+        [BindProperty]
+        public List<Rating> Rating { get; set; }
 
         public async Task<IActionResult> OnGet(int id)
         {
@@ -58,6 +60,10 @@ namespace FS.FruitStore.Pages
             lstComments = _db.Comments.Where(a => a.Product_Id == id && a.isVerified == true).ToList();
             //نمونه سازی کلاس به دست آوردن اطلاعات کاربر
             GetInfo = new GetUserInfo(_db);
+
+            Rating = _db.Ratings
+                .Where(a => a.ProductId == Product.ProductId)
+                .ToList();
 
             return Page();
 
@@ -163,7 +169,6 @@ namespace FS.FruitStore.Pages
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (claim == null)
                 return Redirect("/Identity/Account/Login");
-
             var userId = claim.Value;
 
             var currentProduct = _db.Products.Where(a => a.ProductId == ProductId).FirstOrDefault();
@@ -186,6 +191,44 @@ namespace FS.FruitStore.Pages
             await _db.SaveChangesAsync();
 
             return RedirectToPage("Product-Details", new { id = ProductId });
+
+        }
+        public async Task<IActionResult> OnPostRating(byte Rate, int ProductId)
+        {
+            if (Rate < 0 || Rate > 5)
+                return Page();
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim == null)
+                return Redirect("/Identity/Account/Login");
+            var userId = claim.Value;
+
+            if (userId == null)
+                return Redirect("/Identity/Account/Login");
+
+            var checkIfRatedAlready = _db.Ratings
+                .Where(a=>a.UserId == userId && a.ProductId == Product.ProductId)
+                .FirstOrDefault();
+
+            if (checkIfRatedAlready != null)
+            {
+                checkIfRatedAlready.Rate = Rate;
+                _db.Update(checkIfRatedAlready);
+                _db.SaveChanges();
+            }
+
+            var newRating = new Rating()
+            {
+                ProductId = Product.ProductId,
+                UserId = userId,
+                Rate = Rate
+            };
+            _db.Add(newRating);
+            _db.SaveChanges();
+
+            return RedirectToPage("Product-Details", new { id = ProductId });
+            
 
         }
     }

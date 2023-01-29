@@ -828,8 +828,12 @@ html {
     font-size: 14px;
     text-align: center;
     font-weight: 600;
+    position: relative;
     display: none;
+    z-index:999999;
 }
+
+
 
 
 
@@ -838,6 +842,7 @@ html {
     border: none;
     outline: none;
     background: unset !important;
+
 }
 
     .star-icon:hover {

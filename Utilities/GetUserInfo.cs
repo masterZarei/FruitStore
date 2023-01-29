@@ -1,7 +1,11 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Utilities.Convertors
 {
@@ -46,7 +50,7 @@ namespace Utilities.Convertors
 
         }
        
-        public  int AuthorizeUser(string Username)
+        public int AuthorizeUser(string Username)
         {
             User ap = GetInfoByUsername(Username);
             if (ap == null)
@@ -59,5 +63,6 @@ namespace Utilities.Convertors
                 return 0;
 
         }
+
     }
 }
