@@ -11,9 +11,9 @@ namespace FS.Models.Models
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
-        public double TrackingCode { get; set; }
-        public double TransactionAmount { get; set; }
-        public double NewWalletAmount { get; set; }
-        public string State { get; set; }
+        public int TrackingCode { get; set; }
+        public decimal TransactionAmount { get; set; }
+        public decimal NewWalletAmount { get; set; }
+        public bool State { get; set; }
     }
 }

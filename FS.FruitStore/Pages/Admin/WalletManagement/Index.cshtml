@@ -1,9 +1,7 @@
 ﻿@page
-@using Utilities.Convertors;
-@model FS.FruitStore.Pages.Wallet.IndexModel
+@model FS.FruitStore.Pages.Admin.WalletManagement.IndexModel
 @{
 }
-
 <div class="row">
     <!-- #region پنل-->
     <partial name="_Panel" />
@@ -14,34 +12,27 @@
                 <h4 class="text-dark text-center"> کیف پول </h4>
             </div>
             <div class="card-body pt-2">
-                <div class="display-lg-flex display-md-block justify-content-between">
-                    <h2 class="text-dark mb-2"> موجودی فعلی کیف پول  : <span> @Model.UserWalletVM.ApplicationUser.WalletAmount.ToToman() </span> </h2>
-                    <div class="btns">
-                        <a asp-page="History" class="btn btn-secondary"> تاریخچه </a>
-                        <a asp-page="Charge" asp-route-Id="@Model.UserWalletVM.ApplicationUser.Id" class="btn btn-success"> شارژ </a>
-                    </div>
-                </div>
-                <h4 class="text-dark h4 mt-3 mb-4"> تراکنش های اخیر </h4>
+                <h4 class="text-dark mt-3 mb-4">تاریخچه تراکنش های کیف پول کاربران </h4>
                 <table class="table table-bordered table-hover table-striped table-responsive-sm">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-center"> شماره فاکتور </th>
-                            <th class="text-center"> مبلغ کل </th>
-                            <th class="text-center"> تاریخ پرداخت </th>
+                            <th class="text-center"> نام </th>
+                            <th class="text-center"> مبلغ </th>
+                            <th class="text-center"> تاریخ </th>
                             <th class="text-center"> نوع </th>
-                            <th class="text-center"> جزئیات </th>
+                            <th class="text-center"> چزئیات </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.UserWalletVM.WalletHistory.Any())
+                        @if (Model.WalletHistory.Any())
                         {
-                            @foreach (var item in Model.UserWalletVM.WalletHistory.Take(6))
+                            @foreach (var item in Model.WalletHistory.Take(6))
                             {
                                 <tr>
-                                    <td class="text-center"> @item.TrackingCode </td>
+                                    <td class="text-center"> @item.User.Name @item.User.LastName </td>
                                     <td class="text-center"> @item.TransactionAmount.ToToman() </td>
                                     <td class="text-center"> @item.CreateDate.ToShamsi() </td>
-                                    <td class="text-center"> @(item.State?"شارژ":"خرید") </td>
+                                    <td class="text-center"> @(item.State ? "شارژ" : "خرید") </td>
                                     <td class="text-center">
                                         <a asp-page="Details" asp-route-Id="@item.Id" class="btn btn-primary"> مرور </a>
                                     </td>
@@ -53,7 +44,7 @@
                             <h1 class="h4 text-center alert alert-info">موردی ای موجود نمی باشد</h1>
                         }
                         
-                        
+
                     </tbody>
                 </table>
             </div>

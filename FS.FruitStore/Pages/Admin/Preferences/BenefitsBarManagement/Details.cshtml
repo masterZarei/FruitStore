@@ -1,34 +1,28 @@
 ﻿@page
-@model FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management.DetailsModel
-
+@model FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement.DetailsModel
 @{
     ViewData["Title"] = "اطلاعات";
 }
 <div class="row">
-
     <!-- #region پنل-->
     <partial name="_Panel" />
     <!-- #endregion -->
     <div class="col-lg-9 col-12">
         <div class="card">
             <div class="card-header d-flex">
-                <h4 class="text-center mx-auto font-weight-bold title-text"> اطلاعات راه های ارتباطی </h4>
+                <h4 class="text-center mx-auto font-weight-bold title-text"> اطلاعات مزایای محصول </h4>
             </div>
             <div class="card-body">
-                <label for="name" class="my-2"> نام : </label>
-                <input asp-for="ContactWays.Name" class="form-control" disabled>
-
-                <label for="name" class="my-2"> آدرس : </label>
-                <input asp-for="ContactWays.Address" class="form-control" disabled>
+                <label for="name" class="my-2"> متن : </label>
+                <input asp-for="BenefitBar.Text" class="form-control" disabled/>
 
                 <label for="name" class="my-2"> نمایه : </label>
                 <br />
-                <i style="font-size:32px;" class="mx-2 @Model.ContactWays.Icon"></i> 
-
+                <img src="~/Preferences/@Model.BenefitBar.Img" width="350" height="350" class="mx-auto mb-2 rounded"></img>
 
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-12">
-                        <button asp-page="Edit" asp-route-Id="@Model.ContactWays.Id" class="btn btn-block btn-info"> ویرایش </button>
+                        <button asp-page="Edit" asp-route-Id="@Model.BenefitBar.Id" class="btn btn-block btn-info"> ویرایش </button>
                     </div>
                     <div class="col-lg-6 col-md-6 col-12">
                         <button asp-page="Index" class="btn btn-block btn-secondary"> بازگشت </button>

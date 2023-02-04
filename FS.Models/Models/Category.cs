@@ -14,6 +14,6 @@ namespace FS.Models.Models
 
         [Display(Name = "توضیحات دسته بندی")]
         public string Description { get; set; }
-        public List<Product>? Products { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

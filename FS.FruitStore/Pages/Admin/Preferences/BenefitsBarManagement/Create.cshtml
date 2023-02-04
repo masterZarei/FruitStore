@@ -1,0 +1,74 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="row">
+    <!-- #region پنل-->
+    <partial name="_Panel" />
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12 mt-5">
+
+        <div class="card mb-4 mt-2 pb-4 text-center">
+            <div class="card-header d-flex">
+                <h4 class="text-center m-auto text-dark"> ایجاد نوار مزایا و خدمات </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div>
+                        <label> متن : </label>
+                        <input asp-for="BenefitBar.Text" placeholder="متن را وارد کنید . . ." class="form-control mb-2 d-block mx-auto">
+                        <span asp-validation-for="BenefitBar.Text" class="text-danger"></span>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <label> نمایه </label>
+                                <div class="custom-file">
+                                    <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
+                                    <input type="file" name="ImgUp" class="custom-file-input">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12 mt-3">
+                                <img class="border d-block mx-auto" src="" width="160px" height="160px" id="imgPreview">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block w-75 d-block mx-auto my-3"> ثبت </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#imgUp").change(function () {
+            readURL(this);
+        });
+
+
+        //نمایش اسم عکس روی اینپوت
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}

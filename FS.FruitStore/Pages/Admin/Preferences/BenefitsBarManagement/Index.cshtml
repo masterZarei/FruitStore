@@ -1,0 +1,60 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="row">
+    <!-- #region پنل-->
+    <partial name="_Panel" />
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12 mt-5">
+        <form method="post">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <a asp-page="Create" class="btn btn-primary text-right"> <i class="fa fa-plus"></i> افزودن </a>
+                    <h4 class="h4 text-center m-auto"> مدیریت نوار مزایا و خدمات </h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered ttable-hover table-stript table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-center"> متن </th>
+                                <th class="text-center"> نمایه </th>
+                                <th class="text-center"> مدیریت </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.BenefitBar.Any())
+                            {
+                                @foreach (var item in Model.BenefitBar)
+                                {
+                                    <tr>
+                                        <td class="text-center"> @item.Text </td>
+                                        <td class="text-center text-primary"> <img width="30" height="30" class="rounded" src="~/Preferences/@item.Img"/> </td>
+                                        <td class=" text-center">
+                                            <button asp-page-handler="Remove" type="submit" class="align-middle btn text-primary" asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+                                            <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle text-primary">
+                                                <i class="fa fa-list"></i>
+                                            </a>
+                                            <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle text-primary">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <h1 class="h4 text-center alert alert-info">موردی ای موجود نمی باشد</h1>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+        </form>
+    </div>
+</div>
+

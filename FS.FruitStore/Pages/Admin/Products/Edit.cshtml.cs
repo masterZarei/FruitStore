@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FS.DataAccess;
+using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Utilities.Roles;
-using FS.DataAccess;
-using FS.Models.Models;
-using Utilities.Convertors;
-using Microsoft.EntityFrameworkCore;
 using Utilities;
+using Utilities.Convertors;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
 {

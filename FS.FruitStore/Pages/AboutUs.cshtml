@@ -11,26 +11,31 @@
             </p>
         </div>
         <div class="col-lg-6 col-md-6 col-12">
-            <img src="~/Preferences/@Model.AboutUs.Img" alt="logo" class="rounded about-pic" height="400px" width="450px">
+            <img src="~/Preferences/@Model.AboutUs.Img" class="rounded about-pic" height="400px" width="450px">
         </div>
     </div>
 </div>
 
 
-
 <!-- #region ContactUs -->
-<div class="contactUS">
-
-    <div class="row d-flex justify-content-lg-center flex-wrap services-box">
-        @foreach (var item in Model.ContactWays)
-        {
-            <div class="d-flex mx-3 justify-content-center align-items-center">
-                <i class="@item.Icon"></i>
-                <h6 class="mx-1">@((item.IsLink) ? Html.Raw($"<a href='{item.Address}'>{item.Name}</a>") : Html.Raw($"<span>{item.Name}: {item.Address} </span>"))</h6>
-            </div>
-        }
+@if (Model.ContactWays.Any())
+{
+    <span>راه های ارتباطی ما: </span>
+    <div class="contactUS">
 
 
+        <div class="row d-flex justify-content-lg-center flex-wrap services-box">
+            @foreach (var item in Model.ContactWays)
+            {
+                <div class="d-flex mx-3 justify-content-center align-items-center">
+                    <i class="@item.Icon"></i>
+                    <h6 class="mx-1">@((item.IsLink) ? Html.Raw($"<a href='{item.Address}'>{item.Name}</a>") : Html.Raw($"<span>{item.Name}: {item.Address} </span>"))</h6>
+                </div>
+            }
+
+
+        </div>
     </div>
-</div>
+}
+
 <!-- #endregion -->

@@ -1,4 +1,6 @@
-﻿namespace Utilities.Convertors
+﻿using System;
+
+namespace Utilities.Convertors
 {
     public static class PriceConverter
     {
@@ -10,6 +12,10 @@
         {
             return value.ToString("#,0 تومان");
         }
+        public static string ToToman(this decimal value)
+        {
 
+            return Convert.ToDouble(value).ToString("#,0 تومان");
+        }
     }
 }

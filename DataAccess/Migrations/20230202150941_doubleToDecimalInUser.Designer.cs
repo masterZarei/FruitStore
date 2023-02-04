@@ -4,14 +4,16 @@ using FS.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230202150941_doubleToDecimalInUser")]
+    partial class doubleToDecimalInUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,28 +37,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AboutUs");
-                });
-
-            modelBuilder.Entity("FS.Models.Models.BenefitBar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Img")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BenefitBars");
                 });
 
             modelBuilder.Entity("FS.Models.Models.Category", b =>
@@ -403,17 +383,17 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("NewWalletAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("NewWalletAmount")
+                        .HasColumnType("float");
 
-                    b.Property<bool>("State")
-                        .HasColumnType("bit");
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TrackingCode")
-                        .HasColumnType("int");
+                    b.Property<double>("TrackingCode")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("TransactionAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("TransactionAmount")
+                        .HasColumnType("float");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");

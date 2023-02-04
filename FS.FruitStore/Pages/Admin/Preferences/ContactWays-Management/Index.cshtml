@@ -12,7 +12,7 @@
         <form method="post">
             <div class="card">
                 <div class="card-header d-flex">
-                        <!-- به صفحه اضافه کردن راه های ارتباطی ...>>>  -->
+                    <!-- به صفحه اضافه کردن راه های ارتباطی ...>>>  -->
                     <a asp-page="Create" class="btn btn-primary text-right"> <i class="fa fa-plus"></i> افزودن </a>
                     <h4 class="text-center mx-auto font-weight-bold title-text"> راه های ارتباطی </h4>
                 </div>
@@ -32,15 +32,15 @@
                             {
                                 <tr>
                                     <td class="text-center"> @item.Name </td>
-                                    <td class="text-center"> @item.Address </td>
-                                    <td class="text-center text-primary"> <i class="@item.Icon"></i> </td>
+                                    <td class="text-center"><a href="@item.Address"> @item.Address </a></td>
+                                    <td class="text-center text-primary"> <i class="@item.Icon h5"></i> </td>
                                     <td class=" text-center">
-                                        <button asp-page-handler="Remove" type="submit" class="align-middle btn " asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+                                        <button asp-page-handler="Remove" type="submit" class="align-middle btn text-primary " asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
 
-                                        <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle btn ">
+                                        <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle text-primary">
                                             <i class="fa fa-list"></i>
                                         </a>
-                                        <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle btn ">
+                                        <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle text-primary">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                     </td>
@@ -56,6 +56,5 @@
         </form>
 
     </div>
-</div>
 </div>
 

@@ -25,5 +25,6 @@ namespace FS.DataAccess
         public DbSet<CategoryToProduct> CategoryToProducts { get; set; }
         public DbSet<WalletHistory> WalletHistories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<BenefitBar> BenefitBars { get; set; }
     }
 }

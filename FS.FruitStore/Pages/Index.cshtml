@@ -1,14 +1,14 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "خانه";
 }
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-12">
             <section class="home">
                 <div class="slider">
-                    @foreach(var item in Model.Sliders)
+                    @foreach (var item in Model.Sliders)
                     {
                         <div class="slide active" style="background-image: url('img/@item.Img');">
                             <div class="container">
@@ -17,7 +17,8 @@
                                 </div>
                             </div>
                         </div>
-                    }                </div>
+                    }
+                </div>
                 <div class="controls">
                     <div class="next"><i class="fas fa-chevron-right"></i></div>
                     <div class="prev"><i class="fas fa-chevron-left"></i></div>
@@ -54,26 +55,24 @@
         @if (Model.Product.Any())
         {
 
-            <div class="row">
-                @foreach (var item in Model.Product)
-                {
-                    <div class="col-lg-3 col-md-3 col-12 my-1">
-                        <a asp-page="Product-Details" asp-route-Id="@item.ProductId">
-                            <div class="card product-box">
-                                <div class="mother-imageBox">
-                                    <img class="card-img-top" src="~/ProductImages/@item.ProductPic" alt="this is a img" height="250px">
-                                </div>
-                                <div class="card-body product-box-body">
-                                    <h5 class="card-title h5 text-dark" style="font-size: 18px; font-weight: 600;">
-                                        @item.Name
-                                    </h5>
-                                    <p class="h6 text-dark" style="font-weight: 600"> @item.Price.ToToman() </p>
-                                </div>
+            @foreach (var item in Model.Product)
+            {
+                <div class="col-lg-3 col-md-3 col-12 my-1">
+                    <a asp-page="Product-Details" asp-route-Id="@item.ProductId">
+                        <div class="card product-box">
+                            <div class="mother-imageBox">
+                                <img class="card-img-top" src="~/ProductImages/@item.ProductPic" alt="this is a img" height="250px">
                             </div>
-                        </a>
-                    </div>
-                }
-            </div>
+                            <div class="card-body product-box-body">
+                                <h5 class="card-title h5 text-dark" style="font-size: 18px; font-weight: 600;">
+                                    @item.Name
+                                </h5>
+                                <p class="h6 text-dark" style="font-weight: 600"> @item.Price.ToToman() </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
         }
         else
         {
@@ -86,32 +85,19 @@
 <!-- #region Our Services-->
 <div class="our-services">
     <div class="container">
-        <div class="row d-flex justify-content-lg-between flex-wrap services-box">
-            <div class="d-flex mx-3 justify-content-center align-items-center">
-                <img src="/image/car.png" width="40px" height="40px">
-                <h6> ارسال رایگان </h6>
+        @if (Model.BenefitBars.Any())
+        {
+            <div class="row d-flex justify-content-lg-around flex-wrap services-box">
+                @foreach (var item in Model.BenefitBars)
+                {
+                    <div class="d-flex mx-3 justify-content-center align-items-center">
+                        <img src="~/Preferences/@item.Img" width="40px" height="40px" class="rounded">
+                        <h6 class="mr-1"> @item.Text </h6>
+                    </div>
+                }
+
             </div>
-            <div class="d-flex mx-3 justify-content-center align-items-center">
-                <img src="/image/shopping-cart.png" class="bg-warning p-1" width="40px" height="40px">
-                <h6 class="mx-1"> سفارش آماده </h6>
-            </div>
-            <div class="d-flex mx-3 justify-content-center align-items-center">
-                <img src="/image/footer-phone.png" width="40px" height="40px">
-                <h6 class="mx-1"> مشاوره رایگان </h6>
-            </div>
-            <div class="d-flex mx-3 justify-content-center align-items-center">
-                <img src="/image/pin.png" class="bg-warning p-1" width="40px" height="40px">
-                <h6 class="mx-1"> با صرفه و اقتصادی </h6>
-            </div>
-            <div class="d-flex mx-3 justify-content-center align-items-center">
-                <img src="/image/medal.png" width="40px" height="40px">
-                <h6> تضمین کیفیت </h6>
-            </div>
-            <div class="d-flex mx-3 justify-content-center align-items-center">
-                <img src="/image/discount.png" width="40px" height="40px">
-                <h6> تخفیف </h6>
-            </div>
-        </div>
+        }
     </div>
 </div>
 <!-- #endregion -->
