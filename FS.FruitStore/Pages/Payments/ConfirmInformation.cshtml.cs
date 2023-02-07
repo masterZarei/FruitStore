@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.Convertors;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Payments
 {
@@ -58,16 +59,18 @@ namespace FS.FruitStore.Pages.Payments
         {
             var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
-            var currentUser = _db.Users.FirstOrDefault(a => a.Id == userId);
+            var currentUser = _db.Users
+                .FirstOrDefault(a => a.Id == userId);
 
 
 
             var factor = _db.Factors
+                .Include(a=> a.FactorDetails)
                 .Where(a => a.UserId == userId && !a.IsFinally)
                 .FirstOrDefault();
 
-            if (string.IsNullOrEmpty(CIModel.ApplicationUser.PostalCode)
-                || (string.IsNullOrEmpty(CIModel.ApplicationUser.Address)))
+            if (string.IsNullOrEmpty(CIModel.ApplicationUser.PostalCode)||
+                string.IsNullOrEmpty(CIModel.ApplicationUser.Address))
             {
                 ModelState.AddModelError(string.Empty, "لطفا کد پستی را وارد کنید!");
                 ModelState.AddModelError(string.Empty, "لطفا آدرس را وارد کنید!");
@@ -76,21 +79,76 @@ namespace FS.FruitStore.Pages.Payments
             }
             else
             {
-                currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-                currentUser.Address = CIModel.ApplicationUser.PostalCode;
-                currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+                switch (CIModel.SelectedPaymentType)
+                {
+                    case "پرداخت در محل":
+                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+                        currentUser.Address = CIModel.ApplicationUser.PostalCode;
+                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
-                factor.Post_Type = CIModel.SelectedPostType;
-                factor.Payment_Type = CIModel.SelectedPaymentType;
-                factor.Description = CIModel.Description;
-                factor.WillDeliver_Date = DateTime.Now.AddDays(10);
-                factor.Send_Date = DateTime.Now.AddDays(2);
+                        factor.Post_Type = CIModel.SelectedPostType;
+                        factor.Payment_Type = CIModel.SelectedPaymentType;
+                        factor.Description = CIModel.Description;
+                        factor.WillDeliver_Date = DateTime.Now.AddDays(10);
+                        factor.Send_Date = DateTime.Now.AddDays(2);
 
 
-                _db.Update(currentUser);
-                _db.Update(factor);
-                await _db.SaveChangesAsync();
-                return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
+                        _db.Update(currentUser);
+                        _db.Update(factor);
+                        await _db.SaveChangesAsync();
+                        return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
+
+                    case "پرداخت اینترنتی":
+                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+                        currentUser.Address = CIModel.ApplicationUser.PostalCode;
+                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+
+                        factor.Post_Type = CIModel.SelectedPostType;
+                        factor.Payment_Type = CIModel.SelectedPaymentType;
+                        factor.Description = CIModel.Description;
+                        factor.WillDeliver_Date = DateTime.Now.AddDays(10);
+                        factor.Send_Date = DateTime.Now.AddDays(2);
+
+
+                        _db.Update(currentUser);
+                        _db.Update(factor);
+                        await _db.SaveChangesAsync();
+                        return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
+
+                    case "پرداخت با کیف پول":
+                        double FullFactorPrice = factor.FactorDetails.Sum(a => a.Price);
+                        if (currentUser.WalletAmount >= FullFactorPrice)
+                        {
+                            currentUser.WalletAmount -= FullFactorPrice;
+
+                            currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+                            currentUser.Address = CIModel.ApplicationUser.PostalCode;
+                            currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+
+                            factor.Post_Type = CIModel.SelectedPostType;
+                            factor.Payment_Type = CIModel.SelectedPaymentType;
+                            factor.Description = CIModel.Description;
+                            factor.WillDeliver_Date = DateTime.Now.AddDays(SD.CountOfDaysPackageWillDeliver);
+                            factor.Send_Date = DateTime.Now.AddDays(1);
+                            factor.PurchaseNumber = "5454";
+                            factor.IsFinally = true;
+
+                            _db.Update(currentUser);
+                            _db.Update(factor);
+                            await _db.SaveChangesAsync();
+                            return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
+                        }
+                        else
+                        {
+                            //TODO : Return Error
+                            return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
+                        }
+
+                    default:
+                        //TODO : Return Error
+                        return BadRequest();
+                }
+                
 
             }
 

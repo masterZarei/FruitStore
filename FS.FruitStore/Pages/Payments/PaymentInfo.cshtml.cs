@@ -19,7 +19,6 @@ namespace Mahshop.Pages.Payment
             _db = db;
         }
 
-        //Id=4&&Authority=000000000000000000000000000000892673&Status=OK
         public async Task<IActionResult> OnGet(int Id, string Authority, string Status)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -28,20 +27,7 @@ namespace Mahshop.Pages.Payment
                 return BadRequest();
             var userId = claim.Value;
 
-            //Checking if all payment info is OK
 
-            //if (HttpContext.Request.Query["Status"] != "" &&
-            //    HttpContext.Request.Query["Status"].ToString().ToLower() != "ok" &&
-            //    HttpContext.Request.Query["Authority"] != "")
-            //{
-            //    string authority = HttpContext.Request.Query["Authority"].ToString();
-            //    //Order = _db.Factors.Find(Id);
-            //    // var payment = new ZarinpalSandbox.Models.PaymentVerificationWithExtraResponse(authority).RefId;
-
-            //}
-
-
-            // Assume everything is OK
             var crntFactor = _db.Factors
                 .Where(a => a.FactorId == Id)
                 .Include(a => a.FactorDetails)
@@ -50,13 +36,10 @@ namespace Mahshop.Pages.Payment
 
             if (crntFactor != null)
             {
-
-
                 crntFactor.WillDeliver_Date = System.DateTime.Now.AddDays(SD.CountOfDaysPackageWillDeliver);
                 crntFactor.Send_Date = System.DateTime.Now.AddDays(2);
                 crntFactor.Post_Type = "سفارشی";
-                crntFactor.PurchaseNumber = "5454";
-                crntFactor.IsFinally = true;
+                
                 _db.Update(crntFactor);
                 await _db.SaveChangesAsync();
 

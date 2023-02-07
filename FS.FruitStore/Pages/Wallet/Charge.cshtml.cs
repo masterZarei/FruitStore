@@ -23,7 +23,7 @@ namespace FS.FruitStore.Pages.Wallet
         public User ApplicationUser { get; set; }
 
         [BindProperty]
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
 
         public async Task<IActionResult> OnGet(string Id)
         {

@@ -27,11 +27,9 @@ namespace FS.Models.Models
         public string Description { get; set; }
         //
         [Display(Name = "عکس محصول")]
-        //[Required(ErrorMessage = "لطفا عکس محصول را وارد کنید")]
         public string ProductPic { get; set; }
         //
         [Display(Name = "عکس محصول")]
-        //[Required(ErrorMessage = "لطفا عکس محصول را وارد کنید")]
         public string ProductPic2 { get; set; }
 
         //

@@ -31,8 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Admin\BannerManagenent\" />
-    <Folder Include="Pages\Admin\FooterManagement\" />
+    <Folder Include="Pages\Admin\Preferences\BannerManagenent\" />
     <Folder Include="Pages\Panel\Wallet\" />
     <Folder Include="wwwroot\Preferences\" />
   </ItemGroup>

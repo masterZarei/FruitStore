@@ -38,6 +38,8 @@ namespace FS.FruitStore.Pages.Payments
         }
         public async Task<IActionResult> OnPostAsync(int Id)
         {
+
+
             //var claimsIdentity = (ClaimsIdentity)User.Identity;
             //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             //if (claim == null)

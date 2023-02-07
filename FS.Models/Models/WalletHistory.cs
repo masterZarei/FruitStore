@@ -12,8 +12,8 @@ namespace FS.Models.Models
         public virtual User User { get; set; }
 
         public int TrackingCode { get; set; }
-        public decimal TransactionAmount { get; set; }
-        public decimal NewWalletAmount { get; set; }
+        public double TransactionAmount { get; set; }
+        public double NewWalletAmount { get; set; }
         public bool State { get; set; }
     }
 }

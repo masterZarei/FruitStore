@@ -1,6 +1,5 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -18,7 +17,6 @@ namespace FS.FruitStore.Pages
         public Product_DetailsModel(ApplicationDbContext db)
         {
             _db = db;
-
         }
 
         [BindProperty]
@@ -70,7 +68,10 @@ namespace FS.FruitStore.Pages
         }
         public async Task<IActionResult> OnPost(int ProductId)
         {
-            var currentProduct = _db.Products.Where(a => a.ProductId == ProductId).FirstOrDefault();
+            var currentProduct = _db.Products
+                .Where(a => a.ProductId == ProductId)
+                .FirstOrDefault();
+
             if (currentProduct == null)
                 return NotFound();
 
@@ -80,13 +81,14 @@ namespace FS.FruitStore.Pages
                 return Redirect("/Identity/Account/Login");
             var userId = claim.Value;
 
-            var factor = _db.Factors.FirstOrDefault(o => o.UserId == userId && !o.IsFinally);
-
+            var factor = _db.Factors
+                .FirstOrDefault(o => o.UserId == userId && !o.IsFinally);
             //اگه فاکتور باز داشت
             if (factor != null)
             {
-                var factorDetail = _db.FactorDetails.FirstOrDefault(f => f.FactorId == factor.FactorId &&
-                                                                  f.ProductId == currentProduct.ProductId);
+                var factorDetail = _db.FactorDetails
+                    .FirstOrDefault(f => f.FactorId == factor.FactorId &&
+                                         f.ProductId == currentProduct.ProductId);
                 //اگه محصول تو سبدش بود
                 if (factorDetail != null)
                 {

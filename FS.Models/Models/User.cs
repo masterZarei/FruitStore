@@ -56,7 +56,7 @@ namespace FS.Models.Models
         public string CartNumber { get; set; }
         //
         [Display(Name = "مقدار کیف پول")]
-        public decimal WalletAmount  { get; set; }
+        public double WalletAmount  { get; set; }
         //
         public bool isDisabled { get; set; }
         //

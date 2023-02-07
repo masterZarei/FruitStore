@@ -1,0 +1,71 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Preferences.FooterManagement.Footer_mgmtModel
+@{
+}
+<div class="row">
+    <!-- #region پنل-->
+    <partial name="_Panel" />
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12 mt-5">
+        <div class="card mb-4 mt-2 pb-4 text-center">
+            <div class="card-header d-flex">
+                <h4 class="h4 text-center m-auto"> مدیریت فوتر </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div>
+                        <label> توضیحات : </label>
+                        <textarea cols="30" rows="10" placeholder="توضیحات را وارد کنید . . ." asp-for="Footer.Description"
+                                  class="form-control"></textarea>
+                        <hr color="#eee" size="2px">
+                        <label> نماد های اعتماد </label>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <img width="160px" height="160px" class="border mx-auto d-block my-2">
+                                <div class="custom-file">
+                                    <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
+                                    <input id="fileup" name="ImgUp" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <img width="160px" height="160px" class="border mx-auto d-block my-2">
+                                <div class="custom-file">
+                                    <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
+                                    <input id="fileup" name="ImgUp2" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <hr color="#eee" size="2px">
+
+                        <label> راه های ارتباطی </label>
+                        <div class="d-flex justify-content-between">
+                            @*<select class="form-control w-50" asp-for="SelectedCwId" asp-items="Model.CWs">
+                            </select>*@
+                            <button class="btn btn-success"> افزودن </button>
+                        </div>
+                        <table class="table table-bordered mt-3">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"> نام </th>
+                                    <th class="text-center"> آدرس </th>
+                                    <th class="text-center"> نمایه </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"> تلگرام </td>
+                                    <td class="text-center"> t.me/sagZ </td>
+                                    <td class="text-center"> <i class="fab fa-telegram"></i> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <button type="submit" class="btn btn-success btn-block mx-auto my-3 w-75 d-block"> ثبت </button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
