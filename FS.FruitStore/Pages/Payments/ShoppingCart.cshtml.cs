@@ -36,7 +36,7 @@ namespace FS.FruitStore.Pages.Payments
 
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync(int Id)
+        public IActionResult OnPost(int Id)
         {
 
 
@@ -75,27 +75,27 @@ namespace FS.FruitStore.Pages.Payments
             {
                 factorDetail.Count -= 1;
                 _db.Update(factorDetail);
-                _db.SaveChanges();
+               await _db.SaveChangesAsync();
 
                 return RedirectToPage("ShoppingCart");
             }
             _db.Remove(factorDetail);
-            _db.SaveChanges();
+           await _db.SaveChangesAsync();
             return RedirectToPage("ShoppingCart");
         }
         public async Task<IActionResult> OnPostAddToCart(int DetailId)
         {
-            var factorDetail = _db.FactorDetails
+            var factorDetail = await _db.FactorDetails
                 .Include(a=>a.Product)
                 .Where(a=>a.DetailId == DetailId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (factorDetail.Count <= factorDetail.Product.Count-1)
             {
                 factorDetail.Count += 1;
 
                 _db.Update(factorDetail);
-                _db.SaveChanges();
+               await _db.SaveChangesAsync();
                 return RedirectToPage("ShoppingCart");
 
             }
@@ -111,25 +111,25 @@ namespace FS.FruitStore.Pages.Payments
             var factor = _db.Factors.Find(OrderId);
             _db.Factors.Remove(factor);
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return RedirectToPage("ShoppingCart");
         }
         public async Task<IActionResult> OnPostRemoveThisCart(int DetailId)
         {
             var orderDetail = _db.FactorDetails.Find(DetailId);
-            var factor = _db.Factors
+            var factor = await _db.Factors
                 .Include(a=>a.FactorDetails)
-                .Where(a => a.FactorId == orderDetail.FactorId).FirstOrDefault();
+                .Where(a => a.FactorId == orderDetail.FactorId).FirstOrDefaultAsync();
 
             if (factor.FactorDetails.Count<=1)
             {
                 _db.Remove(factor);
-                _db.SaveChanges();
+               await _db.SaveChangesAsync();
                 return RedirectToPage("ShoppingCart");
             }
 
             _db.Remove(orderDetail);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
             return RedirectToPage("ShoppingCart");
         }
     }

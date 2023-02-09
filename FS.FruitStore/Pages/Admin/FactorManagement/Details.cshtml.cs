@@ -25,13 +25,13 @@ namespace Mahshop.Pages.FactorManagement
         public async Task<IActionResult> OnGet(int Id)
         {
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
+            }
 
             Factor = _db.Factors
                 .Include(a=>a.FactorDetails)
@@ -42,7 +42,13 @@ namespace Mahshop.Pages.FactorManagement
                 .FirstOrDefault();
 
             if (Factor == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
             GetInfo = new GetUserInfo(_db);
 
             return Page();

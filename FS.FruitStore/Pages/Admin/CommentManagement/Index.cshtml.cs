@@ -32,12 +32,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
                 return NotFound();
             var userId = claim.Value;
 
-            //#region isDisabled?
-            //Methods mtd = new Methods(_db);
-            //int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            //if (isAuthorized == 1)
-            //    return Redirect("/Identity/Account/AccessDenied");
-            //#endregion
+
 
             var CommentsList = _db.Comments
                 .Where(a => a.Answer == null)

@@ -2,6 +2,7 @@ using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,9 +22,9 @@ namespace FS.FruitStore.Pages
 
         [BindProperty]
         public List<ContactWays> ContactWays { get; set; }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            AboutUs = _db.AboutUs.FirstOrDefault();
+            AboutUs = await _db.AboutUs.FirstOrDefaultAsync();
 
             if (AboutUs == null)
             {
@@ -34,11 +35,11 @@ namespace FS.FruitStore.Pages
                 };
                 _db.Add(initAboutUs);
                 _db.SaveChanges();
-                AboutUs = _db.AboutUs.FirstOrDefault();
+                AboutUs = await _db.AboutUs.FirstOrDefaultAsync();
             }
-            ContactWays = _db.ContactWays
+            ContactWays = await _db.ContactWays
                 .OrderByDescending(a=>a.CreateDate)
-                .ToList();
+                .ToListAsync();
 
 
             return Page();

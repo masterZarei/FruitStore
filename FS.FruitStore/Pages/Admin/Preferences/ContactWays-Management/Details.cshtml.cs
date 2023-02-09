@@ -21,13 +21,27 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
             
 
-            ContactWays = await _context.ContactWays.FirstOrDefaultAsync(m => m.Id == id);
+            ContactWays = await _context
+                .ContactWays
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (ContactWays == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             return Page();
         }

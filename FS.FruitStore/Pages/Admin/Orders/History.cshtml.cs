@@ -28,12 +28,6 @@ namespace FS.FruitStore.Pages.Admin.Orders
         public List<AdminIndexOrderVM> Model { get; set; }
         public async Task<IActionResult> OnGet()
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
             Model = new List<AdminIndexOrderVM>();
             var Order = _db.Factors

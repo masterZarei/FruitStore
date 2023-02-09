@@ -20,7 +20,7 @@ namespace FS.FruitStore.Pages.Admin.Categories
             _context = context;
         }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             #region isDisabled?
             GetUserInfo mtd = new GetUserInfo(_context);
@@ -39,13 +39,22 @@ namespace FS.FruitStore.Pages.Admin.Categories
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "مشکلی رخ داد!";
+                #endregion
                 return Page();
             }
 
             _context.Categories.Add(Category);
             await _context.SaveChangesAsync();
 
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = "دسته بندی با موفقیت ایجاد شد.";
+            #endregion
             return RedirectToPage("./Index");
+
         }
     }
 }

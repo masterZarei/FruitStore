@@ -1,13 +1,16 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 using Utilities;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
 {
+    [Authorize(SD.AdminEndUser)]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -48,6 +51,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 initIcons();
                 return Page();
             }
@@ -58,7 +65,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
 
             _context.ContactWays.Add(ContactWays);
             await _context.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("./Index");
         }
     }

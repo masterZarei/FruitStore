@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FS.DataAccess;
+using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using Utilities.Roles;
-using FS.DataAccess;
-using FS.Models.Models;
-using Utilities.Convertors;
 using Utilities;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
 {
@@ -22,7 +20,7 @@ namespace FS.FruitStore.Pages.Admin.Products
         public DetailsModel(ApplicationDbContext context)
         {
             _context = context;
-            
+
         }
 
         [BindProperty]
@@ -35,32 +33,41 @@ namespace FS.FruitStore.Pages.Admin.Products
 
         public async Task<IActionResult> OnGetAsync(int? Id)
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_context);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
 
-            Product = await _context.Products.FirstOrDefaultAsync(u => u.ProductId == Id);
+            Product = await _context
+                .Products
+                .FirstOrDefaultAsync(u => u.ProductId == Id);
+
             //Getting unit
             var checkProductUnit = new GetProductInfo(_context).GetUnit(Product.ProductId);
 
-            if(checkProductUnit == null)
+            if (checkProductUnit == null)
                 ProductUnit = "0";
             else
                 ProductUnit = new GetProductInfo(_context).GetUnit(Product.ProductId).Name;
 
             if (Product == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
-            ProdCats = (from a in _context.Categories
-                        join b in _context.CategoryToProducts on a.Id equals b.CategoryId
-                        where b.ProductId == Product.ProductId
-                        select a).ToList();
+            ProdCats = await (from a in _context.Categories
+                              join b in _context.CategoryToProducts on a.Id equals b.CategoryId
+                              where b.ProductId == Product.ProductId
+                              select a).ToListAsync();
 
             return Page();
         }

@@ -9,14 +9,17 @@ using Microsoft.EntityFrameworkCore;
 using FS.DataAccess;
 using FS.Models.Models;
 using Utilities;
+using Microsoft.AspNetCore.Authorization;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
 {
+    [Authorize(SD.AdminEndUser)]
     public class EditModel : PageModel
     {
-        private readonly FS.DataAccess.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public EditModel(FS.DataAccess.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -37,13 +40,27 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
 
 
-            ContactWays = await _context.ContactWays.FirstOrDefaultAsync(m => m.Id == id);
+            ContactWays = await _context
+                .ContactWays
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (ContactWays == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
             var currentIcon = ContactWays.Icon;
 
             // Icons
@@ -59,7 +76,13 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
+            }
 
             ContactWays.Icon = SelectedIcon;
 
@@ -68,7 +91,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
 
             _context.Update(ContactWays);
             await _context.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("./Index");
         }
 

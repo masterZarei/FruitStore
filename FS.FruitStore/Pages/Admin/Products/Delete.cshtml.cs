@@ -25,23 +25,34 @@ namespace FS.FruitStore.Pages.Admin.Products
 
         public async Task<IActionResult> OnGetAsync(int? Id)
         {
-            //#region isDisabled?
-            //Methods mtd = new Methods(_context);
-            //int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            //if (isAuthorized == 1)
-            //    return Redirect("/Identity/Account/AccessDenied");
-            //#endregion
 
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
 
 
-            Products = await _context.Products.FirstOrDefaultAsync(u => u.ProductId == Id);
+            Products = await _context
+                .Products
+                .FirstOrDefaultAsync(u => u.ProductId == Id);
 
             if (Products == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(int? Id)
@@ -49,19 +60,34 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             if (Id == 0)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
             }
 
-            Products = await _context.Products.FindAsync(Id);
+            Products = await _context
+                .Products
+                .FindAsync(Id);
 
             if (Products == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             Products.isVerified = false;
 
             _context.Update(Products);
             await _context.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Index");
 
         }

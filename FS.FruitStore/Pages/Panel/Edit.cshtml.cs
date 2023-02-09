@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.Convertors;
 
@@ -28,16 +27,19 @@ namespace FS.FruitStore.Pages.Panel
         public async Task<IActionResult> OnGetAsync(string userID)
         {
 
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
             if (userID == null)
-               return NotFound();
-            Users = await _db.Users.Where(a => a.Id == userID).FirstOrDefaultAsync();
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
+                return NotFound();
+            }
+            Users = await _db
+                .Users
+                .Where(a => a.Id == userID)
+                .FirstOrDefaultAsync();
             
 
             return Page();
@@ -48,12 +50,24 @@ namespace FS.FruitStore.Pages.Panel
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
             }
-            var userInDb = await _db.Users.FirstOrDefaultAsync(u => u.Id == Users.Id);
+            var userInDb = await _db
+                .Users
+                .FirstOrDefaultAsync(u => u.Id == Users.Id);
 
             if (userInDb == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             userInDb.Name = Users.Name;
             userInDb.LastName = Users.LastName;
@@ -68,6 +82,10 @@ namespace FS.FruitStore.Pages.Panel
 
             _db.Users.Update(userInDb);
             await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Index");
         }
     }

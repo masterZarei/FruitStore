@@ -1,16 +1,15 @@
+using FS.DataAccess;
+using FS.Models.Paging;
+using FS.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Text;
-using System.Security.Claims;
+using System.Threading.Tasks;
+using Utilities.Convertors;
 using Utilities.Roles;
-using FS.DataAccess;
-using FS.Models.ViewModels;
-using FS.Models.Paging;
 
 namespace FS.FruitStore.Pages.Admin.Products
 {
@@ -30,24 +29,17 @@ namespace FS.FruitStore.Pages.Admin.Products
 
         public async Task<IActionResult> OnGet(int pageId = 1, string searchName = null)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
-                return NotFound();
 
-            var userId = claim.Value;
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name);
 
-            //#region isDisabled?
-            //Methods mtd = new Methods(_db);
-            //int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            //if (isAuthorized == 1)
-            //    return Redirect("/Identity/Account/AccessDenied");
-            //#endregion
 
             ProductsListViewModel = new ProductsListViewModel
             {
 
-                Products = await _db.Products.Where(q=>q.isVerified==false).ToListAsync(),
+                Products = await _db
+                .Products
+                .Where(q=>q.isVerified==false)
+                .ToListAsync(),
 
             };
 
@@ -66,7 +58,10 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             if (searchName != null)
             {
-                ProductsListViewModel.Products = _db.Products.Where(q => q.isVerified == false && q.Name.Contains(searchName)).ToList();
+                ProductsListViewModel.Products = await _db
+                    .Products
+                    .Where(q => q.isVerified == false && q.Name.Contains(searchName))
+                    .ToListAsync();
             }
 
             //Pages
@@ -80,7 +75,9 @@ namespace FS.FruitStore.Pages.Admin.Products
                 UrlParam = param.ToString()
             };
 
-            ProductsListViewModel.Products = ProductsListViewModel.Products.OrderByDescending(a => a.CreateDate)
+            ProductsListViewModel.Products = ProductsListViewModel
+                .Products
+                .OrderByDescending(a => a.CreateDate)
                 .Skip((pageId - 1) * SD.PagingUserCount)
                 .Take(SD.PagingUserCount).ToList();
 

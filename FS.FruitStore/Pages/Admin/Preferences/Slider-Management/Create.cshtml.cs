@@ -24,13 +24,6 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
         public async Task<IActionResult> OnGetAsync()
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_context);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
-
             return Page();
         }
 
@@ -45,6 +38,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
             }
             string SaveDir = $"wwwroot/img";
@@ -65,7 +62,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
             _context.Sliders.Add(Slider);
             await _context.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("./Index");
         }
        

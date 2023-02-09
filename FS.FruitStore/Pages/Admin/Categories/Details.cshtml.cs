@@ -23,22 +23,31 @@ namespace FS.FruitStore.Pages.Admin.Categories
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            //    #region isDisabled?
-            //    Methods mtd = new Methods(_context);
-            //    int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            //    if (isAuthorized == 1)
-            //        return Redirect("/Identity/Account/AccessDenied");
-            //    #endregion
+
 
             if (id == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "دسته بندی پیدا نشد!";
+                #endregion
                 return NotFound();
+            }
 
 
-            Category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
+            Category = await _context
+                .Categories
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Category == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "دسته بندی پیدا نشد!";
+                #endregion
                 return NotFound();
-            
+            }
+
             return Page();
         }
     }

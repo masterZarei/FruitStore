@@ -1,17 +1,21 @@
-﻿using FS.Models.Models;
+﻿using FS.DataAccess;
+using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
 {
+    [Authorize(SD.AdminEndUser)]
     public class IndexModel : PageModel
     {
-        private readonly FS.DataAccess.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public IndexModel(FS.DataAccess.ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context)
         {
             _context = context;
         }

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="~/css/bootstrap-rtl.css">
     <link rel="stylesheet" href="~/css/bootstrap.css">
     <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="stylesheet" href="~/css/alert.css">
     <link rel="stylesheet" href="~/FontAwesome.Pro.6.1.2/Web/css/all.min.css">
 </head>
 
@@ -52,6 +53,9 @@
                     @*محل قرار گیری سبد خرید و نام*@
                     @if (User.Identity.IsAuthenticated)
                         @await Component.InvokeAsync("LoggedInUser")
+
+
+
 
 
 
@@ -158,15 +162,27 @@
 
 
 
-    <script src="~/js/all.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
-    <script src="~/js/jquery-3.3.1.min.js"></script>
-    <script src="~/js/popper.min.js"></script>
-    <script src="~/js/Script.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
+    <script type="text/javascript" src="~/js/all.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="~/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/js/Script.js"></script>
+    <script type="text/javascript" src="~/js/alert.js"></script>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
+    @if (TempData["Msg"] != null && TempData["State"] != null)
+    {
+        string msg = TempData["Msg"].ToString();
+        string state = TempData["State"].ToString();
+        <script>
 
+            showAlert('@TempData["State"].ToString()', '@Html.Raw(TempData["Msg"].ToString())')
+        </script>
+        TempData["State"] = null;
+        TempData["Msg"] = null;
+
+    }
 </body>
 
 </html>

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
@@ -27,23 +26,36 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
         public async Task<IActionResult> OnGetAsync()
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_context);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
-            Slider = await _context.Sliders.ToListAsync();
+            Slider = await _context
+                .Sliders
+                .ToListAsync();
             return Page();
         }
         public async Task<IActionResult> OnPostRemove(int Id)
         {
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
-            var thisSlider = _context.Sliders.Where(a => a.Id == Id).FirstOrDefault();
+            }
+
+            var thisSlider = await _context
+                .Sliders
+                .Where(a => a.Id == Id)
+                .FirstOrDefaultAsync();
+
             if (thisSlider == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return Page();
+            }
 
             string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", (string.IsNullOrEmpty(thisSlider.Img) ? "" : thisSlider.Img));
             if (System.IO.File.Exists(deletePath))
@@ -51,6 +63,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
             _context.Remove(thisSlider);
             await _context.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Index");
         }
         

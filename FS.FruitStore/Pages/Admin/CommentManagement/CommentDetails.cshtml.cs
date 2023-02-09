@@ -24,19 +24,23 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
         public Comments Comments { get; set; }
         public async Task<IActionResult> OnGet(int Id)
         {
-            //#region isDisabled?
-            //Methods mtd = new Methods(_db);
-            //int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            //if (isAuthorized == 1)
-            //    return Redirect("/Identity/Account/AccessDenied");
-            //#endregion
-
             if (Id == 0)
-                return NotFound();
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+            return NotFound();
+            }
 
             Comments = _db.Comments.Where(a => a.Id == Id).Include(a => a.Product).FirstOrDefault();
             if (Comments == null)
-                return NotFound();
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+            }
 
             return Page();
 
@@ -48,7 +52,14 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
 
             var cmt = await _db.Comments.Where(a => a.Id == Id).FirstOrDefaultAsync();
             if (cmt == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+
                 return NotFound();
+            }
 
             cmt.isVerified = true;
             cmt.Answer = Comments.Answer;
@@ -58,21 +69,40 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
             _db.Update(cmt);
             await _db.SaveChangesAsync();
 
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = "نظر با موفقیت پاسخ داده شد";
+            #endregion
             return RedirectToPage("ProductsComments", new { Id = cmt.Product_Id });
 
         }
         public async Task<IActionResult> OnPostRemoveCmt(int Id)
         {
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             var cmt = _db.Comments.Where(a => a.Id == Id).FirstOrDefault();
             if (cmt == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             _db.Remove(cmt);
             await _db.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = "نظر با موفقیت حذف شد";
+            #endregion
             return RedirectToPage("ProductsComments", new { Id = cmt.Product_Id });
 
         }

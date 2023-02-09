@@ -59,7 +59,7 @@ namespace FS.FruitStore.Pages
             return Page();
 
         }
-        public async Task<IActionResult> OnPostFilCatAsync()
+        public IActionResult OnPostFilCat()
         {
             if (SelectedCat != null)
             {

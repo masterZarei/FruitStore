@@ -1,12 +1,12 @@
+using FS.DataAccess;
+using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
-using FS.DataAccess;
-using FS.Models.Models;
 using Utilities.Convertors;
 
 namespace FS.FruitStore.Pages.Panel.MyFactors
@@ -27,19 +27,29 @@ namespace FS.FruitStore.Pages.Panel.MyFactors
         public async Task<IActionResult> OnGetAsync(int Id)
         {
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
 
-            FactorDetail = _db.FactorDetails.Include(a=>a.Product).Where(a => a.FactorId == Id).ToList();
+            FactorDetail = await _db.FactorDetails
+                .Include(a=>a.Product)
+                .Where(a => a.FactorId == Id)
+                .ToListAsync();
 
             if (FactorDetail == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
+
 
             return Page();
         }

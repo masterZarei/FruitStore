@@ -1,4 +1,4 @@
-using FS.DataAccess;
+﻿using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,22 +28,36 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
         public async Task<IActionResult> OnGet(int Id)
         {
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
-            Comments = _db.Comments.Where(a => a.Product_Id == Id && string.IsNullOrEmpty(a.Answer)).Include(a => a.Product).ToList();
+            Comments = _db.Comments
+                .Where(a => a.Product_Id == Id && string.IsNullOrEmpty(a.Answer))
+                .Include(a => a.Product).ToList();
+
             if (Comments.Count < 1)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "تعداد کامنت ها از 1 کمتر است";
+                #endregion
                 return RedirectToPage("Index");
+            }
 
             if (Comments == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
-
+            }
             getInfo = new GetUserInfo(_db);
 
             return Page();

@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
 {
-    [Authorize]
+    [Authorize(Roles = SD.AdminEndUser)]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -34,7 +35,13 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Success;
+                TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                #endregion
                 return Page();
+            }
 
             if (ImgUp != null)
             {
@@ -53,7 +60,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
 
             _context.BenefitBars.Add(BenefitBar);
             await _context.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = "با موفقیت انجام شد";
+            #endregion
             return RedirectToPage("./Index");
         }
     }

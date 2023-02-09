@@ -34,18 +34,18 @@ namespace FS.FruitStore.Pages.Payments
 
             if (Id == 0)
                 return NotFound();
-            var factor = _db.Factors
+            var factor = await _db.Factors
                 .Where(a => a.FactorId == Id &&
                 a.UserId == userId && !a.IsFinally &&
                 a.FactorDetails.Count > 1)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             
             CIModel = new ConfirmInformationVM()
             {
-                ApplicationUser = _db.Users
+                ApplicationUser = await _db.Users
                 .Where(a => a.Id == userId)
-                .FirstOrDefault()
+                .FirstOrDefaultAsync()
             };
             var AllPostTypes = PostTypes.GetTypes;
             var AllPaymentTypes = PayWays.GetWays;

@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
@@ -31,33 +30,39 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_context);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
             if (id == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
             }
 
-            Slider = await _context.Sliders.FirstOrDefaultAsync(m => m.Id == id);
+            Slider = await _context
+                .Sliders
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Slider == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
             }
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
             }
             try
@@ -86,20 +91,22 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
                 _context.Sliders.Update(currentSlider);
                 await _context.SaveChangesAsync();
 
+                #region Notif
+                TempData["State"] = Notifs.Success;
+                TempData["Msg"] = Notifs.SUCCEEDED;
+                #endregion
                 return RedirectToPage("Index");
 
             }
             catch (Exception)
             {
-
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                #endregion
                 return RedirectToPage("Index");
 
             }
-
-
-
-
-
 
         }
 

@@ -3,6 +3,7 @@ using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Convertors;
@@ -26,7 +27,7 @@ namespace FS.FruitStore.Pages.Wallet
             UserWalletVM = new UserWalletVM()
             {
                 ApplicationUser = CurrentUser,
-                WalletHistory = _db.WalletHistories.Where(a=>a.UserId == CurrentUser.Id).ToList()
+                WalletHistory = await _db.WalletHistories.Where(a=>a.UserId == CurrentUser.Id).ToListAsync()
             };
 
             return Page();

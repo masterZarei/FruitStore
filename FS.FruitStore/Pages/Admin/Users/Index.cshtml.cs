@@ -1,6 +1,7 @@
 using FS.DataAccess;
 using FS.Models.Paging;
 using FS.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Users
 {
+    [Authorize(SD.AdminEndUser)]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _db;
@@ -31,16 +32,13 @@ namespace FS.FruitStore.Pages.Admin.Users
 
         public async Task<IActionResult> OnGet(int pageId = 1, string searchName = null, string searchPhone = null)
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
             UsersListViewModel = new UsersListViewModel
             {
-                ApplicationUserList = await _db.Users.OrderByDescending(a => a.reg_Date).ToListAsync(),
+                ApplicationUserList = await _db
+                .Users
+                .OrderByDescending(a => a.reg_Date)
+                .ToListAsync(),
 
             };
             //Filter
@@ -59,7 +57,12 @@ namespace FS.FruitStore.Pages.Admin.Users
 
             if (searchName != null || searchPhone != null)
             {
-                UsersListViewModel.ApplicationUserList = _db.Users.Where(u => u.Name.Contains(searchName) || u.PhoneNumber.Contains(searchPhone) || u.LastName.Contains(searchName)).ToList();
+                UsersListViewModel.ApplicationUserList = await _db
+                    .Users
+                    .Where(u => u.Name.Contains(searchName) ||
+                    u.PhoneNumber.Contains(searchPhone) ||
+                    u.LastName.Contains(searchName))
+                    .ToListAsync();
             }
 
             //Pages

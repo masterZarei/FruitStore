@@ -4,6 +4,7 @@ using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace FS.FruitStore.Pages.Wallet
             if (Id.Equals(null))
                 return NotFound();
 
-            ApplicationUser = _db.Users.Where(i => i.Id == Id).FirstOrDefault();
+            ApplicationUser = await _db.Users.Where(i => i.Id == Id).FirstOrDefaultAsync();
             return Page();
             
         }

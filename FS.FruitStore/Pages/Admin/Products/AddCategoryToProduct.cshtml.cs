@@ -3,6 +3,7 @@ using FS.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,16 +33,22 @@ namespace FS.FruitStore.Pages.Admin.Products
         public Product Product { get; set; }
 
 
-
+        //Made THis method Async
         public async Task<IActionResult> OnGetAsync(int Id)
         {
-            ProdCats = (from a in _db.Categories
+            ProdCats = await (from a in _db.Categories
                         join b in _db.CategoryToProducts on a.Id equals b.CategoryId
                         where b.ProductId == Id
-                        select a).ToList();
+                        select a).ToListAsync();
 
             if (Id == 0)
-                return RedirectToPage("Index");
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
+            return RedirectToPage("Index");
+            }
 
             Category = (from a in _db.Categories
                         where !ProdCats.Contains(a)
@@ -50,21 +57,26 @@ namespace FS.FruitStore.Pages.Admin.Products
             if (Category.Count == 0) return RedirectToPage("Index");
 
 
-
-
             if (Category != null)
                 Cats = new SelectList(Category, "Name", "Name");
 
 
 
-            Product = _db.Products.Where(a => a.ProductId == Id).FirstOrDefault();
+            Product = _db
+                .Products
+                .Where(a => a.ProductId == Id)
+                .FirstOrDefault();
 
             return Page();
         }
-        public async Task<IActionResult> OnPost()
+        public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
             }
             return RedirectToPage("./Index");
@@ -74,18 +86,31 @@ namespace FS.FruitStore.Pages.Admin.Products
         {
             if (Id == 0)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return Page();
             }
 
-            var findCat = _db.CategoryToProducts
-                .FirstOrDefault(a => a.CategoryId == Id && a.ProductId == Product.ProductId);
+            var findCat = await _db.CategoryToProducts
+                .FirstOrDefaultAsync(a => a.CategoryId == Id && a.ProductId == Product.ProductId);
 
             if (findCat == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             _db.Remove(findCat);
             await _db.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("AddCategoryToProduct", new { Id = Product.ProductId });
 
         }
@@ -93,12 +118,26 @@ namespace FS.FruitStore.Pages.Admin.Products
         {
             if (SelectedCat == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
             }
 
-            var findCat = _db.Categories.Where(a => a.Name == SelectedCat).FirstOrDefault();
+            var findCat = await _db
+                .Categories
+                .Where(a => a.Name == SelectedCat)
+                .FirstOrDefaultAsync();
+
             if (findCat == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             CategoryToProduct ctp = new CategoryToProduct()
             {
@@ -109,7 +148,10 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             _db.Add(ctp);
             await _db.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("AddCategoryToProduct", new { Id = Product.ProductId });
 
         }

@@ -25,12 +25,12 @@ namespace FS.FruitStore.Pages.Verification
         public async Task<IActionResult> OnGet(string Id)
         {
             if (!string.IsNullOrEmpty(Id))
-                ApplicationUser = _db.Users.Find(Id);
+                ApplicationUser = await _db.Users.FindAsync(Id);
             else
             {
                 var userId = new GetUserInfo(_db)
                                 .GetInfoByUsername(User.Identity.Name);
-                ApplicationUser = _db.Users.Find(userId);
+                ApplicationUser = await _db.Users.FindAsync(userId);
             }
 
 
@@ -44,7 +44,7 @@ namespace FS.FruitStore.Pages.Verification
 
                 return Page();
 
-            var user = _db.Users.Find(ApplicationUser.Id);
+            var user = await _db.Users.FindAsync(ApplicationUser.Id);
 
             if (user.VerificationCode == EnteredCode)
                 user.isVerified = true;

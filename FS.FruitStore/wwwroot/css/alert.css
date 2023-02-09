@@ -1,0 +1,161 @@
+﻿
+/*Alert*/
+.alert-box {
+    width: 270px;
+    color: #fff;
+    padding: 25px 27px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    font-size: 16px;
+    direction: rtl;
+    overflow: hidden;
+}
+
+.success {
+    background-color: green;
+}
+
+.warning {
+    background-color: #ffc107;
+    color: #343a40;
+}
+
+.danger {
+    background-color: rgba(208, 15, 15, 0.8274509804);
+}
+
+.info {
+    background-color: #006c75;
+}
+
+.primary {
+    background-color: #0067ce;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.close-btn {
+    cursor: pointer;
+}
+
+.alert-box.hide {
+    -webkit-animation: hideAlert 1s ease forwards;
+    animation: hideAlert 1s ease forwards;
+}
+
+@-webkit-keyframes hideAlert {
+    0% {
+        transform: translateX(-5%);
+    }
+
+    40% {
+        transform: translateX(0%);
+    }
+
+    80% {
+        transform: translateX(-15%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes hideAlert {
+    0% {
+        transform: translateX(-5%);
+    }
+
+    40% {
+        transform: translateX(0%);
+    }
+
+    80% {
+        transform: translateX(-15%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.alert-box.show {
+    -webkit-animation: showAlert 1s ease forwards;
+    animation: showAlert 1s ease forwards;
+}
+
+@-webkit-keyframes showAlert {
+    0% {
+        transform: translateX(100%);
+    }
+
+    40% {
+        transform: translateX(-15%);
+    }
+
+    80% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-5%);
+    }
+}
+
+@keyframes showAlert {
+    0% {
+        transform: translateX(100%);
+    }
+
+    40% {
+        transform: translateX(-15%);
+    }
+
+    80% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-5%);
+    }
+}
+
+.alert-box.show::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(129, 0, 180, 0.862745098);
+    -webkit-animation: hideMaster 5s linear;
+    animation: hideMaster 5s linear;
+
+}
+
+@-webkit-keyframes hideMaster {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
+    }
+}
+
+@keyframes hideMaster {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
+    }
+}
+/*Alert*/

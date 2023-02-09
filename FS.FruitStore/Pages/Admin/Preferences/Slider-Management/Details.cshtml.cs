@@ -22,23 +22,28 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
         public Slider Slider { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_context);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
-            if (id == null)
+
+            if (id < 0)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
             }
 
-            Slider = await _context.Sliders.FirstOrDefaultAsync(m => m.Id == id);
+            Slider = await _context
+                .Sliders
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Slider == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
             }
             return Page();

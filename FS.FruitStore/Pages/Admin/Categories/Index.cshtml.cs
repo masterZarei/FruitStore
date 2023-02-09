@@ -30,7 +30,7 @@ namespace FS.FruitStore.Pages.Admin.Categories
             //if (isAuthorized == 1)
             //    return Redirect("/Identity/Account/AccessDenied");
             //#endregion
-
+            
             Category = await _context.Categories.ToListAsync();
             return Page();
         }

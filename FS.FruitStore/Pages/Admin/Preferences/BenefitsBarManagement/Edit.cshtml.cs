@@ -1,12 +1,15 @@
 ﻿using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
 {
+    [Authorize(Roles =SD.AdminEndUser)]
     public class EditModel : PageModel
     {
         private readonly FS.DataAccess.ApplicationDbContext _context;
@@ -23,13 +26,23 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
         {
             if (id == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
             }
 
-            BenefitBar = await _context.BenefitBars.FirstOrDefaultAsync(m => m.Id == id);
+            BenefitBar = await _context
+                .BenefitBars
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (BenefitBar == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
             }
             return Page();
@@ -41,6 +54,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
             }
 
@@ -54,6 +71,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
             {
                 if (!BenefitBarExists(BenefitBar.Id))
                 {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = Notifs.IDINVALID;
+                    #endregion
                     return NotFound();
                 }
                 else
@@ -61,7 +82,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                     throw;
                 }
             }
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("./Index");
         }
 

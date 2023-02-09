@@ -2,6 +2,7 @@
 using FS.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,13 +22,18 @@ namespace FS.FruitStore.Pages
         public List<Product> Product  { get; set; }
         public List<Slider> Sliders  { get; set; }
         public List<BenefitBar> BenefitBars  { get; set; }
-        public async Task<ActionResult> OnGet()
+        public async Task<ActionResult> OnGetAsync()
         {
-            Product = _db.Products.ToList();
+            Product = await _db.Products.ToListAsync();
 
-            Sliders = _db.Sliders.ToList();
+            Sliders = await _db.Sliders.ToListAsync();
 
-            BenefitBars = _db.BenefitBars.ToList();
+            BenefitBars = await _db.BenefitBars.ToListAsync();
+
+            #region Notif
+            ViewData["State"] = Notifs.Warning;
+            ViewData["Msg"] = "ریدم تو قیافتتتتت :)))";
+            #endregion
 
             return Page();
         }

@@ -129,7 +129,13 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     await _smsService.SendPublicSMS("09367472136", message);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToPage("/Verification/VerifyPhonenumber", new {Id = user.Id});
+
+                    #region Notif
+                    TempData["State"] = Notifs.Success;
+                    TempData["Msg"] = "ثبت نام با موفقیت انجام شد!";
+                    #endregion
+
+                    return RedirectToPage("/Verification/VerifyPhonenumber", new {Id = user.Id});
                 }
                 foreach (var error in result.Errors)
                 {

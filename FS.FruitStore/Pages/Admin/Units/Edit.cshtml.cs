@@ -1,12 +1,15 @@
 ﻿using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Units
 {
+    [Authorize(SD.AdminEndUser)]
     public class EditModel : PageModel
     {
         private readonly FS.DataAccess.ApplicationDbContext _context;
@@ -23,13 +26,23 @@ namespace FS.FruitStore.Pages.Admin.Units
         {
             if (id == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
             }
 
-            Unit = await _context.Units.FirstOrDefaultAsync(m => m.Id == id);
+            Unit = await _context
+                .Units
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Unit == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
             }
             return Page();
@@ -38,7 +51,13 @@ namespace FS.FruitStore.Pages.Admin.Units
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
+            }
 
 
             _context.Attach(Unit).State = EntityState.Modified;
@@ -51,14 +70,24 @@ namespace FS.FruitStore.Pages.Admin.Units
             {
                 if (!UnitExists(Unit.Id))
                 {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = Notifs.NOTFOUND;
+                    #endregion
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                    #endregion
                 }
             }
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("./Index");
         }
 

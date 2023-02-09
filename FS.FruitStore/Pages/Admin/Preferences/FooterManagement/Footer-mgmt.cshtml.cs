@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
 {
+    [Authorize(SD.AdminEndUser)]
     public class Footer_mgmtModel : PageModel
     {
         private readonly ApplicationDbContext _db;
@@ -82,9 +84,13 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
         {
             if (SelectedCwId > 0)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                #endregion
                 return NotFound();
             }
-
+            /////////////////TODO: Do the Notif part
             var findCW = _db.ContactWays.Where(a => a.Id == SelectedCwId).FirstOrDefault();
             if (findCW == null)
                 return Page();

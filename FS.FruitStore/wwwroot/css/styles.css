@@ -1,10 +1,7 @@
 ﻿@import url(reset.css);
-@import url(det-product.css);
 @import url(index.css);
 @import url('login - register .css');
-@import url('shop - blog .css');
 @import url(order.css);
-@import url(shopping-basket.css);
 
 .btn-purple {
     color: #fff;

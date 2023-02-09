@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
@@ -63,20 +63,26 @@ namespace FS.FruitStore.Pages.Admin.Products
 
         public async Task<IActionResult> OnGet(int? Id)
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_context);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
-
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
 
-            Product = _context.Products.Where(c => c.ProductId == Id).FirstOrDefault();
+            Product = await _context
+                .Products
+                .Where(c => c.ProductId == Id)
+                .FirstOrDefaultAsync();
 
             if (Product == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
             }
 
@@ -87,15 +93,15 @@ namespace FS.FruitStore.Pages.Admin.Products
 
 
             //Categories
-            ProdCats = (from a in _context.Categories
+            ProdCats = await (from a in _context.Categories
                         join b in _context.CategoryToProducts on a.Id equals b.CategoryId
                         where b.ProductId == Product.ProductId
-                        select a).ToList();
+                        select a).ToListAsync();
 
 
-            Category = (from a in _context.Categories
+            Category = await (from a in _context.Categories
                         where !ProdCats.Contains(a)
-                        select a).ToList();
+                        select a).ToListAsync();
 
             if (Category != null)
             {
@@ -115,7 +121,13 @@ namespace FS.FruitStore.Pages.Admin.Products
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-                return Page();
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
+            return Page();
+            }
 
 
 
@@ -157,8 +169,13 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             if (currentUnit != null)
             {
-                var UnitToDelete = _context.UnitToProducts.FirstOrDefault(a => a.ProductId == Product.ProductId);
-                var UnitToAssign = _context.Units.FirstOrDefault(a => a.Name == SelectedUnit);
+                var UnitToDelete = await _context
+                    .UnitToProducts
+                    .FirstOrDefaultAsync(a => a.ProductId == Product.ProductId);
+
+                var UnitToAssign = await _context
+                    .Units
+                    .FirstOrDefaultAsync(a => a.Name == SelectedUnit);
 
                 _context.Remove(UnitToDelete);
 
@@ -171,7 +188,9 @@ namespace FS.FruitStore.Pages.Admin.Products
             }
             else
             {
-                var UnitToAssign = _context.Units.FirstOrDefault(a => a.Name == SelectedUnit);
+                var UnitToAssign = await _context
+                    .Units
+                    .FirstOrDefaultAsync(a => a.Name == SelectedUnit);
                 var newUnit = new UnitToProduct()
                 {
                     ProductId = Product.ProductId,
@@ -182,22 +201,50 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             _context.Update(Product);
             await _context.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Index");
         }
         public async Task<IActionResult> OnPostAddCat()
         {
             if (SelectedCat == null)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
             }
 
-            var findCat = _context.Categories.Where(a => a.Name == SelectedCat).FirstOrDefault();
-            if (findCat == null)
-                return Page();
+            var findCat = await _context
+                .Categories
+                .Where(a => a.Name == SelectedCat)
+                .FirstOrDefaultAsync();
 
-            var isAlreadyAdded = _context.CategoryToProducts.Where(a => a.ProductId == Product.ProductId && a.CategoryId == findCat.Id).FirstOrDefault();
-            if (isAlreadyAdded != null)
+            if (findCat == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return Page();
+            }
+
+            var isAlreadyAdded = await _context
+                .CategoryToProducts
+                .Where(a => a.ProductId == Product.ProductId && a.CategoryId == findCat.Id)
+                .FirstOrDefaultAsync();
+
+            if (isAlreadyAdded != null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "دسته بندی با همین نام برای این محصول موجود است";
+                #endregion
+                return Page();
+            }
 
             CategoryToProduct ctp = new CategoryToProduct()
             {
@@ -208,7 +255,10 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             _context.Add(ctp);
             await _context.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Edit", new { Id = Product.ProductId });
 
         }
@@ -216,17 +266,33 @@ namespace FS.FruitStore.Pages.Admin.Products
         {
             if (Id == 0)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return Page();
             }
 
-            var findCat = _context.CategoryToProducts.Where(a => a.CategoryId == Id && a.ProductId == Product.ProductId).FirstOrDefault();
+            var findCat = await _context
+                .CategoryToProducts
+                .Where(a => a.CategoryId == Id && a.ProductId == Product.ProductId)
+                .FirstOrDefaultAsync();
 
             if (findCat == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             _context.Remove(findCat);
             await _context.SaveChangesAsync();
-
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Edit", new { Id = Product.ProductId });
 
         }

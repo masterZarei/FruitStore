@@ -12,7 +12,7 @@ using Utilities.Convertors;
 
 namespace FS.FruitStore.Pages.Admin.Orders
 {
-    [Authorize(Roles =SD.AdminEndUser)]
+    [Authorize(Roles = SD.AdminEndUser)]
     public class DetailsModel : PageModel
     {
         private readonly ApplicationDbContext _db;
@@ -24,17 +24,17 @@ namespace FS.FruitStore.Pages.Admin.Orders
 
         [BindProperty]
         public List<Factor> Order { get; set; }
-        public async Task<IActionResult> OnGet(string Id,bool isIndex = true)
+        public async Task<IActionResult> OnGet(string Id, bool isIndex = true)
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
             if (Id.Trim().Length == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion               
                 return NotFound();
+            }
             if (isIndex)
             {
                 Order = _db.Factors
@@ -55,10 +55,10 @@ namespace FS.FruitStore.Pages.Admin.Orders
               .ThenInclude(a => a.Product)
               .ToList();
             }
-           
+
 
             return Page();
         }
-        
+
     }
 }

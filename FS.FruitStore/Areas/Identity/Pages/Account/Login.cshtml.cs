@@ -52,7 +52,7 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public void OnGet(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -76,7 +76,10 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    #region Notif
+                    TempData["State"] = Notifs.Success;
+                    TempData["Msg"] = "ورود با موفقیت انجام شد!";
+                    #endregion
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -85,7 +88,6 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
                 else

@@ -3,7 +3,7 @@ using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.Convertors;
@@ -27,15 +27,20 @@ namespace FS.FruitStore.Pages.Panel
         public async Task<IActionResult> OnGetAsync()
         {
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
-                return Redirect("/Identity/Account/Login");
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
-            var userId = claim.Value;
-            ApplicationUser = _db.Users.FirstOrDefault(a => a.Id == userId);
+            ApplicationUser = await _db
+                .Users
+                .FirstOrDefaultAsync(a => a.Id == userId);
+
             if (ApplicationUser == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
             #region isDisabled?
             GetUserInfo mtd = new GetUserInfo(_db);

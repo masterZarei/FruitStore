@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
@@ -22,26 +22,6 @@ namespace FS.FruitStore.Pages.Admin.Products
         public CreateModel(ApplicationDbContext db)
         {
             _db = db;
-        }
-
-        public async Task<IActionResult> OnGetAsync()
-        {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
-
-            // Units
-            var AllUnits = _db.Units.ToList();
-            if (AllUnits != null)
-            {
-                Units = new SelectList(AllUnits, "Name", "Name");
-            }
-
-            return Page();
-
         }
         [BindProperty]
         public Product Product { get; set; }
@@ -62,18 +42,44 @@ namespace FS.FruitStore.Pages.Admin.Products
 
         public string CurrentUnit { get; set; }
         #endregion
+        public async Task<IActionResult> OnGetAsync()
+        {
+            // Units
+            var AllUnits = await _db
+                .Units
+                .ToListAsync();
+            if (AllUnits != null)
+            {
+                Units = new SelectList(AllUnits, "Name", "Name");
+            }
+
+            return Page();
+
+        }
+        
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
             }
 
-            var checkIfRedundunt = _db.Products.Where(a => a.Name == Product.Name).FirstOrDefault();
+            var checkIfRedundunt = await _db
+                .Products
+                .Where(a => a.Name == Product.Name)
+                .FirstOrDefaultAsync();
+
             if(checkIfRedundunt!=null)
             {
-                TempData["Error"] = " محصولی با همین نام موجود است.";
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "محصولی با همین نام موجود است";
+                #endregion
                 return RedirectToPage("Index");
             }
 
@@ -106,8 +112,15 @@ namespace FS.FruitStore.Pages.Admin.Products
             _db.Products.Add(Product);
             await _db.SaveChangesAsync();
 
-            var productId = _db.Products.OrderByDescending(a => a.CreateDate).FirstOrDefault();
-            var UnitToAssign = _db.Units.FirstOrDefault(a => a.Name == SelectedUnit);
+            var productId = await _db
+                .Products
+                .OrderByDescending(a => a.CreateDate)
+                .FirstOrDefaultAsync();
+
+            var UnitToAssign = await _db
+                .Units
+                .FirstOrDefaultAsync(a => a.Name == SelectedUnit);
+
             var newUnit = new UnitToProduct()
             {
                 ProductId = Product.ProductId,
@@ -117,8 +130,12 @@ namespace FS.FruitStore.Pages.Admin.Products
             _db.Add(newUnit);
             await _db.SaveChangesAsync();
 
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
+
             return RedirectToPage("./AddCategoryToProduct", new { Id = Product.ProductId });
-            //return RedirectToPage("./Index");
         }
 
     }

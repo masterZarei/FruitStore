@@ -1,4 +1,4 @@
-using Utilities.Roles;
+﻿using Utilities.Roles;
 using FS.DataAccess;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FS.Models.ViewModels;
 using Utilities.Convertors;
+using FS.Models.Models;
 
 namespace FS.FruitStore.Pages.Admin.Orders
 {
@@ -25,21 +26,16 @@ namespace FS.FruitStore.Pages.Admin.Orders
 
         [BindProperty]
         public List<AdminIndexOrderVM> Model { get; set; }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
+
 
             Model = new List<AdminIndexOrderVM>();
-            var Order = _db.Factors
+            var Order = await _db.Factors
                  .Where(a => a.isCompleted == false)
                  .Include(a => a.User)
                  .Include(a => a.FactorDetails)
-                 .ThenInclude(a => a.Product).ToList();
+                 .ThenInclude(a => a.Product).ToListAsync();
 
             foreach (var item in Order)
             {
@@ -60,18 +56,35 @@ namespace FS.FruitStore.Pages.Admin.Orders
         public async Task<IActionResult> OnPostReadyToSendAsync(int Id)
         {
             if (Id == 0)
-                return RedirectToPage("Index");
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+            return RedirectToPage("Index");
+            }
 
-            var selectedOrder = _db.Factors
+            var selectedOrder = await _db.Factors
                  .Where(a => a.FactorId == Id)
-                 .FirstOrDefault();
+                 .FirstOrDefaultAsync();
 
             if (selectedOrder == null || selectedOrder.DeliverState > 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return RedirectToPage("Index");
+            }
 
             selectedOrder.DeliverState = 0;
             _db.Update(selectedOrder);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
+
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = "با موفقیت انجام شد";
+            #endregion
 
             return RedirectToPage("Index");
 
@@ -79,19 +92,34 @@ namespace FS.FruitStore.Pages.Admin.Orders
         public async Task<IActionResult> OnPostOrderCompletedAsync(int Id)
         {
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return RedirectToPage("Index");
+            }
 
-            var selectedOrder = _db.Factors
+            var selectedOrder = await _db.Factors
                  .Where(a => a.FactorId == Id)
-                 .FirstOrDefault();
+                 .FirstOrDefaultAsync();
 
             if (selectedOrder == null || selectedOrder.isCompleted == true)
-                return RedirectToPage("Index");
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+            return RedirectToPage("Index");
+            }
 
             selectedOrder.isCompleted = true;
             _db.Update(selectedOrder);
-            _db.SaveChanges();
-
+            await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = "با موفقیت انجام شد";
+            #endregion
             return RedirectToPage("Index");
 
         }

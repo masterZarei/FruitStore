@@ -1,14 +1,17 @@
 using FS.DataAccess;
 using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.WalletManagement
 {
+    [Authorize(SD.AdminEndUser)]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _db;
@@ -17,12 +20,12 @@ namespace FS.FruitStore.Pages.Admin.WalletManagement
             _db = db;
         }
         public List<WalletHistory> WalletHistory { get; set; }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            WalletHistory = _db.WalletHistories
+            WalletHistory = await _db.WalletHistories
                 .Include(a => a.User)
                 .OrderByDescending(a => a.CreateDate)
-                .ToList();
+                .ToListAsync();
 
             return Page();
         }

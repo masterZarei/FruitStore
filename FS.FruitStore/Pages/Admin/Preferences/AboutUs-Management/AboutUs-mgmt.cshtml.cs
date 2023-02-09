@@ -1,9 +1,10 @@
-using FS.DataAccess;
+﻿using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
@@ -31,17 +32,11 @@ namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
 
 
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
 
 
-            AboutUs = _db.AboutUs.FirstOrDefault();
+            AboutUs = await _db.AboutUs.FirstOrDefaultAsync();
 
             if (AboutUs == null)
             {
@@ -52,8 +47,8 @@ namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
                             Text = ""
                         }
                     );
-                _db.SaveChanges();
-                AboutUs = _db.AboutUs.FirstOrDefault();
+                await _db.SaveChangesAsync();
+                AboutUs = await _db.AboutUs.FirstOrDefaultAsync();
             }
 
 
@@ -64,7 +59,13 @@ namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                #endregion
                 return Page();
+            }
 
 
             if (ImgUp != null)
@@ -93,6 +94,10 @@ namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
 
             _db.Update(AboutUs);
             await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = "با موفقیت انجام شد";
+            #endregion
             return RedirectToPage("Index");
         }
 

@@ -2,6 +2,7 @@
 using FS.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -42,26 +43,28 @@ namespace FS.FruitStore.Pages
             if (id == 0)
                 return NotFound();
 
-            Product = _db.Products.Where(a => a.ProductId == id).FirstOrDefault();
-            SuggestProduct = _db.Products.Take(4).ToList();
+            Product = await _db.Products.Where(a => a.ProductId == id).FirstOrDefaultAsync();
+            SuggestProduct = await _db.Products.Take(4).ToListAsync();
 
             if (Product == null)
                 return NotFound();
 
 
             //دسته بندیهای محصول
-            ProdCats = (from a in _db.Categories
+            ProdCats = await (from a in _db.Categories
                         join b in _db.CategoryToProducts on a.Id equals b.CategoryId
                         where b.ProductId == Product.ProductId
-                        select a).ToList();
+                        select a).ToListAsync();
             //کامنته ای محصول
-            lstComments = _db.Comments.Where(a => a.Product_Id == id && a.isVerified == true).ToList();
+            lstComments = await _db.Comments
+                .Where(a => a.Product_Id == id && a.isVerified == true)
+                .ToListAsync();
             //نمونه سازی کلاس به دست آوردن اطلاعات کاربر
             GetInfo = new GetUserInfo(_db);
 
-            Rating = _db.Ratings
+            Rating = await _db.Ratings
                 .Where(a => a.ProductId == Product.ProductId)
-                .ToList();
+                .ToListAsync();
 
             return Page();
 
@@ -209,9 +212,9 @@ namespace FS.FruitStore.Pages
             if (userId == null)
                 return Redirect("/Identity/Account/Login");
 
-            var checkIfRatedAlready = _db.Ratings
+            var checkIfRatedAlready = await _db.Ratings
                 .Where(a=>a.UserId == userId && a.ProductId == Product.ProductId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (checkIfRatedAlready != null)
             {
@@ -227,7 +230,7 @@ namespace FS.FruitStore.Pages
                 Rate = Rate
             };
             _db.Add(newRating);
-            _db.SaveChanges();
+           await _db.SaveChangesAsync();
 
             return RedirectToPage("Product-Details", new { id = ProductId });
             
