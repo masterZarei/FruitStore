@@ -22,7 +22,7 @@ namespace Mahshop.Pages.FactorManagement
         public Factor Factor { get; set; }
         [BindProperty]
         public GetUserInfo GetInfo { get; set; }
-        public async Task<IActionResult> OnGet(int Id)
+        public async Task<IActionResult> OnGetAsync(int Id)
         {
             if (Id == 0)
             {
@@ -33,13 +33,13 @@ namespace Mahshop.Pages.FactorManagement
                 return NotFound();
             }
 
-            Factor = _db.Factors
+            Factor = await _db.Factors
                 .Include(a=>a.FactorDetails)
                 .ThenInclude(a=>a.Product)
                 .ThenInclude(a=>a.User)
                 .Where(a => a.FactorId == Id)
                 .OrderByDescending(a=>a.CreateDate)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (Factor == null)
             {

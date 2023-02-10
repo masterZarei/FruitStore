@@ -32,11 +32,10 @@ namespace FS.FruitStore.Pages
 
         public IList<Product> Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string? SC)
+        public async Task<IActionResult> OnGetAsync(string SC)
         {
-            // ست کن اگه سلر وریفاید نبود محصولاشو نیاره
-            Category = (from a in _context.Categories
-                        select a).ToList();
+            Category = await (from a in _context.Categories
+                        select a).ToListAsync();
 
             if (Category != null)
             {
@@ -44,11 +43,10 @@ namespace FS.FruitStore.Pages
             }
             if (SC != null)
             {
-                Product = (from p in _context.Products
+                Product = await (from p in _context.Products
                            join ctp in _context.CategoryToProducts on p.ProductId equals ctp.ProductId
                            where ctp.Category.Name == SC && ctp.Product.ProductId == p.ProductId && p.isVerified == true
-                           select p
-                                 ).ToList();
+                           select p).ToListAsync();
                 return Page();
             }
 

@@ -26,15 +26,15 @@ namespace FS.FruitStore.Pages.Admin.Orders
 
         [BindProperty]
         public List<AdminIndexOrderVM> Model { get; set; }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
 
             Model = new List<AdminIndexOrderVM>();
-            var Order = _db.Factors
+            var Order = await _db.Factors
                  .Where(a => a.isCompleted == true)
                  .Include(a => a.User)
                  .Include(a => a.FactorDetails)
-                 .ThenInclude(a => a.Product).ToList();
+                 .ThenInclude(a => a.Product).ToListAsync();
 
 
             foreach (var item in Order)

@@ -1,11 +1,12 @@
 ﻿using FS.Models.BaseEntities;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FS.Models.Models
 {
     public class ContactWays:BaseClass
     {
-        
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -15,5 +16,8 @@ namespace FS.Models.Models
 
         public string Icon { get; set; }
         public bool IsLink { get; set; }
+
+        public bool IsInFooter { get; set; }
+
     }
 }

@@ -38,7 +38,7 @@ namespace FS.FruitStore.Pages.Users
         //اگه کاربر در جدول فروشنده هم باشه این متغیر پر میشه
         public string isSeller = null;
 
-        public async Task<IActionResult> OnGetAsync(string? userId)
+        public async Task<IActionResult> OnGetAsync(string userId)
         {
 
             if (userId.Trim().Length == 0)

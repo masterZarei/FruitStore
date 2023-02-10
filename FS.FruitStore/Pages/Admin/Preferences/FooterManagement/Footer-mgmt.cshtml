@@ -1,7 +1,6 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Preferences.FooterManagement.Footer_mgmtModel
-@{
-}
+
 <div class="row">
     <!-- #region پنل-->
     <partial name="_Panel" />
@@ -12,7 +11,8 @@
                 <h4 class="h4 text-center m-auto"> مدیریت فوتر </h4>
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Footer.Id" />
                     <div>
                         <label> توضیحات : </label>
                         <textarea cols="30" rows="10" placeholder="توضیحات را وارد کنید . . ." asp-for="Footer.Description"
@@ -21,15 +21,14 @@
                         <label> نماد های اعتماد </label>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-12">
-                                <img width="160px" height="160px" class="border mx-auto d-block my-2">
+                                <img width="160px" height="160px" class="border mx-auto d-block my-2" src="~/Preferences/@Model.Footer.TrustSymbol" id="imgPreview">
                                 <div class="custom-file">
                                     <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
                                     <input id="fileup" name="ImgUp" type="file" class="custom-file-input">
                                 </div>
                             </div>
-
                             <div class="col-lg-6 col-md-6 col-12">
-                                <img width="160px" height="160px" class="border mx-auto d-block my-2">
+                                <img width="160px" height="160px" class="border mx-auto d-block my-2" src="~/Preferences/@Model.Footer.TrustSymbol2" name="ImgUp2" id="imgPreview2">
                                 <div class="custom-file">
                                     <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
                                     <input id="fileup" name="ImgUp2" type="file" class="custom-file-input">
@@ -37,12 +36,11 @@
                             </div>
                         </div>
                         <hr color="#eee" size="2px">
-
                         <label> راه های ارتباطی </label>
                         <div class="d-flex justify-content-between">
-                            @*<select class="form-control w-50" asp-for="SelectedCwId" asp-items="Model.CWs">
-                            </select>*@
-                            <button class="btn btn-success"> افزودن </button>
+                            <select class="custom-select" asp-for="SelectedCwId" asp-items="Model.CWs">
+                            </select>
+                            <button asp-page-handler="AddCW" class="btn btn-success"> افزودن </button>
                         </div>
                         <table class="table table-bordered mt-3">
                             <thead>
@@ -50,22 +48,72 @@
                                     <th class="text-center"> نام </th>
                                     <th class="text-center"> آدرس </th>
                                     <th class="text-center"> نمایه </th>
+                                    <th class="text-center"> مدیریت </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center"> تلگرام </td>
-                                    <td class="text-center"> t.me/sagZ </td>
-                                    <td class="text-center"> <i class="fab fa-telegram"></i> </td>
-                                </tr>
+                                @foreach (var item in Model.FooterCWs)
+                                {
+                                    <tr>
+                                        <td class="text-center"> @item.Name </td>
+                                        <td class="text-center"> @item.Address </td>
+                                        <td class="text-center"> <i class="@item.Icon"></i> </td>
+                                        <td class=" text-center">
+                                            <button asp-page-handler="RemoveCW" type="submit" class="align-middle btn text-primary " asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+                                    </tr>
+                                }
+
                             </tbody>
                         </table>
-
                         <button type="submit" class="btn btn-success btn-block mx-auto my-3 w-75 d-block"> ثبت </button>
-
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+@section Scripts{
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $("#imgUp").change(function () {
+            readURL(this);
+        });
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var reader1 = new FileReader();
+
+                reader1.onload = function (e) {
+                    $('#imgPreview2').attr('src', e.target.result);
+                }
+
+                reader1.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $("#imgUp2").change(function () {
+            readURL1(this);
+        });
+
+        //نمایش اسم عکس روی اینپوت
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    }

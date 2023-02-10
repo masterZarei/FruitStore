@@ -9,6 +9,7 @@ namespace FS.Models.Models
         //
         public string Img { get; set; }
         //
+        [Required]
         public string Caption { get; set; }
         //
         public string Link { get; set; }

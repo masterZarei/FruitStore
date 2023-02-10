@@ -10,7 +10,7 @@ using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
 {
-    [Authorize(SD.AdminEndUser)]
+    [Authorize(Roles = SD.AdminEndUser)]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _context;

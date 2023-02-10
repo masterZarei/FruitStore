@@ -1,4 +1,3 @@
-using Utilities.Roles;
 using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Orders
 {
@@ -24,7 +23,8 @@ namespace FS.FruitStore.Pages.Admin.Orders
 
         [BindProperty]
         public List<Factor> Order { get; set; }
-        public async Task<IActionResult> OnGet(string Id, bool isIndex = true)
+        public User ApplicationUser { get; set; }
+        public async Task<IActionResult> OnGetAsync(string Id, bool isIndex = true)
         {
 
             if (Id.Trim().Length == 0)
@@ -37,23 +37,29 @@ namespace FS.FruitStore.Pages.Admin.Orders
             }
             if (isIndex)
             {
-                Order = _db.Factors
+                Order = await _db.Factors
                .Where(a => a.isCompleted == false &&
                        a.User.Id == Id)
                .Include(a => a.User)
                .Include(a => a.FactorDetails)
                .ThenInclude(a => a.Product)
-               .ToList();
+               .ToListAsync();
+
+                ApplicationUser = await _db.Users
+                    .FindAsync(Id);
             }
             else
             {
-                Order = _db.Factors
+                Order = await _db.Factors
               .Where(a => a.isCompleted == true &&
                       a.User.Id == Id)
               .Include(a => a.User)
               .Include(a => a.FactorDetails)
               .ThenInclude(a => a.Product)
-              .ToList();
+              .ToListAsync();
+
+                ApplicationUser = await _db.Users
+                    .FindAsync(Id);
             }
 
 

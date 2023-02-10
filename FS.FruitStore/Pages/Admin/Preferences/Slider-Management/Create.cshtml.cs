@@ -22,7 +22,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
             _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             return Page();
         }

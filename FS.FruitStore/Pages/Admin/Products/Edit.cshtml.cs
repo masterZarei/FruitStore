@@ -94,14 +94,14 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             //Categories
             ProdCats = await (from a in _context.Categories
-                        join b in _context.CategoryToProducts on a.Id equals b.CategoryId
-                        where b.ProductId == Product.ProductId
-                        select a).ToListAsync();
+                              join b in _context.CategoryToProducts on a.Id equals b.CategoryId
+                              where b.ProductId == Product.ProductId
+                              select a).ToListAsync();
 
 
             Category = await (from a in _context.Categories
-                        where !ProdCats.Contains(a)
-                        select a).ToListAsync();
+                              where !ProdCats.Contains(a)
+                              select a).ToListAsync();
 
             if (Category != null)
             {
@@ -112,7 +112,7 @@ namespace FS.FruitStore.Pages.Admin.Products
             var AllUnits = _context.Units.ToList();
             if (AllUnits != null)
             {
-                Units = new SelectList(AllUnits, "Name", "Name",CurrentUnit);
+                Units = new SelectList(AllUnits, "Name", "Name", CurrentUnit);
             }
             return Page();
 
@@ -126,10 +126,11 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
                 #endregion
-            return Page();
+                return Page();
             }
 
 
+           
 
             if (ImgUp != null)
             {

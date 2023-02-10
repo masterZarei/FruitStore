@@ -1,17 +1,21 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
 {
-    [Authorize(SD.AdminEndUser)]
+    [Authorize(Roles = SD.AdminEndUser)]
     public class Footer_mgmtModel : PageModel
     {
         private readonly ApplicationDbContext _db;
@@ -38,51 +42,104 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
         public int SelectedCwId { get; set; }
 
         #endregion
-
         public IFormFile ImgUp { get; set; }
         [BindProperty]
         public IFormFile ImgUp2 { get; set; }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Footer = _db.Footers.FirstOrDefault();
-            //Categories
-            FooterCWs = (from a in _db.ContactWays
-                        join b in _db.ContactWaysToFooters on a.Id equals b.ContactWaysId
-                        select a).ToList();
+            Footer = await _db.Footers
+                .FirstOrDefaultAsync();
 
-
-            ContactWays = (from a in _db.ContactWays
-                        where !FooterCWs.Contains(a)
-                        select a).ToList();
-
-            if (ContactWays != null)
-            {
-                CWs = new SelectList(ContactWays,"Id", "Name");
-            }
 
             if (Footer == null)
             {
-                _db.Add(
-                    new Footer
-                    {
-                        TrustSymbol = "",
-                        TrustSymbol2 = "",
-                        Description = ""
-                    }
-                    );
+                _db.Add(new Footer
+                {
+                    TrustSymbol = "",
+                    TrustSymbol2 = "",
+                    Description = ""
+                });
                 _db.SaveChanges();
             }
+            //  Categories
+            FooterCWs = await _db.ContactWays
+               .Where(a => a.IsInFooter.Equals(true))
+               .ToListAsync();
+
+            ContactWays = await (from a in _db.ContactWays
+                                 where !FooterCWs.Contains(a)
+                                 select a).ToListAsync();
+
+            if (ContactWays != null)
+                CWs = new SelectList(ContactWays, "Id", "Name");
+
 
             return Page();
         }
         public async Task<IActionResult> OnPost()
         {
-            return Page();
+            if (!ModelState.IsValid)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
+                return Page();
+            }
+
+
+            if (!ImgUp.Equals(null) && !ImgUp2.Equals(null))
+            {
+                string DirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences");
+                if (!Directory.Exists(DirectoryPath))
+                    Directory.CreateDirectory(DirectoryPath);
+            }
+
+            if (ImgUp != null)
+            {
+                if (!string.IsNullOrEmpty(Footer.TrustSymbol))
+                {
+                    string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences", Footer.TrustSymbol);
+                    if (System.IO.File.Exists(deletePath))
+                        System.IO.File.Delete(deletePath);
+                }
+
+                Footer.TrustSymbol = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp.FileName);
+                string savepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences", Footer.TrustSymbol);
+                using (var filestream = new FileStream(savepath, FileMode.Create))
+                {
+                    ImgUp.CopyTo(filestream);
+                }
+            }
+            if (ImgUp2 != null)
+            {
+                if (!string.IsNullOrEmpty(Footer.TrustSymbol2))
+                {
+                    string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences", Footer.TrustSymbol2);
+                    if (System.IO.File.Exists(deletePath))
+                        System.IO.File.Delete(deletePath);
+                }
+                Footer.TrustSymbol2 = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp2.FileName);
+                string savepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences", Footer.TrustSymbol2);
+                using (var filestream = new FileStream(savepath, FileMode.Create))
+                {
+                    ImgUp2.CopyTo(filestream);
+                }
+            }
+
+            _db.Update(Footer);
+            await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
+
+            return RedirectToPage("Footer-mgmt");
         }
-        public async Task<IActionResult> OnPostAddCat()
+        public async Task<IActionResult> OnPostAddCW()
         {
-            if (SelectedCwId > 0)
+            if (SelectedCwId < 0)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
@@ -90,43 +147,77 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
                 #endregion
                 return NotFound();
             }
-            /////////////////TODO: Do the Notif part
-            var findCW = _db.ContactWays.Where(a => a.Id == SelectedCwId).FirstOrDefault();
+
+            var findCW = await _db.ContactWays
+                .Where(a => a.Id == SelectedCwId)
+                .FirstOrDefaultAsync();
+
             if (findCW == null)
-                return Page();
-
-            var isAlreadyAdded = _db.ContactWaysToFooters.Where(a=> a.ContactWaysId == findCW.Id).FirstOrDefault();
-            if (isAlreadyAdded != null)
-                return Page();
-
-            ContactWaysToFooter cWf = new ContactWaysToFooter()
             {
-                ContactWaysId = findCW.Id
-            };
-
-
-            _db.Add(cWf);
-            await _db.SaveChangesAsync();
-
-            return Page();
-
-        }
-        public async Task<IActionResult> OnPostRemoveCat(int Id)
-        {
-            if (Id == 0)
-            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                #endregion
                 return Page();
             }
 
-            var findCW = _db.ContactWays.Where(a => a.Id == SelectedCwId).FirstOrDefault();
-            if (findCW == null)
-                return NotFound();
+            var isAlreadyAdded = _db.ContactWays
+                .Where(a => a.IsInFooter.Equals(true) && a.Id == SelectedCwId)
+                .FirstOrDefault();
 
-            _db.Remove(findCW);
+            if (isAlreadyAdded != null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "این آیتم در حال حاضر در فوتر می باشد";
+                #endregion
+                return Page();
+            }
+
+            findCW.IsInFooter = true;
+
+            _db.Update(findCW);
             await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
+            return RedirectToPage("Footer-mgmt");
 
-            return Page();
+        }
+        public async Task<IActionResult> OnPostRemoveCW(int Id)
+        {
+            if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
+                return Page();
+            }
 
+            var findCW = _db.ContactWays
+                .Where(a => a.Id.Equals(Id) && a.IsInFooter.Equals(true))
+                .FirstOrDefault();
+
+            if (findCW == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+                return NotFound();
+            }
+
+            findCW.IsInFooter = false;
+
+            _db.Update(findCW);
+            await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
+            return RedirectToPage("Footer-mgmt");
         }
     }
 }

@@ -10,7 +10,7 @@ using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
 {
-    [Authorize(SD.AdminEndUser)]
+    [Authorize(Roles = SD.AdminEndUser)]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -31,7 +31,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
         public string SelectedIcon { get; set; }
 
         #endregion
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             // Icons
             initIcons();

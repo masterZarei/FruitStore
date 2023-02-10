@@ -40,13 +40,11 @@ namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
 
             if (AboutUs == null)
             {
-                _db.Add(
-                        new AboutUs()
+                _db.Add(new AboutUs()
                         {
                             Img = "",
                             Text = ""
-                        }
-                    );
+                        });
                 await _db.SaveChangesAsync();
                 AboutUs = await _db.AboutUs.FirstOrDefaultAsync();
             }

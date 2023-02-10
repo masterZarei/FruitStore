@@ -27,6 +27,5 @@ namespace FS.DataAccess
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<BenefitBar> BenefitBars { get; set; }
         public DbSet<Footer> Footers { get; set; }
-        public DbSet<ContactWaysToFooter> ContactWaysToFooters { get; set; }
     }
 }

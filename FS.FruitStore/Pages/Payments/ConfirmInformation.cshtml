@@ -12,12 +12,12 @@
             </div>
             <div class="col-lg-6 col-md-6 col-12">
                 <span class="text-danger font-weight-bold"></span>
-                <label class="my-2"> آدرس : </label> <span class="text-danger d-inline">*</span>
+                <label class="my-2"> آدرس : <span class="text-danger align-middle d-inline">*</span></label>
                 <textarea requierd asp-for="CIModel.ApplicationUser.Address" class="form-control form-control-information"
                           cols="5"> explicabo quis quo optio. </textarea>
             </div>
             <div class="col-lg-6 col-12 my-sm-2 my-lg-0 col-md-6">
-                <label class="my-2"> تلفن همراه : </label> <span class="text-danger d-inline">*</span>
+                <label class="my-2"> تلفن همراه : <span class="text-danger align-middle d-inline">*</span></label>
                 <input requierd asp-for="CIModel.ApplicationUser.PhoneNumber" type="text" class="form-control form-control-information w-75"
                        placeholder="01235447891">
                 <label class="my-2"> نوع پست </label>
@@ -25,8 +25,8 @@
             </div>
 
             <div class="col-lg-6 col-12 my-sm-2 my-lg-0 col-md-6">
-                <label class="my-2 "> کد پستی : </label> <span class="text-danger d-inline">*</span>
-                <input requierd asp-for="CIModel.ApplicationUser.PostalCode" type="text" class="form-control form-control-information w-75" placeholder="558585">
+                <label class="my-2 "> کد پستی : <span class="text-danger align-middle d-inline">*</span></label>
+                <input requierd asp-for="CIModel.ApplicationUser.PostalCode" type="text" class="form-control form-control-information w-75">
                 
                 <label class="my-2"> نوع پرداخت </label>
                 <select asp-for="CIModel.SelectedPaymentType" asp-items="@Model.CIModel.PaymentTypes" class="custom-select"> </select>

@@ -9,7 +9,7 @@ using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Units
 {
-    [Authorize(SD.AdminEndUser)]
+    [Authorize(Roles = SD.AdminEndUser)]
     public class EditModel : PageModel
     {
         private readonly FS.DataAccess.ApplicationDbContext _context;

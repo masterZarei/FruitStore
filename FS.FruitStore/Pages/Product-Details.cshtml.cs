@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.Convertors;
 
@@ -41,20 +40,37 @@ namespace FS.FruitStore.Pages
         {
 
             if (id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
 
-            Product = await _db.Products.Where(a => a.ProductId == id).FirstOrDefaultAsync();
-            SuggestProduct = await _db.Products.Take(4).ToListAsync();
+            Product = await _db.Products
+                .Where(a => a.ProductId == id)
+                .FirstOrDefaultAsync();
+
+            SuggestProduct = await _db.Products
+                .Take(4)
+                .ToListAsync();
 
             if (Product == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
 
             //دسته بندیهای محصول
             ProdCats = await (from a in _db.Categories
-                        join b in _db.CategoryToProducts on a.Id equals b.CategoryId
-                        where b.ProductId == Product.ProductId
-                        select a).ToListAsync();
+                              join b in _db.CategoryToProducts on a.Id equals b.CategoryId
+                              where b.ProductId == Product.ProductId
+                              select a).ToListAsync();
             //کامنته ای محصول
             lstComments = await _db.Comments
                 .Where(a => a.Product_Id == id && a.isVerified == true)
@@ -76,13 +92,19 @@ namespace FS.FruitStore.Pages
                 .FirstOrDefault();
 
             if (currentProduct == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
+            if (string.IsNullOrEmpty(User.Identity.Name))
+            {
                 return Redirect("/Identity/Account/Login");
-            var userId = claim.Value;
+            }
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
             var factor = _db.Factors
                 .FirstOrDefault(o => o.UserId == userId && !o.IsFinally);
@@ -95,13 +117,16 @@ namespace FS.FruitStore.Pages
                 //اگه محصول تو سبدش بود
                 if (factorDetail != null)
                 {
-                   
 
-                    if (currentProduct.Count >= factorDetail.Count+Product.Count)
+
+                    if (currentProduct.Count >= factorDetail.Count + Product.Count)
                         factorDetail.Count += Product.Count;
                     else
                     {
-                        TempData["error"] = "لطفا به تعداد موجود محصول، به سبد خریدتان اضافه نمایید.";
+                        #region Notif
+                        TempData["State"] = Notifs.Error;
+                        TempData["Msg"] = "لطفا به تعداد موجود محصول، به سبد خریدتان اضافه نمایید.";
+                        #endregion
                         return RedirectToPage("Product-Details", new { Id = ProductId });
                     }
                 }
@@ -120,7 +145,10 @@ namespace FS.FruitStore.Pages
                     }
                     else
                     {
-                        TempData["error"] = "لطفا به تعداد موجود محصول، به سبد خریدتان اضافه نمایید.";
+                        #region Notif
+                        TempData["State"] = Notifs.Error;
+                        TempData["Msg"] = "لطفا به تعداد موجود محصول، به سبد خریدتان اضافه نمایید.";
+                        #endregion
                         return RedirectToPage("Product-Details", new { Id = ProductId });
                     }
 
@@ -158,32 +186,46 @@ namespace FS.FruitStore.Pages
 
             await _db.SaveChangesAsync();
 
-
-
-
             return RedirectToPage("Product-Details", new { Id = ProductId });
 
         }
         public async Task<IActionResult> OnPostAddCmt(int ProductId)
         {
             if (ProductId == 0 || Comments.Text == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return RedirectToPage("Product-Details", new { id = ProductId });
-
-
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
+            }
+            if (string.IsNullOrEmpty(User.Identity.Name))
+            {
                 return Redirect("/Identity/Account/Login");
-            var userId = claim.Value;
+            }
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
-            var currentProduct = _db.Products.Where(a => a.ProductId == ProductId).FirstOrDefault();
+            var currentProduct = await _db.Products
+                .Where(a => a.ProductId == ProductId)
+                .FirstOrDefaultAsync();
+
             if (currentProduct == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
-
-
+            }
 
             if (Comments == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
                 return NotFound();
+            }
 
 
             var cmt = new Comments();
@@ -195,25 +237,33 @@ namespace FS.FruitStore.Pages
             _db.Add(cmt);
             await _db.SaveChangesAsync();
 
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Product-Details", new { id = ProductId });
 
         }
         public async Task<IActionResult> OnPostRating(byte Rate, int ProductId)
         {
             if (Rate < 0 || Rate > 5)
-                return Page();
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                #endregion
+                return RedirectToPage("Product-Details", new { id = ProductId });
+            }
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
+            if (string.IsNullOrEmpty(User.Identity.Name))
+            {
                 return Redirect("/Identity/Account/Login");
-            var userId = claim.Value;
+            }
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
-            if (userId == null)
-                return Redirect("/Identity/Account/Login");
 
             var checkIfRatedAlready = await _db.Ratings
-                .Where(a=>a.UserId == userId && a.ProductId == Product.ProductId)
+                .Where(a => a.UserId == userId && a.ProductId == Product.ProductId)
                 .FirstOrDefaultAsync();
 
             if (checkIfRatedAlready != null)
@@ -221,6 +271,11 @@ namespace FS.FruitStore.Pages
                 checkIfRatedAlready.Rate = Rate;
                 _db.Update(checkIfRatedAlready);
                 _db.SaveChanges();
+                #region Notif
+                TempData["State"] = Notifs.Success;
+                TempData["Msg"] = Notifs.SUCCEEDED;
+                #endregion
+                return RedirectToPage("Product-Details", new { id = ProductId });
             }
 
             var newRating = new Rating()
@@ -230,10 +285,14 @@ namespace FS.FruitStore.Pages
                 Rate = Rate
             };
             _db.Add(newRating);
-           await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return RedirectToPage("Product-Details", new { id = ProductId });
-            
+
 
         }
     }

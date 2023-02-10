@@ -30,11 +30,6 @@ namespace FS.FruitStore.Pages
 
             BenefitBars = await _db.BenefitBars.ToListAsync();
 
-            #region Notif
-            ViewData["State"] = Notifs.Warning;
-            ViewData["Msg"] = "ریدم تو قیافتتتتت :)))";
-            #endregion
-
             return Page();
         }
     }

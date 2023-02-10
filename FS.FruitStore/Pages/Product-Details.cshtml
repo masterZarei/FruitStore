@@ -9,8 +9,17 @@
 
 
         <div class="col-lg-6 col-12 col-right-det-product">
-            <img src="~/ProductImages/@Model.Product.ProductPic" alt="product" style="width:290px !important; height:300px !important;" class="img-fluid w-100 h-100 mt-5 ">
+            <img src="~/ProductImages/@Model.Product.ProductPic" alt="product" style="width:290px !important; height:300px !important;" id="OrgImage" class="img-fluid w-100 h-100 mt-5 ">
             <!-- عکس محصول -->
+            <div class="w-50 mt-2">
+                <div class="d-flex justify-content-center">
+                    <img class="img-thumbnail img-fluid" width="60" id="thumb1"
+                         height="60px" src="~/ProductImages/@Model.Product.ProductPic" />
+                    <img class="img-thumbnail img-fluid" width="60" id="thumb2"
+                         height="60px" src="~/ProductImages/@Model.Product.ProductPic2" />
+
+               </div>
+            </div>
         </div>
         <div class="col-lg-6 ml-n5 col-md-6 col-12 mb-md-5">
             <form method="Post">
@@ -26,7 +35,7 @@
                     <!-- قیمت محصول -->
                     <h4 class="h5 text-danger text-right">
                         @Model.Product.Price.ToToman()
-    
+
                     </h4>
                 </div>
                 <!-- تعداد محصول -->
@@ -44,9 +53,9 @@
                         @if (Model.Rating.Any())
                         {
                             <h6> تعداد افراد : <span>@Model.Rating.Count</span></h6>
-                            <h4> رتبه فعلی : <span>@(Model.Rating.Sum(a=>a.Rate)/5)</span></h4>
+                            <h4> رتبه فعلی : <span>@(Convert.ToDouble(Model.Rating.Sum(a => a.Rate)) / 10)</span></h4>
                         }
-                        
+
                     </div>
                 </div>
 
@@ -56,15 +65,15 @@
                     <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="1" class="star-icon" id="button1"><i class="fas fa-star"></i></button>
                     <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="2" class="star-icon" id="button2"><i class="fas fa-star"></i></button>
                     <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="3" class="star-icon" id="button3"><i class="fas fa-star"></i></button>
-                    <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="5" class="star-icon" id="button4"><i class="fas fa-star"></i></button>
-                    <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="6" class="star-icon" id="button5"><i class="fas fa-star"></i></button>
+                    <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="4" class="star-icon" id="button4"><i class="fas fa-star"></i></button>
+                    <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="5" class="star-icon" id="button5"><i class="fas fa-star"></i></button>
                 </div>
 
-                <div class="alert-box" id="alert1"> خیلی بد </div>
-                <div class="alert-box" id="alert2"> بد </div>
-                <div class="alert-box" id="alert3"> خوب </div>
-                <div class="alert-box" id="alert4"> خیلی خوب </div>
-                <div class="alert-box" id="alert5"> عالی </div>
+                <div class="alert-box-rate" id="alert1"> خیلی بد </div>
+                <div class="alert-box-rate" id="alert2"> بد </div>
+                <div class="alert-box-rate" id="alert3"> خوب </div>
+                <div class="alert-box-rate" id="alert4"> خیلی خوب </div>
+                <div class="alert-box-rate" id="alert5"> عالی </div>
                 <hr>
 
                 <!-- دکمه افزودن به سبد خرید -->
@@ -79,7 +88,6 @@
 </div>
 
 <br>
-</div>
 <div class="container">
     <hr size="1px" color="#ccc">
     <!-- توضیحات کامل درباره محصول -->
@@ -219,9 +227,16 @@
 
     document.getElementById("countHolder").value = "1";
 
+    const tmb1 = document.querySelector("#thumb1")
+    const tmb2 = document.querySelector("#thumb2")
+    let OrgImage = document.querySelector("#OrgImage")
 
-
-
+    tmb1.addEventListener("click",()=>{
+        OrgImage.src = tmb1.src
+    })
+    tmb2.addEventListener("click", () => {
+        OrgImage.src = tmb2.src
+    })
 
     let Alerts = ['alert1', 'alert2', 'alert3', 'alert4', 'alert5'];
     let Buttons = ['button1', 'button2', 'button3', 'button4', 'button5'];

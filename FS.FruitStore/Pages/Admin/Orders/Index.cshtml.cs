@@ -77,7 +77,7 @@ namespace FS.FruitStore.Pages.Admin.Orders
                 return RedirectToPage("Index");
             }
 
-            selectedOrder.DeliverState = 0;
+            selectedOrder.DeliverState = 2;
             _db.Update(selectedOrder);
             await _db.SaveChangesAsync();
 
@@ -114,6 +114,8 @@ namespace FS.FruitStore.Pages.Admin.Orders
             }
 
             selectedOrder.isCompleted = true;
+            selectedOrder.DeliverState = 3;
+
             _db.Update(selectedOrder);
             await _db.SaveChangesAsync();
             #region Notif

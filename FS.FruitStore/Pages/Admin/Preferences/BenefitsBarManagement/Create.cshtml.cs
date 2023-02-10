@@ -27,7 +27,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
         [BindProperty]
         public IFormFile ImgUp { get; set; }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             return Page();
         }

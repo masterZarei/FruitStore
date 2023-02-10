@@ -1,4 +1,5 @@
 ﻿using FS.DataAccess;
+using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace Mahshop.Pages.Payment
@@ -21,33 +23,26 @@ namespace Mahshop.Pages.Payment
 
         public async Task<IActionResult> OnGet(int Id, string Authority, string Status)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
-                return BadRequest();
-            var userId = claim.Value;
+
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
 
-            var crntFactor = _db.Factors
-                .Where(a => a.FactorId == Id)
+            var crntFactor = await _db.Factors
+                .Where(a => a.FactorId == Id && a.UserId == userId)
                 .Include(a => a.FactorDetails)
                 .ThenInclude(a => a.Product)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
-            if (crntFactor != null)
+            if (crntFactor == null)
             {
-                crntFactor.WillDeliver_Date = System.DateTime.Now.AddDays(SD.CountOfDaysPackageWillDeliver);
-                crntFactor.Send_Date = System.DateTime.Now.AddDays(2);
-                crntFactor.Post_Type = "سفارشی";
-                
-                _db.Update(crntFactor);
-                await _db.SaveChangesAsync();
-
-                return Page();
-
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+                return NotFound();
             }
 
-            return Page(); // And send Errors
+            return Page(); 
 
         }
     }

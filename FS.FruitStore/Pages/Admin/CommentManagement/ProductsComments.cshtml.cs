@@ -25,7 +25,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
         public List<Comments> Comments { get; set; }
 
         public GetUserInfo getInfo { get; set; }
-        public async Task<IActionResult> OnGet(int Id)
+        public async Task<IActionResult> OnGetAsync(int Id)
         {
             if (Id == 0)
             {
@@ -37,9 +37,9 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
             }
 
 
-            Comments = _db.Comments
+            Comments = await _db.Comments
                 .Where(a => a.Product_Id == Id && string.IsNullOrEmpty(a.Answer))
-                .Include(a => a.Product).ToList();
+                .Include(a => a.Product).ToListAsync();
 
             if (Comments.Count < 1)
             {

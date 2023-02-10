@@ -24,20 +24,13 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
 
         [BindProperty]
         public List<CommentsIndexVM> Comments { get; set; }
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claim == null)
-                return NotFound();
-            var userId = claim.Value;
 
-
-
-            var CommentsList = _db.Comments
+            var CommentsList = await _db.Comments
                 .Where(a => a.Answer == null)
                 .Include(a => a.Product)
-                .ToList();
+                .ToListAsync();
             Comments = new List<CommentsIndexVM>();
 
            

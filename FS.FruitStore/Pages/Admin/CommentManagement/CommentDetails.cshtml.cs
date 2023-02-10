@@ -22,7 +22,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
         }
         [BindProperty]
         public Comments Comments { get; set; }
-        public async Task<IActionResult> OnGet(int Id)
+        public async Task<IActionResult> OnGetAsync(int Id)
         {
             if (Id == 0)
             {
@@ -33,7 +33,10 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
             return NotFound();
             }
 
-            Comments = _db.Comments.Where(a => a.Id == Id).Include(a => a.Product).FirstOrDefault();
+            Comments = await _db.Comments
+                .Where(a => a.Id == Id)
+                .Include(a => a.Product)
+                .FirstOrDefaultAsync();
             if (Comments == null)
             {
                 #region Notif
@@ -46,11 +49,14 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
 
         }
 
-        public async Task<IActionResult> OnPost(int Id)
+        public async Task<IActionResult> OnPostAsync(int Id)
         {
             //   Methods mtd = new Methods(_db);
 
-            var cmt = await _db.Comments.Where(a => a.Id == Id).FirstOrDefaultAsync();
+            var cmt = await _db.Comments
+                .Where(a => a.Id == Id)
+                .FirstOrDefaultAsync();
+
             if (cmt == null)
             {
                 #region Notif
@@ -87,7 +93,10 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
                 return NotFound();
             }
 
-            var cmt = _db.Comments.Where(a => a.Id == Id).FirstOrDefault();
+            var cmt = await _db.Comments
+                .Where(a => a.Id == Id)
+                .FirstOrDefaultAsync();
+
             if (cmt == null)
             {
                 #region Notif

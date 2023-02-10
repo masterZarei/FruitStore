@@ -158,6 +158,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsInFooter")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsLink")
                         .HasColumnType("bit");
 
@@ -168,23 +171,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ContactWays");
-                });
-
-            modelBuilder.Entity("FS.Models.Models.ContactWaysToFooter", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ContactWaysId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactWaysId");
-
-                    b.ToTable("ContactWaysToFooters");
                 });
 
             modelBuilder.Entity("FS.Models.Models.Factor", b =>
@@ -270,6 +256,7 @@ namespace DataAccess.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TrustSymbol")
@@ -366,6 +353,7 @@ namespace DataAccess.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Caption")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Img")
@@ -752,17 +740,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FS.Models.Models.ContactWaysToFooter", b =>
-                {
-                    b.HasOne("FS.Models.Models.ContactWays", "ContactWays")
-                        .WithMany()
-                        .HasForeignKey("ContactWaysId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ContactWays");
                 });
 
             modelBuilder.Entity("FS.Models.Models.Factor", b =>

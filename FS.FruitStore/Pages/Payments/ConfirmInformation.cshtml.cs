@@ -1,4 +1,5 @@
 ﻿using FS.DataAccess;
+using FS.Models.Models;
 using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,14 @@ namespace FS.FruitStore.Pages.Payments
             var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
             if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
                 return NotFound();
+            }
+
             var factor = await _db.Factors
                 .Where(a => a.FactorId == Id &&
                 a.UserId == userId && !a.IsFinally &&
@@ -59,21 +67,23 @@ namespace FS.FruitStore.Pages.Payments
         {
             var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
-            var currentUser = _db.Users
-                .FirstOrDefault(a => a.Id == userId);
+            var currentUser = await _db.Users
+                .FirstOrDefaultAsync(a => a.Id == userId);
 
 
 
-            var factor = _db.Factors
+            var factor = await _db.Factors
                 .Include(a=> a.FactorDetails)
                 .Where(a => a.UserId == userId && !a.IsFinally)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (string.IsNullOrEmpty(CIModel.ApplicationUser.PostalCode)||
                 string.IsNullOrEmpty(CIModel.ApplicationUser.Address))
             {
-                ModelState.AddModelError(string.Empty, "لطفا کد پستی را وارد کنید!");
-                ModelState.AddModelError(string.Empty, "لطفا آدرس را وارد کنید!");
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return RedirectToPage("ConfirmInformation", new { Id = factor.FactorId });
 
             }
@@ -89,9 +99,13 @@ namespace FS.FruitStore.Pages.Payments
                         factor.Post_Type = CIModel.SelectedPostType;
                         factor.Payment_Type = CIModel.SelectedPaymentType;
                         factor.Description = CIModel.Description;
+                        factor.DeliverState = 1;
+
                         factor.WillDeliver_Date = DateTime.Now.AddDays(10);
                         factor.Send_Date = DateTime.Now.AddDays(2);
 
+                        factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
+                        factor.IsFinally = true;
 
                         _db.Update(currentUser);
                         _db.Update(factor);
@@ -106,8 +120,13 @@ namespace FS.FruitStore.Pages.Payments
                         factor.Post_Type = CIModel.SelectedPostType;
                         factor.Payment_Type = CIModel.SelectedPaymentType;
                         factor.Description = CIModel.Description;
+                        factor.DeliverState = 1;
+
                         factor.WillDeliver_Date = DateTime.Now.AddDays(10);
                         factor.Send_Date = DateTime.Now.AddDays(2);
+
+                        factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
+                        factor.IsFinally = true;
 
 
                         _db.Update(currentUser);
@@ -128,9 +147,12 @@ namespace FS.FruitStore.Pages.Payments
                             factor.Post_Type = CIModel.SelectedPostType;
                             factor.Payment_Type = CIModel.SelectedPaymentType;
                             factor.Description = CIModel.Description;
+                            factor.DeliverState = 1;
+
                             factor.WillDeliver_Date = DateTime.Now.AddDays(SD.CountOfDaysPackageWillDeliver);
                             factor.Send_Date = DateTime.Now.AddDays(1);
-                            factor.PurchaseNumber = "5454";
+
+                            factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
                             factor.IsFinally = true;
 
                             _db.Update(currentUser);
@@ -140,13 +162,19 @@ namespace FS.FruitStore.Pages.Payments
                         }
                         else
                         {
-                            //TODO : Return Error
+                            #region Notif
+                            TempData["State"] = Notifs.Error;
+                            TempData["Msg"] = "موجودی کیف پول شما کافی نمی‌باشد";
+                            #endregion
                             return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
                         }
 
                     default:
-                        //TODO : Return Error
-                        return BadRequest();
+                        #region Notif
+                        TempData["State"] = Notifs.Error;
+                        TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                        #endregion
+                        return NotFound();
                 }
                 
 

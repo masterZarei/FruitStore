@@ -41,22 +41,34 @@ namespace FS.FruitStore.Pages.Verification
 
 
             if (string.IsNullOrEmpty(EnteredCode))
-
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                #endregion
                 return Page();
+            }
 
-            var user = await _db.Users.FindAsync(ApplicationUser.Id);
+            var user = await _db.Users
+                .FindAsync(ApplicationUser.Id);
 
             if (user.VerificationCode == EnteredCode)
                 user.isVerified = true;
             else
             {
-                ModelState.AddModelError("CodeNotMatched", "کد وارد شده معتبر نمی باشد!");
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = "کد وارد شده معتبر نمی باشد";
+                #endregion
                 return Page();
             }
 
             _db.Update(user);
-            _db.SaveChanges();
-
+            await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
             return Redirect("/");
 
 
