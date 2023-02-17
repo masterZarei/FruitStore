@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Roles;
 
@@ -32,7 +31,7 @@ namespace FS.FruitStore.Pages.Admin.Categories
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = "مشکلی رخ داد!";
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
@@ -43,14 +42,11 @@ namespace FS.FruitStore.Pages.Admin.Categories
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = "دسته بندی پیدا نشد!!";
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             return Page();
         }
-
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -62,20 +58,10 @@ namespace FS.FruitStore.Pages.Admin.Categories
                 return Page();
             }
 
-            _context.Attach(Category).State = EntityState.Modified;
+            _context.Update(Category);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                #region Notif
-                TempData["State"] = Notifs.Error;
-                TempData["Msg"] = "مشکل در ویرایش دسته بندی";
-                #endregion
-                return Page();
-            }
+           
             #region Notif
             TempData["State"] = Notifs.Success;
             TempData["Msg"] = "دسته بندی با موفقیت ویرایش شد.";

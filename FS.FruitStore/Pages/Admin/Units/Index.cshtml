@@ -1,8 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Units.IndexModel
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "مدیریت واحد";
 }
 <div class="row">
     <partial name="_Panel" />
@@ -35,12 +34,12 @@
                                     <tr>
                                         <td class="text-center"> @item.Name </td>
                                         <td class=" text-center">
-                                            <button asp-page-handler="Remove" type="submit" class="align-middle btn " asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+                                            <button asp-page-handler="Remove" type="submit" class="align-middle btn text-primary" asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
 
-                                            <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle btn ">
+                                            <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle btn text-primary">
                                                 <i class="fa fa-list"></i>
                                             </a>
-                                            <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle btn ">
+                                            <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle btn text-primary">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                         </td>

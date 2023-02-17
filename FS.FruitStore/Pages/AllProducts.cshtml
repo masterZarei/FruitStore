@@ -1,18 +1,16 @@
 ﻿@page
+@using Utilities.Convertors;
 @model FS.FruitStore.Pages.AllProductsModel
 @{
 }
 
 <div class="shop-header">
-    <i class="fa fa-home shop-home-icon"></i>
-    <a href="index.html"> خانه </a>
-    <span> > </span>
-    <a href="shop.html"> فروشگاه </a>
     <hr size="2px" color="gray">
     <form method="post">
         <div class="input-group my-3">
             <!-- سلکت اپشن انتخاب کتگوری -->
             <select class="custom-select" asp-for="SelectedCat" asp-items="Model.Cats">
+                <option>همه</option>
             </select>
             <div class="input-group-append">
                 <!-- دکمه اضافه کردن -->
@@ -49,7 +47,7 @@
         }
         else
         {
-            <h4 class="m-auto alert alert-warning"> محصولی وجود ندارد </h4>
+            <h4 class="m-auto alert text-center h3 alert-warning"> محصولی وجود ندارد </h4>
         }
     </form>
 

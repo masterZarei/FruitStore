@@ -1,9 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Preferences.Slider_Management.CreateModel
-
-
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "ایجاد اسلایدر";
 }
 <h1 class="mt-3 text-center h3"> مدیریت قالب سایت </h1>
 <div class="row">
@@ -63,7 +61,7 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
 
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     $('#imgPreview').attr('src', e.target.result);
                 }
 
@@ -71,13 +69,13 @@
             }
         }
 
-        $("#ImgUp").change(function() {
+        $("#ImgUp").change(function () {
             readURL(this);
         });
 
 
         //نمایش اسم عکس روی اینپوت
-        $(".custom-file-input").on("change", function() {
+        $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });

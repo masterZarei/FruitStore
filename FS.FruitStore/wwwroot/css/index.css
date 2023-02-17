@@ -427,16 +427,19 @@ section .thumbnail:hover {
 
 /* \****\ */
 
-
+#Comments_Text {
+    width: 90%;
+    display: block;
+    margin: auto auto 20px auto !important;
+}
 
 
 /* product Cards */
 
 .product-child {
-    box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
     transition: all ease 0.4s;
     border-radius: 3px 3px 0 0;
-
+    border: 1px solid #ddd !important;
 }
 
 .product-child img {
@@ -462,7 +465,6 @@ section .thumbnail:hover {
 }
 
 .product-child:hover {
-    box-shadow: 4px 4px 24px #181818;
     transition: all ease 0.4s;
 }
 

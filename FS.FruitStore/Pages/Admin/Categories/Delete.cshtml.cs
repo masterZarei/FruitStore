@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities.Roles;
 
@@ -32,7 +31,7 @@ namespace FS.FruitStore.Pages.Admin.Categories
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = "دسته بندی پیدا نشد!";
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -44,7 +43,7 @@ namespace FS.FruitStore.Pages.Admin.Categories
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = "دسته بندی پیدا نشد!";
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             return Page();

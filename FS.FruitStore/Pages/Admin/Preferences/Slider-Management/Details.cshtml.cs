@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
@@ -25,13 +24,13 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
         public async Task<IActionResult> OnGetAsync(int id)
         {
 
-            if (id < 0)
+            if (id == 0)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Slider = await _context
@@ -44,7 +43,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             return Page();
         }

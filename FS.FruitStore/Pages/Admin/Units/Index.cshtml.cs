@@ -40,7 +40,7 @@ namespace FS.FruitStore.Pages.Admin.Units
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var thisUnit = await _context

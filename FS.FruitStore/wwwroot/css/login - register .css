@@ -6,7 +6,8 @@
     padding: 10px;
     max-width: 500px;
     margin: auto;
-    margin-top: 40px;
+    margin: 30px auto;
+    /*margin-top: 40px;*/
     border-radius: 15px;
     background-color: transparent !important;
 }
@@ -125,3 +126,4 @@
 .last-name-user {
     margin-right: 173px;
 }
+

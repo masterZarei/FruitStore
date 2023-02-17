@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.Convertors;
 
@@ -31,6 +30,7 @@ namespace FS.FruitStore.Pages.Payments
             Factor = await _db.Factors.Where(o => o.UserId == userId && o.IsFinally == false)
                 .Include(o => o.FactorDetails)
                 .ThenInclude(c => c.Product).FirstOrDefaultAsync();
+
 
             return Page();
         }
@@ -74,7 +74,7 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var factorDetail = _db.FactorDetails.Find(DetailId);
@@ -90,7 +90,24 @@ namespace FS.FruitStore.Pages.Payments
                 return RedirectToPage("ShoppingCart");
             }
             _db.Remove(factorDetail);
+            var checkFactor = _db.Factors
+                .Include(a => a.FactorDetails)
+                .ThenInclude(a => a.Product)
+                .Where(a => a.FactorId == factorDetail.FactorId)
+                .FirstOrDefault();
+            int check = checkFactor
+                .FactorDetails
+                .Where(a => a.Product.Count > 0)
+                .ToList()
+                .Count;
+
+            if (check < 1)
+            {
+                _db.Remove(checkFactor);
+            }
             await _db.SaveChangesAsync();
+
+
             #region Notif
             TempData["State"] = Notifs.Success;
             TempData["Msg"] = Notifs.SUCCEEDED;
@@ -105,7 +122,7 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var factorDetail = await _db.FactorDetails
@@ -143,7 +160,7 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             var factor = _db.Factors.Find(OrderId);
             if (factor == null)
@@ -152,7 +169,7 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion               
-                return NotFound();
+                return RedirectToPage("/NotFound");
 
             }
             _db.Factors.Remove(factor);
@@ -172,7 +189,7 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             var orderDetail = _db.FactorDetails.Find(DetailId);
             if (orderDetail == null)
@@ -181,7 +198,7 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             var factor = await _db.Factors
                 .Include(a => a.FactorDetails)
@@ -193,7 +210,7 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             if (factor.FactorDetails.Count <= 1)
             {

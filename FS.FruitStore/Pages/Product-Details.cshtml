@@ -29,7 +29,7 @@
                 <!-- اسم محصول -->
                 <h2 class="h4 my-4"> @Model.Product.Name </h2>
                 <!-- یه متن کوچیک درباره محصول -->
-                <h5 class="h5 text-muted font-weight-lighter">  تعداد موجود : @Model.Product.Count  </h5>
+                <h5 class="h5 text-muted font-weight-lighter">  تعداد موجود : @Model.Product.Count @Model.ProductUnit </h5>
                 <hr>
                 <div class="d-flex justify-content-between">
                     <!-- قیمت محصول -->
@@ -122,7 +122,7 @@
     <hr size="1px" color="#ccc">
     <!-- محصولات پیشنهادی -->
     <h1 class="h4 my-4"> محصولات پیشنهادی </h1>
-    <div class="row">
+    <div class="row" style="margin-bottom: 60px;">
         @if (Model.SuggestProduct.Any())
         {
             @foreach (var item in Model.SuggestProduct)
@@ -160,10 +160,10 @@
             @foreach (var item in Model.lstComments)
             {
                 <div class="media border p-3 mt-3">
-                    <img src="img/zan.png" alt="img-user" class="mr-3 mt-3 rounded-circle" width="60">
+                    <img src="img/user.png" alt="img-user" class="mr-3 mt-3 rounded-circle" width="60">
                     <div class="media-body mr-2">
                         <div class="d-flex user-info-text">
-                            <h4 class="user-name"> @Model.GetInfo.GetInfoById(@item.User_Id).Name @Model.GetInfo.GetInfoById(@item.User_Id).LastName </h4>
+                            <h4 class="user-name"> @item.User.Name @item.User.LastName </h4>
                             <small class="text-muted comment-date mr-2"> <i>@item.CreateDate.ToShamsi() </i> </small>
                         </div>
                         <p>

@@ -1,12 +1,11 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.CommentManagement.ProductsCommentsModel
-@using Utilities.Roles;
 @{
-   // ViewData[PD.PanelViewData] = PD.Comments;
+    ViewData["Title"] = "کامنت های محصول";
 }
 <div class="row">
     <partial name="_Panel" />
-    <div class="col-12 col-lg-8 col-md-8 mt-5">
+    <div class="col-12 col-lg-9 col-md-9 mt-5">
 
         <h4 class="h4 text-center">کامنت ها محصول @Model.Comments[0].Product.Name</h4>
 
@@ -24,7 +23,7 @@
                     @foreach (var item in Model.Comments)
                     {
                         <tr>
-                            <td class="text-center"><a asp-page="/User/Details" asp-route-userId="@item.User_Id"> @Model.getInfo.GetInfoById(@item.User_Id).Name @Model.getInfo.GetInfoById(@item.User_Id).LastName</a> </td>
+                            <td class="text-center"><a asp-page="/User/Details" asp-route-userId="@item.User_Id"> @item.Product.User.Name @item.Product.User.LastName</a> </td>
                             <td class="text-center"> @item.CreateDate </td>
                             <td class="text-center"> <a asp-page="CommentDetails" asp-route-Id="@item.Id"> مرور </a> </td>
                         </tr>

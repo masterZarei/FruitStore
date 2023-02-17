@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Utilities;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
@@ -49,6 +50,15 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                 if (!Directory.Exists(DirectoryPath))
                     Directory.CreateDirectory(DirectoryPath);
 
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
 
                 BenefitBar.Img = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp.FileName);
                 string savepath = Path.Combine(DirectoryPath, BenefitBar.Img);

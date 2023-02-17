@@ -10,6 +10,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
@@ -90,6 +91,16 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             if (ImgUp != null)
             {
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
+
                 Product.ProductPic = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp.FileName);
                 string savepath = Path.Combine(Directory.GetCurrentDirectory(), SaveDir, Product.ProductPic);
                 using (var filestream = new FileStream(savepath, FileMode.Create))
@@ -99,6 +110,16 @@ namespace FS.FruitStore.Pages.Admin.Products
             }
             if (ImgUp1 != null)
             {
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp1.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
+
                 Product.ProductPic2 = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp1.FileName);
                 string savepath = Path.Combine(Directory.GetCurrentDirectory(), SaveDir, Product.ProductPic2);
                 using (var filestream = new FileStream(savepath, FileMode.Create))

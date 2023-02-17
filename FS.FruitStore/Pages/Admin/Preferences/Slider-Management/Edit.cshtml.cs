@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Utilities;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
@@ -28,16 +29,16 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
         [BindProperty]
         public IFormFile ImgUp { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
 
-            if (id == null)
+            if (id == 0)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Slider = await _context
@@ -50,7 +51,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             return Page();
         }
@@ -79,6 +80,16 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
                 if (ImgUp != null)
                 {
+                    // بررسی فایل ورودی
+                    if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                    {
+                        #region Notif
+                        TempData["State"] = Notifs.Error;
+                        TempData["Msg"] = "لطفا عکس وارد کنید";
+                        #endregion
+                        return Page();
+                    }
+
                     currentSlider.Img = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp.FileName);
                     string savepath = Path.Combine(Directory.GetCurrentDirectory(), SaveDir, currentSlider.Img);
                     using (var filestream = new FileStream(savepath, FileMode.Create))

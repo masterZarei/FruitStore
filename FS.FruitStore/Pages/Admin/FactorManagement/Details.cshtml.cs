@@ -1,12 +1,10 @@
 using FS.DataAccess;
 using FS.Models.Models;
-using Utilities.Roles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 
 namespace Mahshop.Pages.FactorManagement
 {
@@ -20,8 +18,7 @@ namespace Mahshop.Pages.FactorManagement
         }
         [BindProperty]
         public Factor Factor { get; set; }
-        [BindProperty]
-        public GetUserInfo GetInfo { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int Id)
         {
             if (Id == 0)
@@ -30,10 +27,11 @@ namespace Mahshop.Pages.FactorManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Factor = await _db.Factors
+                .Include(a=>a.User)
                 .Include(a=>a.FactorDetails)
                 .ThenInclude(a=>a.Product)
                 .ThenInclude(a=>a.User)
@@ -47,9 +45,8 @@ namespace Mahshop.Pages.FactorManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
-            GetInfo = new GetUserInfo(_db);
 
             return Page();
         }

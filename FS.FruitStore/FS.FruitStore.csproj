@@ -8,9 +8,10 @@
 
   <ItemGroup>
     <Content Remove="Pages\AboutUs.cshtml" />
+    <Content Remove="Pages\Admin\Preferences\LogoManagement\Index.cshtml" />
     <Content Remove="Pages\AllProducts.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
-    <Content Remove="Pages\Wallet\Index.cshtml" />
+    <Content Remove="Pages\Panel\Wallet\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,8 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Admin\Preferences\BannerManagenent\" />
-    <Folder Include="Pages\Panel\Wallet\" />
     <Folder Include="wwwroot\Preferences\" />
   </ItemGroup>
 
@@ -43,19 +42,20 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\AboutUs.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Admin\Preferences\LogoManagement\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\AllProducts.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\NotFound.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\Wallet\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Pages\AboutUs.cshtml" />
+    <None Include="Pages\Admin\Preferences\LogoManagement\Index.cshtml" />
     <None Include="Pages\Admin\Orders\Details.cshtml" />
     <None Include="Pages\Admin\Orders\History.cshtml" />
     <None Include="Pages\Admin\Orders\Index.cshtml" />
     <None Include="Pages\AllProducts.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
-    <None Include="Pages\Wallet\Index.cshtml" />
+    <None Include="Pages\Panel\Wallet\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,11 +63,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Wallet\Index.cshtml" />
+    <UpToDateCheckInput Remove="Pages\NotFound.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\NotFound.cshtml" />
+    <UpToDateCheckInput Remove="Pages\Admin\Preferences\LogoManagement\Index.cshtml" />
   </ItemGroup>
 
 </Project>

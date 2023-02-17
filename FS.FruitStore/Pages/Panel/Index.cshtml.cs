@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Utilities.Convertors;
 
@@ -39,7 +38,7 @@ namespace FS.FruitStore.Pages.Panel
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             #region isDisabled?

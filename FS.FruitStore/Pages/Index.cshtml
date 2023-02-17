@@ -4,82 +4,61 @@
     ViewData["Title"] = "خانه";
 }
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-lg-6 col-md-6 col-12">
-            <section class="home">
-                <div class="slider">
-                    @foreach (var item in Model.Sliders)
-                    {
-                        <div class="slide active" style="background-image: url('img/@item.Img');">
-                            <div class="container">
-                                <div class="caption">
-                                    <a href="@item.Link">@item.Caption</a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="controls">
-                    <div class="next"><i class="fas fa-chevron-right"></i></div>
-                    <div class="prev"><i class="fas fa-chevron-left"></i></div>
-                </div>
-                <div class="indicator"></div>
-            </section>
-
-        </div>
-        <div class="col-lg-6 col-md-6 col-12">
-            <div class="border-dotted d-flex px-5 py-4 mt-5">
-                <i class="fa fa-calculator text-success p-2 ml-4 rounded-circle" style="font-size: 70px;"></i>
-                <div>
-                    <h1 class="font-weight-bold text-success"> شنبه های جایزه دار </h1>
-                    <p class="text-secondary">
-                        با هر مقدار خرید هویج سبد خریدت با ما این هفته یک بسته یک کیلویی هویج
-                    </p>
-                </div>
-            </div>
-            <div class="border-dotted d-flex px-5 py-4 mt-3">
-                <i class="fa fa-percent text-orange p-2 ml-4 rounded-circle" style="font-size: 70px;"></i>
-                <div>
-                    <h1 class="font-weight-bold text-orange"> 20 هزار تومان تحفیف</h1>
-                    <p class="text-secondary"> برای خرید اول بالای 200 هزارتومان با کد sunoff </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <h2 class="mt-5 mb-4">
-        محصولات <a href="~/AllProducts" class="font-weight-bold text-success"
-                   style="font-size: 16px !important"> همه محصولات </a>
-    </h2>
-    <div class="row">
-        @if (Model.Product.Any())
-        {
-
-            @foreach (var item in Model.Product)
+    <section class="home">
+        <div class="slider">
+            @foreach (var item in Model.Sliders)
             {
-                <div class="col-lg-3 col-md-3 col-12 my-1">
-                    <a asp-page="Product-Details" asp-route-Id="@item.ProductId">
-                        <div class="card product-box">
-                            <div class="mother-imageBox">
-                                <img class="card-img-top" src="~/ProductImages/@item.ProductPic" alt="this is a img" height="250px">
-                            </div>
-                            <div class="card-body product-box-body">
-                                <h5 class="card-title h5 text-dark" style="font-size: 18px; font-weight: 600;">
-                                    @item.Name
-                                </h5>
-                                <p class="h6 text-dark" style="font-weight: 600"> @item.Price.ToToman() </p>
-                            </div>
+                <div class="slide active" style="background-image: url('img/@item.Img');">
+                    <div class="container">
+                        <div class="caption">
+                            <a href="@item.Link">@item.Caption</a>
                         </div>
-                    </a>
+                    </div>
                 </div>
             }
-        }
-        else
+        </div>
+        <div class="controls">
+            <div class="next"><i class="fas fa-chevron-right"></i></div>
+            <div class="prev"><i class="fas fa-chevron-left"></i></div>
+        </div>
+        <div class="indicator"></div>
+    </section>
+
+</div>
+
+<h2 class="mt-5 mb-4">
+    محصولات <a href="~/AllProducts" class="font-weight-bold text-success"
+               style="font-size: 16px !important"> همه محصولات </a>
+</h2>
+<div class="row">
+    @if (Model.Product.Any())
+    {
+
+        @foreach (var item in Model.Product)
         {
-            <h4 class="m-auto alert alert-warning"> محصولی وجود ندارد </h4>
+            <div class="col-lg-3 col-md-3 col-12 my-1">
+                <a asp-page="Product-Details" asp-route-Id="@item.ProductId">
+                    <div class="card product-box">
+                        <div class="mother-imageBox">
+                            <img class="card-img-top" src="~/ProductImages/@item.ProductPic" alt="this is a img" height="250px">
+                        </div>
+                        <div class="card-body product-box-body">
+                            <h5 class="card-title h5 text-dark" style="font-size: 18px; font-weight: 600;">
+                                @item.Name
+                            </h5>
+                            <p class="h6 text-dark" style="font-weight: 600"> @item.Price.ToToman() </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
         }
-    </div>
-    <a href="~/AllProducts" class="text-orange mt-2 font-weight-bold text-center d-block"> مشاهده بیشتر </a>
+    }
+    else
+    {
+        <h4 class="m-auto alert alert-warning"> محصولی وجود ندارد </h4>
+    }
+</div>
+<a href="~/AllProducts" class="text-orange mt-2 font-weight-bold text-center d-block"> مشاهده بیشتر </a>
 </div>
 
 <!-- #region Our Services-->

@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Utilities;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
@@ -25,12 +24,8 @@ namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
         [BindProperty]
         public AboutUs AboutUs { get; set; }
 
-
-
         [BindProperty]
         public IFormFile ImgUp { get; set; }
-
-
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -71,7 +66,15 @@ namespace FS.FruitStore.Pages.Admin.Preferences.AboutUs_Management
                 string DirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences");
                 if (!Directory.Exists(DirectoryPath))
                     Directory.CreateDirectory(DirectoryPath);
-
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
                 if (!string.IsNullOrEmpty(AboutUs.Img))
                 {
                     string deletePath = Path.Combine(DirectoryPath, AboutUs.Img);

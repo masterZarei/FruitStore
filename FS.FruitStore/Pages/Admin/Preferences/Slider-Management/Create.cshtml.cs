@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Utilities;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
@@ -33,7 +33,6 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
         [BindProperty]
         public IFormFile ImgUp { get; set; }
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -51,6 +50,16 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
 
             if (ImgUp != null)
             {
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
+
                 Slider.Img = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp.FileName);
                 string savepath = Path.Combine(Directory.GetCurrentDirectory(), SaveDir, Slider.Img);
                 using (var filestream = new FileStream(savepath, FileMode.Create))

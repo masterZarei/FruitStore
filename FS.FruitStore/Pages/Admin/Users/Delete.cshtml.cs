@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Users
@@ -35,7 +34,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -49,7 +48,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -60,7 +59,7 @@ namespace FS.FruitStore.Pages.Users
             #region Delete
             //if (userId.Trim().Length == 0)
             //{
-            //    return NotFound();
+            //    return RedirectToPage("/NotFound");
             //}
 
             //ApplicationUser = await _context.ApplicationUsers.FindAsync(userId);
@@ -82,7 +81,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             var ApUser = await _context
                 .Users

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
@@ -61,6 +62,9 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
                     Description = ""
                 });
                 _db.SaveChanges();
+
+                Footer = await _db.Footers
+                .FirstOrDefaultAsync();
             }
             //  Categories
             FooterCWs = await _db.ContactWays
@@ -89,7 +93,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
             }
 
 
-            if (!ImgUp.Equals(null) && !ImgUp2.Equals(null))
+            if (ImgUp != null || ImgUp2 != null)
             {
                 string DirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences");
                 if (!Directory.Exists(DirectoryPath))
@@ -98,6 +102,15 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
 
             if (ImgUp != null)
             {
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
                 if (!string.IsNullOrEmpty(Footer.TrustSymbol))
                 {
                     string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences", Footer.TrustSymbol);
@@ -114,6 +127,15 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
             }
             if (ImgUp2 != null)
             {
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp2.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
                 if (!string.IsNullOrEmpty(Footer.TrustSymbol2))
                 {
                     string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences", Footer.TrustSymbol2);
@@ -145,7 +167,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.ERRORHAPPEDNED;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var findCW = await _db.ContactWays
@@ -206,7 +228,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             findCW.IsInFooter = false;

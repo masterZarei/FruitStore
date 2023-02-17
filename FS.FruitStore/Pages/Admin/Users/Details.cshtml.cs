@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Users
@@ -35,8 +34,7 @@ namespace FS.FruitStore.Pages.Users
         public string SelectedRole { get; set; }
         //لیست رو پر میکنه
         public SelectList Roles { get; set; }
-        //اگه کاربر در جدول فروشنده هم باشه این متغیر پر میشه
-        public string isSeller = null;
+
 
         public async Task<IActionResult> OnGetAsync(string userId)
         {
@@ -47,7 +45,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -61,7 +59,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             //نقش کاربر عادی رو بگیر
             var userRoles = _userManager.GetRolesAsync(new IdentityUser() { Id = ApplicationUser.Id }).Result; //(ClaimsIdentity)User.Identity;

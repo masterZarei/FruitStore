@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Categories
@@ -22,13 +21,6 @@ namespace FS.FruitStore.Pages.Admin.Categories
 
         public IActionResult OnGet()
         {
-            #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_context);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
-                return Redirect("/Identity/Account/AccessDenied");
-            #endregion
-
             return Page();
         }
 

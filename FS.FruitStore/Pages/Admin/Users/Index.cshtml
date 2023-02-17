@@ -1,94 +1,62 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Users.IndexModel
 @{
+    ViewData["Title"] = "مدیریت کاربر";
 }
-<div class="container">
 
-    <div class="row">
+<div class="row">
 
-        <partial name="_Panel" />
+    <partial name="_Panel" />
 
-        <div class="col-lg-9 col-12">
-            <div class="card my-5 pb-4 text-center">
-                <div class="card-header d-flex">
-                    <h4 class="h4 text-center m-auto"> مدیریت کاربران </h4>
-                </div>
+    <div class="col-lg-9 col-12">
+        <div class="card my-5 pb-4 text-center">
+            <div class="card-header d-flex">
+                <h4 class="h4 text-center m-auto"> مدیریت کاربران </h4>
+            </div>
 
-                <div class="card-body">
-                     <form method="get">
-                        <div class="row my-2">
-                            <div class="col-lg-4 col-md-4 col-12">
-                                <input type="text" name="searchName" placeholder="نام یا نام خانوادگی" class="form-control my-sm-1 my-lg-0" />
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-12">
-                                <input type="text" name="searchPhone" placeholder="شماره تلفن" class="form-control my-sm-1 my-lg-0" />
-                            </div>
-                            <button type="submit" class="btn btn-info col-lg-3 col-md-3 col-12 my-sm-1 my-lg-0">
-                                بیاب
-                            </button>
-                        </div>
-                    </form>
-                    <div class="card mb-3 shadow">
-                        <div class="card-body">
-                            @if (Model.UsersListViewModel.ApplicationUserList.Any())
-                            {
-                                    <table class="table table-light table-hover table-responsive-sm table-striped table-bordered ">
-                                        <thead class="thead-light text-center">
-                                            <tr>
-                                                <th> نام</th>
-                                                <th> نام خانوادگی </th>
-                                                <th> شماره تلفن </th>
-                                                <th> نقش </th>
-                                                <th>   </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="text-center">
-                                        @foreach (var item in @Model.UsersListViewModel.ApplicationUserList)
-                                        {
-                                                    <tr>
-                                                        <td> @item.Name </td>
-                                                        <td> @item.LastName </td>
-                                                        <td> @item.PhoneNumber </td>
-                                                        <td>
-                                                    @{
-
-
-                                                        //نقش کاربر عادی رو بگیر
-                                                        var role = Model._userManager.GetRolesAsync(new IdentityUser() { Id = item.Id }).Result[0].ToString();
-
-
-                                                    }
-                                                    @role
-                                                        </td>
-                                                        <td>
-                                                            <a asp-route-userId="@item.Id" asp-page="Delete"> <i class="fa fa-trash"></i> </a>
-                                                            <a asp-route-userId="@item.Id" asp-page="Edit"> <i class="fa fa-edit"></i> </a>
-                                                            <a asp-route-userId="@item.Id" asp-page="Details"> <i class="fa fa-list"></i> </a>
-                                                        </td>
-                                                    </tr>
-                                        }
-
-
-                                        </tbody>
+            <div class="card-body">
+                <div class="card mb-3 shadow">
+                    <div class="card-body">
+                        @if (Model.UsersListViewModel.ApplicationUserList.Any())
+                        {
+                            <table class="table table-light table-hover table-responsive-sm table-striped table-bordered ">
+                                <thead class="thead-light text-center">
+                                    <tr>
+                                        <th> نام</th>
+                                        <th> نام خانوادگی </th>
+                                        <th> شماره تلفن </th>
+                                        <th> نقش </th>
+                                        <th>   </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    @foreach (var item in @Model.UsersListViewModel.ApplicationUserList)
+                                    {
                                         <tr>
-                                            <td colspan="5" class="text-center">
-                                                <div page-model="@Model.UsersListViewModel.PagingInfo"
-                                             page-action="Index"
-                                             page-class="btn border"
-                                             page-class-selected="btn btn-info active"
-                                             page-class-normal="btn btn-light"
-                                             class="btn-group">
-                                                </div>
+                                            <td> @item.Name </td>
+                                            <td> @item.LastName </td>
+                                            <td> @item.PhoneNumber </td>
+                                            <td>
+                                                @{
+                                                    //نقش کاربر عادی رو بگیر
+                                                    var role = Model._userManager.GetRolesAsync(new IdentityUser() { Id = item.Id }).Result[0].ToString();
+                                                }
+                                                @role
+                                            </td>
+                                            <td>
+                                                <a asp-route-userId="@item.Id" asp-page="Delete"> <i class="fa fa-trash"></i> </a>
+                                                <a asp-route-userId="@item.Id" asp-page="Edit"> <i class="fa fa-edit"></i> </a>
+                                                <a asp-route-userId="@item.Id" asp-page="Details"> <i class="fa fa-list"></i> </a>
                                             </td>
                                         </tr>
-                                    </table>
-                            }
-                            else
-                            {
-                                    <h1 class="text-info">کاربری یافت نشد</h1>
-                            }
-
-                        </div>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <h1 class="text-info">کاربری یافت نشد</h1>
+                        }
                     </div>
                 </div>
             </div>
@@ -98,21 +66,21 @@
 
 @section Scripts{
 
-        <script>
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-                    reader.onload = function(e) {
-                        $('#imgPreview').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result);
                 }
-            }
 
-            $("#imgUp").change(function() {
-                readURL(this);
-            });
-        </script>
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+
+        $("#imgUp").change(function () {
+            readURL(this);
+        });
+    </script>
     }

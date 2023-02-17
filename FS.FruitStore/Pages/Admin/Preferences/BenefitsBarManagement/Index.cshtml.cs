@@ -37,7 +37,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             var item = await _context
                 .BenefitBars

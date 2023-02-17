@@ -1,6 +1,8 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Preferences.FooterManagement.Footer_mgmtModel
-
+@{
+    ViewData["Title"] = "مدیریت فوتر";
+}
 <div class="row">
     <!-- #region پنل-->
     <partial name="_Panel" />
@@ -13,36 +15,16 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Footer.Id" />
+                    <input type="hidden" asp-for="Footer.TrustSymbol" />
+                    <input type="hidden" asp-for="Footer.TrustSymbol2" />
                     <div>
-                        <label> توضیحات : </label>
-                        <textarea cols="30" rows="10" placeholder="توضیحات را وارد کنید . . ." asp-for="Footer.Description"
-                                  class="form-control"></textarea>
-                        <hr color="#eee" size="2px">
-                        <label> نماد های اعتماد </label>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <img width="160px" height="160px" class="border mx-auto d-block my-2" src="~/Preferences/@Model.Footer.TrustSymbol" id="imgPreview">
-                                <div class="custom-file">
-                                    <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
-                                    <input id="fileup" name="ImgUp" type="file" class="custom-file-input">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <img width="160px" height="160px" class="border mx-auto d-block my-2" src="~/Preferences/@Model.Footer.TrustSymbol2" name="ImgUp2" id="imgPreview2">
-                                <div class="custom-file">
-                                    <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
-                                    <input id="fileup" name="ImgUp2" type="file" class="custom-file-input">
-                                </div>
-                            </div>
-                        </div>
-                        <hr color="#eee" size="2px">
                         <label> راه های ارتباطی </label>
                         <div class="d-flex justify-content-between">
-                            <select class="custom-select" asp-for="SelectedCwId" asp-items="Model.CWs">
+                            <select class="custom-select  mb-3" asp-for="SelectedCwId" asp-items="Model.CWs">
                             </select>
                             <button asp-page-handler="AddCW" class="btn btn-success"> افزودن </button>
                         </div>
-                        <table class="table table-bordered mt-3">
+                        <table class="table table-bordered mx-3">
                             <thead>
                                 <tr>
                                     <th class="text-center"> نام </th>
@@ -65,6 +47,29 @@
 
                             </tbody>
                         </table>
+
+                        <label> توضیحات : </label>
+                        <textarea cols="30" rows="10" placeholder="توضیحات را وارد کنید . . ." asp-for="Footer.Description"
+                                  class="form-control"></textarea>
+                        <hr color="#eee" size="2px">
+                        <label> نماد های اعتماد </label>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <img width="160px" height="160px" class="border mx-auto d-block my-2" src="~/Preferences/@Model.Footer.TrustSymbol" id="imgPreview">
+                                <div class="custom-file">
+                                    <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
+                                    <input id="imgUp" name="ImgUp" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <img width="160px" height="160px" class="border mx-auto d-block my-2" src="~/Preferences/@Model.Footer.TrustSymbol2" id="imgPreview1">
+                                <div class="custom-file">
+                                    <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
+                                    <input id="imgUp2" name="ImgUp2" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-success btn-block mx-auto my-3 w-75 d-block"> ثبت </button>
                     </div>
                 </form>
@@ -73,10 +78,6 @@
     </div>
 </div>
 @section Scripts{
-
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
 
 
     <script>
@@ -100,7 +101,7 @@
                 var reader1 = new FileReader();
 
                 reader1.onload = function (e) {
-                    $('#imgPreview2').attr('src', e.target.result);
+                    $('#imgPreview1').attr('src', e.target.result);
                 }
 
                 reader1.readAsDataURL(input.files[0]); // convert to base64 string
@@ -108,12 +109,6 @@
         }
         $("#imgUp2").change(function () {
             readURL1(this);
-        });
-
-        //نمایش اسم عکس روی اینپوت
-        $(".custom-file-input").on("change", function () {
-            var fileName = $(this).val().split("\\").pop();
-            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
     </script>
     }

@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FS.FruitStore.Pages.Wallet
+namespace FS.FruitStore.Pages.Admin.Wallet
 {
     [Authorize]
     public class ChargeModel : PageModel
@@ -32,7 +32,7 @@ namespace FS.FruitStore.Pages.Wallet
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             ApplicationUser = await _db.Users
@@ -60,7 +60,7 @@ namespace FS.FruitStore.Pages.Wallet
 
             var newTransactionHistory = new WalletHistory()
             {
-                NewWalletAmount = (currentUser.WalletAmount += Amount),
+                NewWalletAmount = currentUser.WalletAmount,
                 State = true,
                 TrackingCode = new Random().Next(0, 1024),
                 UserId = currentUser.Id,

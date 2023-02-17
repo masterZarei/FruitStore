@@ -1,4 +1,5 @@
-﻿using FS.Models.Models;
+﻿using FS.DataAccess;
+using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,9 +12,9 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
     [Authorize(Roles =SD.AdminEndUser)]
     public class DeleteModel : PageModel
     {
-        private readonly FS.DataAccess.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public DeleteModel(FS.DataAccess.ApplicationDbContext context)
+        public DeleteModel(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -29,7 +30,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             BenefitBar = await _context
@@ -42,7 +43,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             return Page();
         }

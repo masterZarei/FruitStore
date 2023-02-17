@@ -24,13 +24,6 @@ namespace FS.FruitStore.Pages.Admin.Categories
 
         public async Task<IActionResult> OnGetAsync()
         {
-            //#region isDisabled?
-            //Methods mtd = new Methods(_context);
-            //int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            //if (isAuthorized == 1)
-            //    return Redirect("/Identity/Account/AccessDenied");
-            //#endregion
-            
             Category = await _context.Categories.ToListAsync();
             return Page();
         }

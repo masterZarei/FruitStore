@@ -1,6 +1,5 @@
-using Utilities.Roles;
 using FS.DataAccess;
-using FS.Models.Models;
+using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,8 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FS.Models.ViewModels;
-using Utilities.Convertors;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Orders
 {
@@ -34,7 +32,8 @@ namespace FS.FruitStore.Pages.Admin.Orders
                  .Where(a => a.isCompleted == true)
                  .Include(a => a.User)
                  .Include(a => a.FactorDetails)
-                 .ThenInclude(a => a.Product).ToListAsync();
+                 .ThenInclude(a => a.Product)
+                 .OrderByDescending(a=>a.CreateDate).ToListAsync();
 
 
             foreach (var item in Order)
@@ -44,8 +43,7 @@ namespace FS.FruitStore.Pages.Admin.Orders
                     ID = item.User.Id,
                     FullName = $"{item.User.Name} {item.User.LastName}",
                     OrderCount = Order.Count,
-                    OrderId = item.FactorId,
-                    //DeliverState = item.DeliverState
+                    OrderId = item.FactorId
                 });
             }
 

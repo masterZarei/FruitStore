@@ -1,6 +1,8 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Products.DetailsModel
 @{
+    ViewData["Title"] = "جزئیات محصول";
+
     string CS = null;
 }
 
@@ -66,7 +68,7 @@
                             }
                             else
                             {
-                               <div class="form-control mt-2"> @Model.ProductUnit </div>
+                                <div class="form-control mt-2"> @Model.ProductUnit </div>
                             }
 
 

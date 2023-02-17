@@ -1,7 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Payments.ShoppingCartModel
-
 @{
+    ViewData["Title"] = "سبد خرید";
 }
 <style>
     td{
@@ -63,16 +63,6 @@
                             }
                         </tbody>
                     </table>
-                    <div class="row">
-                        <div class="col-lg-8 col-md-8 col-12">
-                            <p class="m-auto mt-2 d-block text-center"> @Model.Factor.FactorDetails.Count کالا در سبد خرید </p>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-12">
-                            <div class="alert alert-primary">
-                                زودترین تاریخ ارسال سفارش : 4مرداد
-                            </div>
-                        </div>
-                    </div>
                     <h5 class="h4 text-left"> قیمت کل: @(Model.Factor.FactorDetails.Sum((s=>s.Count * s.Price)).ToToman()) </h5>
                     <hr>
                     <a asp-page="ConfirmInformation" asp-route-Id="@Model.Factor.FactorId" class="btn btn-info float-left mt-3"> ادامه ثبت سفارش | <i class="fa fa-solid fa-chevron-left align-middle mx-1"></i></a>

@@ -102,7 +102,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             _db.Remove(findCat);
@@ -122,7 +122,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var findCat = await _db
@@ -136,7 +136,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             CategoryToProduct ctp = new CategoryToProduct()

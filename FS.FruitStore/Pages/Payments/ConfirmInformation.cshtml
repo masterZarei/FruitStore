@@ -1,6 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Payments.ConfirmInformationModel
 @{
+    ViewData["Title"] = "تایید اطلاعات";
 }
 <div class="card-body">
     <form method="post">
@@ -22,14 +23,27 @@
                        placeholder="01235447891">
                 <label class="my-2"> نوع پست </label>
                 <select asp-for="CIModel.SelectedPostType" asp-items="@Model.CIModel.PostTypes" class="custom-select"> </select>
+
+                <label class="my-2"> تاریخ دریافت </label>
+                <select asp-for="CIModel.SelectedDeliverDate" asp-items="@Model.CIModel.DeliverDate" class="custom-select"> </select>
+
+
+
             </div>
 
             <div class="col-lg-6 col-12 my-sm-2 my-lg-0 col-md-6">
                 <label class="my-2 "> کد پستی : <span class="text-danger align-middle d-inline">*</span></label>
                 <input requierd asp-for="CIModel.ApplicationUser.PostalCode" type="text" class="form-control form-control-information w-75">
-                
+
                 <label class="my-2"> نوع پرداخت </label>
                 <select asp-for="CIModel.SelectedPaymentType" asp-items="@Model.CIModel.PaymentTypes" class="custom-select"> </select>
+
+
+
+                <label class="my-2"> زمان دریافت محصول </label>
+                <select asp-for="CIModel.SelectedDeliverTime" asp-items="@Model.CIModel.DeliverTime" class="custom-select"></select>
+            
+            
             </div>
         </div>
 
@@ -47,6 +61,6 @@
                 <textarea asp-for="CIModel.Description" class="form-control form-control-information" rows="4"></textarea>
             </div>
 
-            <a class="btn btn-secondary mt-3 pr-2 d-block mx-auto btn-block w-75" href="shopping-basket.html"> بازگشت به سبد خرید </a>
+            <a class="btn btn-secondary mt-3 pr-2 d-block mx-auto btn-block w-75" href="ShoppingCart"> بازگشت به سبد خرید </a>
     </form>
 </div>

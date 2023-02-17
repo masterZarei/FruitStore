@@ -1,45 +1,50 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.CommentManagement.IndexModel
-@using Utilities.Roles;
 @{
-  //  ViewData[PD.PanelViewData] = PD.Comments;
+    ViewData["Title"] = "مدیریت کامنت ها";
 }
 <div class="row">
     <partial name="_Panel" />
 
-    <div class="col-12 col-lg-8 col-md-8 mt-5">
+    <div class="col-12 col-lg-9 col-md-9 mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="h4 mx-auto text-center">مدیریت کامنت ها</h4>
+            </div>
+            <div class="card-body">
 
-        <h4 class="h4 text-center">مدیریت کامنت ها</h4>
-
-        <table class="table table-light table-bordered table-striped mt-3">
-            <thead class="thead-light">
-                <tr>
-                    <th class="text-center">نام</th>
-                    <th class="text-center">جزئیات</th>
-                    <th class="text-center">تعداد</th>
-                    <th class="text-center">مرور</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (@Model.Comments.Any())
-                {
-                    @foreach (var item in Model.Comments)
-                    {
+                <table class="table table-light table-bordered table-striped mt-3">
+                    <thead class="thead-light">
                         <tr>
-                            <td class="text-center"> @item.Name </td>
-                            <td class="text-center"> <a asp-page="/Products/Details" asp-route-Id="@item.productId"> جزئیات </a> </td>
-                            <td class="text-center"> @item.CommentsCount </td>
-                            <td class="text-center"> <a asp-page="ProductsComments" asp-route-Id="@item.productId"> مرور </a> </td>
+                            <th class="text-center">نام</th>
+                            <th class="text-center">جزئیات</th>
+                            <th class="text-center">تعداد</th>
+                            <th class="text-center">مرور</th>
                         </tr>
-                    }
-                }
-                else
-                {
-                   <h4 class="h5 alert alert-info text-center">نظری موجود نیست</h4>
-                }
+                    </thead>
+                    <tbody>
+                        @if (@Model.Comments.Any())
+                        {
+                            @foreach (var item in Model.Comments)
+                            {
+                                <tr>
+                                    <td class="text-center"> @item.Name </td>
+                                    <td class="text-center"> <a asp-page="/Products/Details" asp-route-Id="@item.productId"> جزئیات </a> </td>
+                                    <td class="text-center"> @item.CommentsCount </td>
+                                    <td class="text-center"> <a asp-page="ProductsComments" asp-route-Id="@item.productId"> مرور </a> </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <h4 class="h5 alert alert-info text-center">نظری موجود نیست</h4>
+                        }
 
 
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>

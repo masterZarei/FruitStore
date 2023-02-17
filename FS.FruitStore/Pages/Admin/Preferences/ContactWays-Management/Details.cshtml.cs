@@ -26,7 +26,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             
 
@@ -40,7 +40,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             return Page();

@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 
 namespace FS.FruitStore.Pages.Panel.MyFactors
 {
@@ -32,7 +31,7 @@ namespace FS.FruitStore.Pages.Panel.MyFactors
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             FactorDetail = await _db.FactorDetails
@@ -46,7 +45,7 @@ namespace FS.FruitStore.Pages.Panel.MyFactors
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 

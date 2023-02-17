@@ -2,7 +2,7 @@
 @model Mahshop.Pages.FactorManagement.DetailsModel
 @using Utilities.Roles;
 @{
-  // ViewData[PD.PanelViewData] = PD.FactorManagement;
+    ViewData["Title"] = "جزئیات فاکتور";
 }
 <div class="row">
     <partial name="_Panel" />
@@ -43,7 +43,7 @@
             </tbody>
         </table>
             <h6 class="h6">
-               خریدار : <a href="../User/Details?userId=@Model.Factor.UserId">@Model.GetInfo.GetInfoById(Model.Factor.UserId).Name @Model.GetInfo.GetInfoById(Model.Factor.UserId).LastName </a>
+            خریدار : <a href="../Users/Details?userId=@Model.Factor.UserId"> @Model.Factor.User.Name @Model.Factor.User.LastName </a>
 
             </h6>
                 <h5 class="h5 text-left"> مبلغ کل: @Model.Factor.FactorDetails.Sum(s=>s.Count * s.Price).ToToman() </h5>

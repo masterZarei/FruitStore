@@ -1,6 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Verification.VerifyPhonenumberModel
 @{
+    ViewData["Title"] = "تایید کد ارسال شده";
 }
 <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -16,7 +17,6 @@
         <input class="form-control my-2 form-control-topH" asp-for="EnteredCode">
         <button type="submit" class="btn btn-success my-2 btn-block"> ادامه </button>
 
-        <p class="my-2 text-center mt-3"> تا ارسال مجدد کد  :  <span class="text-orange"> 59 : 01 </span> </p>
 
     </div>
 </form>

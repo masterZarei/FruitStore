@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FS.DataAccess;
+using FS.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FS.DataAccess;
-using FS.Models.Models;
+using System.Threading.Tasks;
 using Utilities;
-using Microsoft.AspNetCore.Authorization;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
@@ -45,7 +42,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -59,7 +56,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             var currentIcon = ContactWays.Icon;
 

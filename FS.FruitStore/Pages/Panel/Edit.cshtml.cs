@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 
 namespace FS.FruitStore.Pages.Panel
 {
@@ -34,7 +33,7 @@ namespace FS.FruitStore.Pages.Panel
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             Users = await _db
                 .Users
@@ -66,7 +65,7 @@ namespace FS.FruitStore.Pages.Panel
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             userInDb.Name = Users.Name;

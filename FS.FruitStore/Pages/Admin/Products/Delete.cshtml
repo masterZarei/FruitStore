@@ -1,69 +1,51 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Products.DeleteModel
-
-
-@if (TempData["msg"] != null)
-{
-    <script>
-        toastr.options = {
-        "closeButton": false,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": false,
-        "preventDuplicates": true,
-        "onclick": null,
-        "showDuration": "100",
-        "hideDuration": "1000",
-        "timeOut": "5000",
-        "extendedTimeOut": "1000"
-    }
-    toastr.error('@TempData["msg"]');
-
-    </script>
+@{
+    ViewData["Title"] = "حذف محصول";
 }
 
-    <div class="container">
+<div class="container">
 
-        <div class="row">
+    <div class="row">
+        <partial name="_Panel" />
 
+        <div class="col-lg-9 col-12">
+            <div class="card my-5 pb-4 text-center">
+                <div class="card-header">
+                    <h4 class="h4"> غیر فعال کردن محصول '@Model.Products.Name' </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-12 col-md-6 col-sm-6">
+                            <img src="~/ProductImages/@Model.Products.ProductPic" width="400px" height="400px" class="img-fluid rounded" />
+                        </div>
+                        <div class="col-lg-6 col-12 col-md-6 col-sm-6">
+                            <h6 for="name" class="my-3 text-right"> نام محصول : </h6>
+                            <input type="text" value="@Model.Products.Name" class="form-control mt-2" disabled>
 
-            <div class="col-lg-9 col-12">
-                <div class="card my-5 pb-4 text-center">
-                    <div class="card-header">
-                        <h4 class="h4"> غیر فعال کردن محصول '@Model.Products.Name' </h4>
+                            <h6 for="last-name" class="my-3 text-right"> قیمت محصول : </h6>
+                            <input type="text" asp-for="Products.Price" class="form-control mt-2" disabled>
+
+                            <h6 for="last-name" class="my-3 text-right"> توضیحات محصول : </h6>
+                            <textarea asp-for="Products.Description" class="form-control mt-2" disabled></textarea>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-6 col-12 col-md-6 col-sm-6">
-                                <img src="~/ProductImages/@Model.Products.ProductPic" width="400px" height="400px" class="img-fluid rounded" />
+                    <form method="post">
+                        <input type="hidden" asp-for="Products.ProductId" />
+                        <div class="row mt-3">
+                            <div class="col-lg-6 col-12">
+                                <input type="submit" class="btn btn-danger btn-block" onclick="deleteUser()" value="غیرفعال کردن محصول " />
                             </div>
-                            <div class="col-lg-6 col-12 col-md-6 col-sm-6">
-                                <h6 for="name" class="my-3 text-right"> نام محصول : </h6>
-                                <input type="text" value="@Model.Products.Name" class="form-control mt-2" disabled>
-
-                                <h6 for="last-name" class="my-3 text-right"> قیمت محصول : </h6>
-                                <input type="text" asp-for="Products.Price" class="form-control mt-2" disabled>
-
-                                <h6 for="last-name" class="my-3 text-right"> توضیحات محصول : </h6>
-                                <textarea asp-for="Products.Description" class="form-control mt-2" disabled></textarea>
+                            <div class="col-lg-6 col-12 mt-2 mt-lg-0">
+                                <a asp-page="Index" class="btn btn-secondary btn-block">
+                                    بازگشت
+                                </a>
                             </div>
                         </div>
-                        <form method="post">
-                            <input type="hidden" asp-for="Products.ProductId" />
-                            <div class="row mt-3">
-                                <div class="col-lg-6 col-12">
-                                    <input type="submit" class="btn btn-danger btn-block" onclick="deleteUser()" value="غیرفعال کردن محصول " />
-                                </div>
-                                <div class="col-lg-6 col-12 mt-2 mt-lg-0">
-                                    <a asp-page="Index" class="btn btn-secondary btn-block">
-                                        بازگشت
-                                    </a>
-                                </div>
-                            </div>
-                        </form>
+                    </form>
 
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>

@@ -44,7 +44,6 @@ namespace FS.Models.Models
         [MaxLength(11)]
         public override string PhoneNumber { get => base.PhoneNumber; set => base.PhoneNumber = value; }
         //
-        [Required(ErrorMessage = "لطفا کد تایید را وارد کنید")]
         [Display(Name = "کد تایید")]
         public string VerificationCode { get; set; }
         //

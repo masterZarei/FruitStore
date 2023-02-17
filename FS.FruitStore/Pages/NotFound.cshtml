@@ -1,10 +1,32 @@
 ﻿@page
 @model FS.FruitStore.Pages.NotFoundModel
 @{
+    Layout = "";
 }
-<div class="notFound">
-    <h1>  404 </h1>
-    <h4>خطایی رخ داد</h4>
-    <p>  نتیجه ای یافت نشد... </p>
-    <a href="index.html" class="error-404"> خانه </a>
+<link href="~/css/NotFound.css" type="text/css" rel="stylesheet" />
+<link href="~/css/alert.css" type="text/css" rel="stylesheet" />
+<style>
+    /* notFound */
+
+</style>
+<div id="container-404">
+    <div class="content">
+        <h2 class="h2"> 404 </h2>
+        <h4 class="h4"> صفحه ای پیدا نشد  !  </h4>
+        <p class="p"> مشکلی پیش آمده و صفحه مورد نظر شما پیدا نشد میخواهید بعدا امتحان کنید؟! </p>
+        <a id="link" href="/"> برگشت به خانه </a>
+    </div>
 </div>
+<script src="~/js/alert.js"></script>
+@if (TempData["Msg"] != null && TempData["State"] != null)
+{
+    string msg = TempData["Msg"].ToString();
+    string state = TempData["State"].ToString();
+    <script>
+
+        showAlert('@TempData["State"].ToString()', '@Html.Raw(TempData["Msg"].ToString())')
+    </script>
+    TempData["State"] = null;
+    TempData["Msg"] = null;
+
+}

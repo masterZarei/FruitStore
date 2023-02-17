@@ -1,8 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Products.IndexModel
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "مدیریت محصول";
 }
 
 
@@ -16,29 +15,13 @@
 
             <div class="card mb-5 mt-2 pb-4 text-center">
                 <div class="card-header d-flex">
-                    <a href="Products/Create">
-                        <button class="btn btn-primary text-right">
-                            <i class="fa fa-plus"></i> اضافه
-                            کردن محصول
-                        </button>
+                    <a href="Products/Create" class="btn btn-primary text-right">
+                        <i class="fa fa-plus"></i> اضافه
+                        کردن محصول
                     </a>
                     <h4 class="h4 text-center m-auto"> مدیریت محصول </h4>
                 </div>
                 <div class="card-body">
-                    <div class="row my-1">
-                        <div class="col-lg-4 col-md-4 col-12">
-                            <input type="text" name="searchName" placeholder="نام"
-                                   class="form-control my-sm-1 my-lg-0" />
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-12">
-                            <input type="email" name="searchEmail" placeholder="قیمت"
-                                   class="form-control my-sm-1 my-lg-0" />
-                        </div>
-                        <button type="submit" name="submit"
-                                class="btn btn-info col-lg-3 col-md-3 col-12 my-sm-1 my-lg-0">
-                            بیاب
-                        </button>
-                    </div>
                     <table class="table table-bordered text-center table-hover mt-4 table-responsive-sm">
                         <thead class="thead-light">
                             <tr>
@@ -46,7 +29,7 @@
                                 <th> نام </th>
                                 <th> قیمت </th>
                                 <th> تعداد </th>
-                                <th> </th>
+                                <th> مدیریت </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,8 +53,6 @@
                                     </tr>
                                 }
                             }
-
-
                         </tbody>
                     </table>
                 </div>

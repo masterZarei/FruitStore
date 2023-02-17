@@ -23,9 +23,9 @@ namespace FS.Models.Models
         //
         public string Payment_Type { get; set; }
         //
-        public DateTime Send_Date { get; set; }
+        public string Deliver_Date { get; set; }
         //
-        public DateTime WillDeliver_Date { get; set; }
+        public string Deliver_Time { get; set; }
         //
         public List<FactorDetail> FactorDetails { get; set; }
         // 1=در حال آماده سازی

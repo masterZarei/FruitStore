@@ -40,7 +40,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Product = await _context
@@ -61,7 +61,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             ProdCats = await (from a in _context.Categories

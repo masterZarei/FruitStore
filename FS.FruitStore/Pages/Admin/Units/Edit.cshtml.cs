@@ -30,7 +30,7 @@ namespace FS.FruitStore.Pages.Admin.Units
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Unit = await _context
@@ -43,7 +43,7 @@ namespace FS.FruitStore.Pages.Admin.Units
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             return Page();
         }
@@ -74,7 +74,7 @@ namespace FS.FruitStore.Pages.Admin.Units
                     TempData["State"] = Notifs.Error;
                     TempData["Msg"] = Notifs.NOTFOUND;
                     #endregion
-                    return NotFound();
+                    return RedirectToPage("/NotFound");
                 }
                 else
                 {

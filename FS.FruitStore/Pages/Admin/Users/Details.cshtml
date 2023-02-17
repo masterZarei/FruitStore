@@ -1,6 +1,8 @@
 ﻿@page
 @model FS.FruitStore.Pages.Users.DetailsModel
-
+@{
+    ViewData["Title"] = "جزئیات کاربر";
+}
 
 <div class="container">
 
@@ -34,7 +36,6 @@
                                 <h6 for="email" class="my-3 text-right"> نقش کاربر : </h6>
 
                                 <select disabled asp-for="SelectedRole" asp-items="Model.Roles" class="custom-select"></select>
-                                <span class="mr-2">@Model.isSeller</span>
 
 
                             </div>

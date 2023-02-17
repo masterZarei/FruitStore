@@ -24,7 +24,6 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
         [BindProperty]
         public List<Comments> Comments { get; set; }
 
-        public GetUserInfo getInfo { get; set; }
         public async Task<IActionResult> OnGetAsync(int Id)
         {
             if (Id == 0)
@@ -33,13 +32,15 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
             Comments = await _db.Comments
                 .Where(a => a.Product_Id == Id && string.IsNullOrEmpty(a.Answer))
-                .Include(a => a.Product).ToListAsync();
+                .Include(a => a.Product)
+                .ThenInclude(a=> a.User)
+                .ToListAsync();
 
             if (Comments.Count < 1)
             {
@@ -56,10 +57,8 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
-            getInfo = new GetUserInfo(_db);
-
             return Page();
 
         }

@@ -1,6 +1,8 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Orders.IndexModel
-
+@{
+    ViewData["Title"] = "مدیریت سفارشات";
+}
 <div class="row">
     <partial name="_Panel" />
 
@@ -38,7 +40,9 @@
                                             <div class="btnBox-lg">
                                                 <div class="d-flex">
                                                     <button asp-page-handler="OrderCompleted" asp-route-Id="@item.OrderId" class="btn btn-primary d-block my-2"> اتمام سفارش </button>
-                                                    <a asp-page="Details" asp-route-Id="@item.ID" class="btn btn-info d-block my-2 mx-2"> جزئیات </a>
+                                                    <a asp-page="Details" asp-route-Id="@item.ID" asp-route-factorId="@item.OrderId" class="btn btn-info d-block my-2 mx-2">
+                                                        جزئیات
+                                                    </a>
                                                 </div>
                                                 <button asp-page-handler="ReadyToSend" asp-route-Id="@item.OrderId" type="submit" class="btn btn-danger d-block my-2">
                                                     @(item.DeliverState == 1 ? "درحال آماده سازی" : "آماده ارسال")

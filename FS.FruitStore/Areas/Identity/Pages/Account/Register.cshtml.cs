@@ -1,23 +1,19 @@
-﻿using System;
+﻿using FS.DataAccess;
+using FS.Models.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Services.SMSService;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using FS.Models.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using FS.DataAccess;
-using Utilities.Roles;
 using Utilities;
-using Services.SMSService;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Areas.Identity.Pages.Account
 {
@@ -116,10 +112,14 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser));
                     }
+                    var doesAnyUserExist = await _db.Users.FirstOrDefaultAsync();
+                    if (doesAnyUserExist==null)
+                    {
                     // به کاربر نقش ادمین بده
                     await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
+                    }
+                    await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
 
-                    _logger.LogInformation("User created a new account with password.");
 
                     //کد تایید باید ارسال شود
                     string name = Input.Name;

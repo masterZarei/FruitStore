@@ -186,6 +186,12 @@ namespace DataAccess.Migrations
                     b.Property<byte>("DeliverState")
                         .HasColumnType("tinyint");
 
+                    b.Property<string>("Deliver_Date")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Deliver_Time")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -201,14 +207,8 @@ namespace DataAccess.Migrations
                     b.Property<string>("PurchaseNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Send_Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("WillDeliver_Date")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("isCompleted")
                         .HasColumnType("bit");
@@ -268,6 +268,27 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Footers");
+                });
+
+            modelBuilder.Entity("FS.Models.Models.Logo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DeliverAtTheSameDate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logos");
                 });
 
             modelBuilder.Entity("FS.Models.Models.Product", b =>
@@ -688,7 +709,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("VerificationCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("WalletAmount")

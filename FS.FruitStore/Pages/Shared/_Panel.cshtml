@@ -4,11 +4,14 @@
     .BlackText {
         color: black
     }
+    .over-flow-unset {
+        overflow: unset !important;
+    }
 </style>
 
-<div class="col-12 col-lg-3">
-    <div class="text-right mt-5">
-        <div class="list-group p-0 mb-5">
+<div class="col-12 col-lg-3 over-flow-unset">
+    <div class="text-right mt-5 over-flow-unset">
+        <div class="list-group p-0 mb-5 over-flow-unset">
             @if (User.Identity.IsAuthenticated)
             {
                 <a href="/Panel" class="list-group-item list-group-item-action BlackText">
@@ -20,7 +23,9 @@
                     <a href="/Panel/MyFactors" class="list-group-item list-group-item-action BlackText">
                         فاکتورهای من <i class="fa-solid fa-table-list"></i>
                     </a>
-
+                    <a href="/Panel/Wallet" class="list-group-item list-group-item-action BlackText">
+                        مدیریت کیف پول <i class="fa fa-wallet" aria-hidden="true"></i>
+                    </a>
                 }
 
                 if (User.IsInRole(SD.AdminEndUser))
@@ -29,7 +34,7 @@
                         مدیریت محصول <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                     </a>
                     <a href="/Admin/Orders" class="list-group-item list-group-item-action BlackText">
-                        سفارشات <i class="fa fa-ballot"></i>
+                        سفارشات <i class="fa fa-shopping-cart"></i>
                     </a>
                     <a href="/Admin/CommentManagement" class="list-group-item list-group-item-action BlackText">
                         کامنت ها <i class="fa fa-comments" aria-hidden="true"></i>
@@ -39,33 +44,46 @@
 
                     </a>
                     <a href="/Admin/Categories" class="list-group-item list-group-item-action BlackText">
-                        مدیریت دسته بندی ها <i class="fa-solid fa-filter-list"></i>
+                        مدیریت دسته بندی ها <i class="fa fa-filter"></i>
                     </a>
                     <a href="/Admin/Units" class="list-group-item list-group-item-action BlackText">
-                        مدیریت واحد ها <i class="fa-solid fa-filter-list"></i>
+                        مدیریت واحد ها <i class="fa fa-list "></i>
                     </a>
                     <a href="/Admin/Users" class="list-group-item list-group-item-action BlackText">
                         مدیریت کاربران <i class="fa fa-user" aria-hidden="true"></i>
                     </a>
-                    <a href="/Admin/Preferences/Slider-Management/" class="list-group-item list-group-item-action BlackText">
+                    <a href="/Admin/WalletManagement" class="list-group-item list-group-item-action BlackText">
+                        مدیریت کیف پول <i class="fa fa-wallet" aria-hidden="true"></i>
+                    </a>
+                    <a href="/Admin/Preferences/Slider-Management/" class="list-group-item dropdown-item border-bottom py-2 over-flow-unset list-group-item-action BlackText">
                         مدیریت اسلایدر <i class="fas fa-paint-brush"></i>
                     </a>
-                    <a href="/Admin/Preferences/AboutUs-Management/AboutUs-mgmt" class="list-group-item list-group-item-action BlackText">
+                    <a href="/Admin/Preferences/AboutUs-Management/AboutUs-mgmt" class="list-group-item dropdown-item border-bottom py-2 over-flow-unset list-group-item-action BlackText">
                         مدیریت صفحه درباره ما <i class="fas fa-paint-brush"></i>
                     </a>
-                    <a href="/Admin/Preferences/ContactWays-Management/" class="list-group-item list-group-item-action BlackText">
+                    <a href="/Admin/Preferences/ContactWays-Management/" class="list-group-item list-group-item-action dropdown-item border-bottom py-2 over-flow-unset BlackText">
                         مدیریت راه های ارتباطی <i class="fas fa-paint-brush"></i>
                     </a>
-                    <a href="/Admin/Preferences/BenefitsBarManagement/" class="list-group-item list-group-item-action BlackText">
+                    <a href="/Admin/Preferences/BenefitsBarManagement/" class="list-group-item list-group-item-action dropdown-item border-bottom py-2 over-flow-unset BlackText">
                         مدیریت نوار مزایا و خدمات <i class="fas fa-paint-brush"></i>
                     </a>
-                    <a href="/Admin/Preferences/FooterManagement/Footer-mgmt" class="list-group-item list-group-item-action BlackText">
+                    <a href="/Admin/Preferences/LogoManagement/" class="list-group-item list-group-item-action dropdown-item border-bottom py-2 over-flow-unset BlackText">
+                        مدیریت لوگو <i class="fas fa-paint-brush"></i>
+                    </a>
+                    <a href="/Admin/Preferences/FooterManagement/Footer-mgmt" class="list-group-item dropdown-item border-bottom py-2 over-flow-unset list-group-item-action BlackText">
                         مدیریت فوتر <i class="fas fa-paint-brush"></i>
                     </a>
+                    <div class="dropdown list-group-item list-group-item-action over-flow-unset">
+						<a href=# class="dropdown-toggle btn btn-block btn-primary over-flow-unset" data-toggle="dropdown"> مدیریت قالب سایت </a>
+						<ul class="dropdown-menu dropdown-menu-right text-right over-flow-unset">
+                            
+						</ul>
+					</div>
+
                 }
 
-                <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" class="list-group-item list-group-item-action ">
-                    <input class="btn btn-danger" type="submit" value="خروج">
+                <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" class="list-group-item list-group-item-action  text-center">
+                    <input class="btn btn-danger btn-block" type="submit" value="خروج">
                 </a>
 
             }

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Users
@@ -45,7 +44,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -59,7 +58,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             //نقش کاربر عادی رو بگیر
             var userRoles = _userManager.GetRolesAsync(new IdentityUser() { Id = ApplicationUser.Id }).Result; //(ClaimsIdentity)User.Identity;
@@ -78,7 +77,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
                 #endregion
-                return Page();
+                return RedirectToPage("Index", new { userId = ApplicationUser.Id });
             }
 
             var userInDb = await _context
@@ -91,7 +90,7 @@ namespace FS.FruitStore.Pages.Users
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             userInDb.Name = ApplicationUser.Name;

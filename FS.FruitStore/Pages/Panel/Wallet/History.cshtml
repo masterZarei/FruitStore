@@ -1,0 +1,47 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Wallet.HistoryModel
+@{
+    ViewData["Title"] = "تاریخچه کیف پول";
+}
+<div class="row">
+    <!-- #region پنل-->
+    <partial name="_Panel" />
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12">
+        <h4 class="text-dark text-center h4 mt-3 mb-4"> تراکنش های اخیر </h4>
+        <table class="table table-bordered table-hover table-striped table-responsive-sm">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center"> شماره فاکتور </th>
+                    <th class="text-center"> مبلغ کل </th>
+                    <th class="text-center"> تاریخ پرداخت </th>
+                    <th class="text-center"> نوع </th>
+                    <th class="text-center"> جزئیات </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.WalletHistory.Any())
+                {
+                    @foreach (var item in Model.WalletHistory)
+                    {
+                        <tr>
+                            <td class="text-center"> @item.TrackingCode </td>
+                            <td class="text-center"> @item.TransactionAmount.ToToman() </td>
+                            <td class="text-center"> @item.CreateDate.ToShamsi() </td>
+                            <td class="text-center"> @(item.State ? "شارژ" : "خرید") </td>
+                            <td class="text-center">
+                                <a asp-page="Details" asp-route-Id="@item.Id" class="btn btn-primary"> مرور </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <h1 class="h4 text-center alert alert-info">موردی ای موجود نمی باشد</h1>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>

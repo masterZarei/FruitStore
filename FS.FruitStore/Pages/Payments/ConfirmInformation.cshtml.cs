@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.Convertors;
@@ -39,7 +41,8 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+
+                return RedirectToPage("/NotFound");
             }
 
             var factor = await _db.Factors
@@ -48,7 +51,7 @@ namespace FS.FruitStore.Pages.Payments
                 a.FactorDetails.Count > 1)
                 .FirstOrDefaultAsync();
 
-            
+
             CIModel = new ConfirmInformationVM()
             {
                 ApplicationUser = await _db.Users
@@ -57,12 +60,29 @@ namespace FS.FruitStore.Pages.Payments
             };
             var AllPostTypes = PostTypes.GetTypes;
             var AllPaymentTypes = PayWays.GetWays;
+
+            bool adminConsent = _db.Logos.FirstOrDefault().DeliverAtTheSameDate;
+
+            var DeliverDates = new List<Dictionary>();
+            int i = adminConsent ? 0 : 1;
+            for ( ; i < 5; i++)
+            {
+                DeliverDates.Add(new Dictionary { Name = $"{DateTime.Now.AddDays(i).ToShamsi()}", Value = $"{DateTime.Now.AddDays(i).ToShamsi()}" });
+            }
+            var DeliverTime = new List<Dictionary>()
+            {
+                new Dictionary {Name = "صبح تا ظهر 9 - 12", Value = "صبح تا ظهر 9 - 12"},
+                new Dictionary {Name = "ظهر تا شب 12 - 22", Value = "ظهر تا شب 12 - 22"},
+            };
+            CIModel.DeliverTime = new SelectList(DeliverTime, "Value", "Name");
+            CIModel.DeliverDate = new SelectList(DeliverDates, "Value", "Name");
             CIModel.PostTypes = new SelectList(AllPostTypes, "Value", "Name");
             CIModel.PaymentTypes = new SelectList(AllPaymentTypes, "Value", "Name");
 
             return Page();
 
         }
+
         public async Task<IActionResult> OnPostAsync()
         {
             var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
@@ -72,12 +92,13 @@ namespace FS.FruitStore.Pages.Payments
 
 
 
-            var factor = await _db.Factors
-                .Include(a=> a.FactorDetails)
+              Factor factor = await _db.Factors
+                .Include(a => a.FactorDetails).
+                 ThenInclude(b => b.Product)
                 .Where(a => a.UserId == userId && !a.IsFinally)
                 .FirstOrDefaultAsync();
 
-            if (string.IsNullOrEmpty(CIModel.ApplicationUser.PostalCode)||
+            if (string.IsNullOrEmpty(CIModel.ApplicationUser.PostalCode) ||
                 string.IsNullOrEmpty(CIModel.ApplicationUser.Address))
             {
                 #region Notif
@@ -97,15 +118,27 @@ namespace FS.FruitStore.Pages.Payments
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
                         factor.Post_Type = CIModel.SelectedPostType;
+                        if (CIModel.SelectedPostType == "پست معمولی")
+                            factor.FactorDetails[0].Price += 12000;
+
+                        if (CIModel.SelectedPostType == "پست پیشتاز")
+                            factor.FactorDetails[0].Price += 18000;
+
                         factor.Payment_Type = CIModel.SelectedPaymentType;
                         factor.Description = CIModel.Description;
                         factor.DeliverState = 1;
-
-                        factor.WillDeliver_Date = DateTime.Now.AddDays(10);
-                        factor.Send_Date = DateTime.Now.AddDays(2);
-
+                        factor.Deliver_Date = CIModel.SelectedDeliverDate;
+                        factor.Deliver_Time = CIModel.SelectedDeliverTime;
                         factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
                         factor.IsFinally = true;
+
+
+                        foreach (var item in factor.FactorDetails)
+                        {
+                            var products = await _db.Products.FindAsync(item.ProductId);
+                            products.Count -= item.Count;
+                            _db.Update(products);
+                        }
 
                         _db.Update(currentUser);
                         _db.Update(factor);
@@ -118,16 +151,26 @@ namespace FS.FruitStore.Pages.Payments
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
                         factor.Post_Type = CIModel.SelectedPostType;
+                        if (CIModel.SelectedPostType == "پست معمولی")
+                            factor.FactorDetails[0].Price += 12000;
+
+                        if (CIModel.SelectedPostType == "پست پیشتاز")
+                            factor.FactorDetails[0].Price += 18000;
+
                         factor.Payment_Type = CIModel.SelectedPaymentType;
                         factor.Description = CIModel.Description;
                         factor.DeliverState = 1;
-
-                        factor.WillDeliver_Date = DateTime.Now.AddDays(10);
-                        factor.Send_Date = DateTime.Now.AddDays(2);
-
+                        factor.Deliver_Date = CIModel.SelectedDeliverDate;
+                        factor.Deliver_Time = CIModel.SelectedDeliverTime;
                         factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
                         factor.IsFinally = true;
 
+                        foreach (var item in factor.FactorDetails)
+                        {
+                            var products = await _db.Products.FindAsync(item.ProductId);
+                            products.Count -= item.Count;
+                            _db.Update(products);
+                        }
 
                         _db.Update(currentUser);
                         _db.Update(factor);
@@ -145,15 +188,35 @@ namespace FS.FruitStore.Pages.Payments
                             currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
                             factor.Post_Type = CIModel.SelectedPostType;
+                            if (CIModel.SelectedPostType == "پست معمولی")
+                                factor.FactorDetails[0].Price += 12000;
+
+                            if (CIModel.SelectedPostType == "پست پیشتاز")
+                                factor.FactorDetails[0].Price += 18000;
+
                             factor.Payment_Type = CIModel.SelectedPaymentType;
                             factor.Description = CIModel.Description;
                             factor.DeliverState = 1;
-
-                            factor.WillDeliver_Date = DateTime.Now.AddDays(SD.CountOfDaysPackageWillDeliver);
-                            factor.Send_Date = DateTime.Now.AddDays(1);
-
+                            factor.Deliver_Date = CIModel.SelectedDeliverDate;
+                            factor.Deliver_Time = CIModel.SelectedDeliverTime;
                             factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
                             factor.IsFinally = true;
+
+                            foreach (var item in factor.FactorDetails)
+                            {
+                                var products = await _db.Products.FindAsync(item.ProductId);
+                                products.Count -= item.Count;
+                                _db.Update(products);
+                            }
+                            _db.Add(new WalletHistory
+                            {
+                                NewWalletAmount = currentUser.WalletAmount,
+                                State = true,
+                                TrackingCode = int.Parse(factor.PurchaseNumber),
+                                UserId = currentUser.Id,
+                                TransactionAmount = FullFactorPrice,
+
+                            });
 
                             _db.Update(currentUser);
                             _db.Update(factor);
@@ -166,7 +229,7 @@ namespace FS.FruitStore.Pages.Payments
                             TempData["State"] = Notifs.Error;
                             TempData["Msg"] = "موجودی کیف پول شما کافی نمی‌باشد";
                             #endregion
-                            return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
+                            return RedirectToPage("/");
                         }
 
                     default:
@@ -174,9 +237,9 @@ namespace FS.FruitStore.Pages.Payments
                         TempData["State"] = Notifs.Error;
                         TempData["Msg"] = Notifs.ERRORHAPPEDNED;
                         #endregion
-                        return NotFound();
+                        return RedirectToPage("/NotFound");
                 }
-                
+
 
             }
 

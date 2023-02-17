@@ -1,9 +1,8 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.CommentManagement.CommentDetailsModel
-
 @using Utilities.Roles;
 @{
-  //  ViewData[PD.PanelViewData] = PD.Comments;
+    ViewData["Title"] = "جزئیات کامنت";
 }
 <div class="row">
     <partial name="_Panel" />
@@ -24,7 +23,6 @@
                 <button type="submit" asp-route-Id="@Model.Comments.Id" class="btn btn-success btn-block mx-1 mt-1"> ثبت </button>
                 @if (User.IsInRole(SD.AdminEndUser))
                 {
-
                     <button type="submit" asp-page-handler="RemoveCmt" asp-route-Id="@Model.Comments.Id" class="btn btn-danger btn-block mx-1 mt-1"> حذف </button>
                 }
             </div>

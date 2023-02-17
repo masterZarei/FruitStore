@@ -31,7 +31,7 @@ namespace FS.FruitStore.Pages.Admin.Categories
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = "دسته بندی پیدا نشد!";
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -45,7 +45,7 @@ namespace FS.FruitStore.Pages.Admin.Categories
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = "دسته بندی پیدا نشد!";
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             return Page();

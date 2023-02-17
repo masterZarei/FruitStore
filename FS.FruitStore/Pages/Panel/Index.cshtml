@@ -1,6 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Panel.IndexModel
 @{
+    ViewData["Title"] = "مدیریت اطلاعات شخصی";
 }
 <div class="row">
 
@@ -26,7 +27,6 @@
                         <tr>
                             <td>  تاریخ ثبت نام: @Model.ApplicationUser.reg_Date.ToShamsi()</td>
                             <td> آدرس: @Html.Raw(Model.retString(Model.ApplicationUser.Address))</td>
-                            <td></td>
                         </tr>
                         <tr>
                             <td>  استان: @Html.Raw(Model.retString(Model.ApplicationUser.State))</td>
@@ -46,7 +46,6 @@
                         ویرایش
                     </a>
                 </div>
-
             </div>
         </div>
     </div>

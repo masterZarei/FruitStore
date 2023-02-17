@@ -3,19 +3,25 @@
 @{
     ViewData["Title"] = "خروج";
 }
-
-<header class="alert alert-info">
-    <h1>@ViewData["Title"]</h1>
     @{
         if (User.Identity.IsAuthenticated)
         {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-danger text-white">برای خروج کلیک کنید</button>
-            </form>
+            <div class="h-100">
+                <div class="m-auto pt-5">
+                    <div class="alert alert-danger mt-5">
+                        <h5 class="text-danger h3 text-center"> خروج </h5>
+                        <h4 class="text-center my-5"> آیا میخواهید از سایت خارج شوید !؟ </h4>
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                            <button type="submit" class="btn mx-2 w-50 mx-auto h-100 mt-2 btn-danger text-white">بلی</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         }
         else
         {
             <p>با موفقیت خارج شده اید.</p>
         }
     }
-</header>

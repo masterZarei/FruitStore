@@ -9,7 +9,7 @@
 
         public static string NOTFOUND = "موردی یافت نشد!";
         public static string ERRORHAPPEDNED = "خطایی رخ داد!!";
-        public static string IDINVALID = "خطایی رخ داد!!";
+        public static string IDINVALID = "شناسه وارد شده نامعتبر است!";
         public static string SUCCEEDED = "با موفقیت انجام شد!";
         public static string FILLREQUESTEDDATA = "لطفا فیلدهای ضروری را پر کنید!";
     }

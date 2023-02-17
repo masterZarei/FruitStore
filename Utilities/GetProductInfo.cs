@@ -27,11 +27,11 @@ namespace Utilities
                 var data = _db.UnitToProducts
                      .Where(a => a.ProductId == productId)
                      .Include(u => u.Unit)
-                     .FirstOrDefault()
-                     .Unit;
+                     .FirstOrDefault();
                 if (data == null)
                     return null;
-                return data;
+
+                return data.Unit;
             }
             catch
             {

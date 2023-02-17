@@ -24,7 +24,7 @@ namespace FS.FruitStore.Pages.Admin.Orders
         [BindProperty]
         public List<Factor> Order { get; set; }
         public User ApplicationUser { get; set; }
-        public async Task<IActionResult> OnGetAsync(string Id, bool isIndex = true)
+        public async Task<IActionResult> OnGetAsync(string Id, int factorId, bool isIndex = true)
         {
 
             if (Id.Trim().Length == 0)
@@ -33,13 +33,14 @@ namespace FS.FruitStore.Pages.Admin.Orders
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion               
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             if (isIndex)
             {
                 Order = await _db.Factors
                .Where(a => a.isCompleted == false &&
-                       a.User.Id == Id)
+                       a.User.Id == Id &&
+                       a.FactorId == factorId)
                .Include(a => a.User)
                .Include(a => a.FactorDetails)
                .ThenInclude(a => a.Product)
@@ -52,7 +53,8 @@ namespace FS.FruitStore.Pages.Admin.Orders
             {
                 Order = await _db.Factors
               .Where(a => a.isCompleted == true &&
-                      a.User.Id == Id)
+                      a.User.Id == Id &&
+                       a.FactorId == factorId)
               .Include(a => a.User)
               .Include(a => a.FactorDetails)
               .ThenInclude(a => a.Product)

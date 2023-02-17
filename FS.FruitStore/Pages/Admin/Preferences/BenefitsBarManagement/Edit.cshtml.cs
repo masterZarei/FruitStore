@@ -1,10 +1,15 @@
-﻿using FS.Models.Models;
+﻿using FS.DataAccess;
+using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
@@ -12,25 +17,28 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
     [Authorize(Roles =SD.AdminEndUser)]
     public class EditModel : PageModel
     {
-        private readonly FS.DataAccess.ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public EditModel(FS.DataAccess.ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
+
         [BindProperty]
         public BenefitBar BenefitBar { get; set; }
+        [BindProperty]
+        public IFormFile ImgUp { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             BenefitBar = await _context
@@ -43,13 +51,11 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -59,6 +65,38 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                 TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
                 #endregion
                 return Page();
+            }
+
+            if (ImgUp != null)
+            {
+                string DirectoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Preferences");
+                if (!Directory.Exists(DirectoryPath))
+                    Directory.CreateDirectory(DirectoryPath);
+
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
+
+                if (!string.IsNullOrEmpty(BenefitBar.Img))
+                {
+                    string deletePath = Path.Combine(DirectoryPath, BenefitBar.Img);
+                    if (System.IO.File.Exists(deletePath))
+                        System.IO.File.Delete(deletePath);
+                }
+
+
+                BenefitBar.Img = Guid.NewGuid().ToString() + Path.GetExtension(ImgUp.FileName);
+                string savepath = Path.Combine(DirectoryPath, BenefitBar.Img);
+                using (var filestream = new FileStream(savepath, FileMode.Create))
+                {
+                    ImgUp.CopyTo(filestream);
+                }
             }
 
             _context.Attach(BenefitBar).State = EntityState.Modified;
@@ -75,11 +113,15 @@ namespace FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement
                     TempData["State"] = Notifs.Error;
                     TempData["Msg"] = Notifs.IDINVALID;
                     #endregion
-                    return NotFound();
+                    return RedirectToPage("/NotFound");
                 }
                 else
                 {
-                    throw;
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = Notifs.IDINVALID;
+                    #endregion
+                    return RedirectToPage("/NotFound");
                 }
             }
             #region Notif

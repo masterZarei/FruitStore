@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Convertors;
 
-namespace FS.FruitStore.Pages.Wallet
+namespace FS.FruitStore.Pages.Admin.Wallet
 {
     [Authorize]
     public class IndexModel : PageModel

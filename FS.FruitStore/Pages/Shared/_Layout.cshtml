@@ -1,8 +1,5 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,30 +11,30 @@
     <link rel="stylesheet" href="~/css/styles.css">
     <link rel="stylesheet" href="~/css/alert.css">
     <link rel="stylesheet" href="~/FontAwesome.Pro.6.1.2/Web/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">*@
+
 </head>
 
 <body>
-
-
     <!-- #region Top Header-->
 
     <div class="top-header container">
         <div class="searchBox">
             <div class="input-group">
-                <input class="form-control form-control-topH" type="search" name="searchInp" placeholder="جست و جو ...">
+                <input class="form-control form-control-topH" type="search" id="searchInp" placeholder="جست و جو ...">
                 <div class="input-group-append input-group-append-topH">
-                    <a href="#" class="input-group-text" id="my-addon">
+                    <button onclick="searchProduct()" href="#" class="input-group-text" id="my-addon">
                         <i class="fas fa-search text-muted"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
         <a href="/">
             <div class="logoBox">
-                <img src="/image/car.png" class="rounded-circle" width="100px" height="100px">
+                <img src="/image/logo.png" class="rounded-circle" width="100px" height="100px">
             </div>
         </a>
-
         @if (User.Identity.IsAuthenticated)
         {
 
@@ -48,6 +45,7 @@
                     @*محل قرار گیری سبد خرید و نام*@
                     @if (User.Identity.IsAuthenticated)
                         @await Component.InvokeAsync("LoggedInUser")
+
                     </ul>
                 </div>
         }
@@ -61,9 +59,7 @@
 
             </div>
         }
-
     </div>
-
     <!-- #endregion -->
     <!-- #region Header-->
     <div class="header">
@@ -95,60 +91,8 @@
 
 
 
-        <!-- #region footer-->
-        <div class="top-footer mt-5">
-            <div class="row">
-                <div class="col-lg-4 col-md-4 col-12">
-                    <h4 class="text-dark text-center"> اهداف ما </h4>
-                    <ul class="mr-5 ">
-                        <li> لورم ایپسوم متن ساختگی با تولید از صنعت چاپ و با استفاده از طراحان گرافیک است </li>
-
-                    </ul>
-                </div>
-                <div class="col-lg-4 col-md-4 col-12">
-                    <h3 class="text-center mt-4 mb-1"> نماد های اعتماد </h3>
-                    <div class="text-center d-flex justify-content-center align-items-center">
-                        <img src="image/enamad.png" alt="">
-                        <div class="border border-dark p-2 center-box-namads"></div>
-                        <img src="image/samandehi.png" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-12 mt-4">
-                    <h3 class="text-right text-dark contact-title"> راه‌های ارتباطی </h3>
-                    <div class="ml-5 contact-foot">
-                        <h6>
-                            <i class="fa fa-check"></i>
-                            مشهد، خیابان گاز پلاک 45
-                        </h6>
-                        <h6>
-                            <i class="fa fa-check"></i>
-                            تهران، خیابان دندون پلاک 5
-                        </h6>
-                        <h6 class="d-flex">
-                            <i class="fa fa-phone-alt"></i>
-                            01234567890
-                        </h6>
-                        <div class="d-flex">
-                            <i class="fab fa-instagram bg-danger p-2 rounded-circle text-white mx-1"
-                               style="font-size: 50px;"></i>
-                            <i class="fab fa-telegram bg-primary p-2 rounded-circle text-white mx-1"
-                               style="font-size: 50px;"></i>
-                            <i class="fab fa-facebook bg-info p-2 rounded-circle text-white mx-1"
-                               style="font-size: 50px;"></i>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- #endregion -->
     </div>
-
-    <!-- #endregion -->
-
-
-
+    @await Component.InvokeAsync("FooterMgmt")
 
     <script type="text/javascript" src="~/js/all.min.js"></script>
     <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
@@ -157,7 +101,10 @@
     <script type="text/javascript" src="~/js/Script.js"></script>
     <script type="text/javascript" src="~/js/alert.js"></script>
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
-    
+@*    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>*@
+
     @await RenderSectionAsync("Scripts", required: false)
     @if (TempData["Msg"] != null && TempData["State"] != null)
     {
@@ -171,6 +118,12 @@
         TempData["Msg"] = null;
 
     }
+    <script>
+        function searchProduct() {
+            const inp = document.querySelector("#searchInp").value;
+            window.location.replace("/AllProducts?search=" + inp)
+        }
+    </script>
 </body>
 
 </html>

@@ -1,8 +1,7 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement.CreateModel
-
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "ایجاد نوار مزایا و خدمات";
 }
 <div class="row">
     <!-- #region پنل-->
@@ -27,7 +26,7 @@
                                 <label> نمایه </label>
                                 <div class="custom-file">
                                     <label for="fileup" class="custom-file-label text-center"> اضافه کردن </label>
-                                    <input type="file" name="ImgUp" class="custom-file-input">
+                                    <input type="file" name="ImgUp" id="imgUp" class="custom-file-input">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-12 mt-3">
@@ -48,6 +47,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

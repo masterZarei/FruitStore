@@ -1,19 +1,18 @@
 ﻿@page
-@using Utilities.Convertors;
 @model FS.FruitStore.Pages.Admin.Products.EditModel
 
 @{
+    ViewData["Title"] = "ویرایش محصول";
 
     string Xicon;
-    Xicon = @"
-<i class='fa fa-trash' style='color:orange; background:gray; border-radius:2px;'></i>";
+    Xicon = @"<i class='fa fa-trash' style='color:orange; background:gray; border-radius:2px;'></i>";
 }
 
 <div class="container">
 
     <div class="row">
 
-            <partial name="_Panel" />
+        <partial name="_Panel" />
 
         <div class="col-lg-9 col-12">
             <div class="card my-5 pb-4 text-center p-2">

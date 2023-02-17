@@ -1,45 +1,47 @@
 ﻿@page
 @model FS.FruitStore.Pages.Admin.Preferences.BenefitsBarManagement.EditModel
-
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "ویرایش نوار مزایا و خدمات";
 }
-
-<h1>Edit</h1>
-
-<h4>BenefitBar</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <!-- #region پنل-->
+    <partial name="_Panel" />
+    <!-- #endregion -->
+    <div class="col-lg-9 col-12 mt-5">
+        <form method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="BenefitBar.Id" />
-            <div class="form-group">
-                <label asp-for="BenefitBar.Text" class="control-label"></label>
-                <input asp-for="BenefitBar.Text" class="form-control" />
-                <span asp-validation-for="BenefitBar.Text" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BenefitBar.Img" class="control-label"></label>
-                <input asp-for="BenefitBar.Img" class="form-control" />
-                <span asp-validation-for="BenefitBar.Img" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BenefitBar.CreateDate" class="control-label"></label>
-                <input asp-for="BenefitBar.CreateDate" class="form-control" />
-                <span asp-validation-for="BenefitBar.CreateDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <input type="hidden" asp-for="BenefitBar.Img" />
+            <div class="card mb-4 mt-2 pb-4 text-center">
+                <div class="card-header d-flex">
+                    <h4 class="text-center h4 m-auto text-dark"> ایجاد نوار مزایا و خدمات </h4>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <label> متن : </label>
+                        <input asp-for="BenefitBar.Text" placeholder="متن را وارد کنید . . ." class="form-control my-3">
+                        <h6 class="h6 text-dark"> نمایه : </h6>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <div class="custom-file">
+                                    <label for="ImgUp" class="custom-file-label text-center"> انتخاب </label>
+                                    <input id="ImgUp" name="ImgUp" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <img src="~/Preferences/@Model.BenefitBar.Img" class="img-fluid rounded float-left" width="250px" height="250px">
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-block d-block w-90 mx-auto mt-3"> ثبت </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

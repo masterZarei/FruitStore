@@ -69,7 +69,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Product = await _context
@@ -83,7 +83,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var checkProductUnit = new GetProductInfo(_context).GetUnit(Product.ProductId);
@@ -129,11 +129,18 @@ namespace FS.FruitStore.Pages.Admin.Products
                 return Page();
             }
 
-
-           
-
             if (ImgUp != null)
             {
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
+
                 if (!string.IsNullOrEmpty(Product.ProductPic2))
                 {
                     string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ProductImages", Product.ProductPic);
@@ -150,6 +157,16 @@ namespace FS.FruitStore.Pages.Admin.Products
             }
             if (ImgUp1 != null)
             {
+                // بررسی فایل ورودی
+                if (ImageFormats.CheckFormats(Path.GetExtension(ImgUp1.FileName)) == null)
+                {
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا عکس وارد کنید";
+                    #endregion
+                    return Page();
+                }
+
                 if (!string.IsNullOrEmpty(Product.ProductPic2))
                 {
                     string deletePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ProductImages", Product.ProductPic2);
@@ -216,7 +233,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var findCat = await _context
@@ -285,7 +302,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             _context.Remove(findCat);

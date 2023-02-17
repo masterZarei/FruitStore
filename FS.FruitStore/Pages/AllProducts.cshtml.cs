@@ -32,10 +32,10 @@ namespace FS.FruitStore.Pages
 
         public IList<Product> Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string SC)
+        public async Task<IActionResult> OnGetAsync(string SC, string search)
         {
             Category = await (from a in _context.Categories
-                        select a).ToListAsync();
+                              select a).ToListAsync();
 
             if (Category != null)
             {
@@ -43,13 +43,26 @@ namespace FS.FruitStore.Pages
             }
             if (SC != null)
             {
+                if (SC == "همه")
+                {
+                    Product = await _context.Products
+                                    .Where(a => a.isVerified).ToListAsync();
+                    return Page();
+                }
+
                 Product = await (from p in _context.Products
-                           join ctp in _context.CategoryToProducts on p.ProductId equals ctp.ProductId
-                           where ctp.Category.Name == SC && ctp.Product.ProductId == p.ProductId && p.isVerified == true
-                           select p).ToListAsync();
+                                 join ctp in _context.CategoryToProducts on p.ProductId equals ctp.ProductId
+                                 where ctp.Category.Name == SC && ctp.Product.ProductId == p.ProductId && p.isVerified == true
+                                 select p).ToListAsync();
                 return Page();
             }
-
+            if (search != null)
+            {
+                Product = await _context.Products
+                    .Where(a => a.Name.Contains(search))
+                    .ToListAsync();
+                return Page();
+            }
             Product = await _context.Products
                 .Where(a => a.isVerified).ToListAsync();
 
@@ -61,7 +74,7 @@ namespace FS.FruitStore.Pages
         {
             if (SelectedCat != null)
             {
-                return RedirectToPage("Product", new { SC = SelectedCat });
+                return RedirectToPage("AllProducts", new { SC = SelectedCat });
             }
             return Page();
         }

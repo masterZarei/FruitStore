@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Roles;
@@ -28,9 +27,9 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
-                TempData["Msg"] = Notifs.NOTFOUND;
+                TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-            return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Comments = await _db.Comments
@@ -64,7 +63,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
 
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             cmt.isVerified = true;
@@ -90,7 +89,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             var cmt = await _db.Comments
@@ -103,7 +102,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             _db.Remove(cmt);

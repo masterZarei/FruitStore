@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Utilities;
 using Utilities.Convertors;
 
 namespace FS.FruitStore.Pages
@@ -18,6 +19,7 @@ namespace FS.FruitStore.Pages
         {
             _db = db;
         }
+        public string ProductUnit;
 
         [BindProperty]
         public Product Product { get; set; }
@@ -32,7 +34,7 @@ namespace FS.FruitStore.Pages
         public List<Comments> lstComments { get; set; }
         #endregion
 
-        public GetUserInfo GetInfo { get; set; }
+
         [BindProperty]
         public List<Rating> Rating { get; set; }
 
@@ -45,7 +47,7 @@ namespace FS.FruitStore.Pages
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             Product = await _db.Products
@@ -62,7 +64,7 @@ namespace FS.FruitStore.Pages
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 
@@ -71,12 +73,20 @@ namespace FS.FruitStore.Pages
                               join b in _db.CategoryToProducts on a.Id equals b.CategoryId
                               where b.ProductId == Product.ProductId
                               select a).ToListAsync();
+            //Getting unit
+            var checkProductUnit = new GetProductInfo(_db).GetUnit(Product.ProductId);
+
+            if (checkProductUnit == null)
+                ProductUnit = "---";
+            else
+                ProductUnit = checkProductUnit.Name;
+
             //کامنته ای محصول
             lstComments = await _db.Comments
+                .Include(a=>a.User)
                 .Where(a => a.Product_Id == id && a.isVerified == true)
                 .ToListAsync();
-            //نمونه سازی کلاس به دست آوردن اطلاعات کاربر
-            GetInfo = new GetUserInfo(_db);
+
 
             Rating = await _db.Ratings
                 .Where(a => a.ProductId == Product.ProductId)
@@ -97,7 +107,7 @@ namespace FS.FruitStore.Pages
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             if (string.IsNullOrEmpty(User.Identity.Name))
@@ -125,7 +135,7 @@ namespace FS.FruitStore.Pages
                     {
                         #region Notif
                         TempData["State"] = Notifs.Error;
-                        TempData["Msg"] = "لطفا به تعداد موجود محصول، به سبد خریدتان اضافه نمایید.";
+                        TempData["Msg"] = "لطفا به تعداد موجود ،محصول به سبد خریدتان اضافه نمایید.";
                         #endregion
                         return RedirectToPage("Product-Details", new { Id = ProductId });
                     }
@@ -147,7 +157,7 @@ namespace FS.FruitStore.Pages
                     {
                         #region Notif
                         TempData["State"] = Notifs.Error;
-                        TempData["Msg"] = "لطفا به تعداد موجود محصول، به سبد خریدتان اضافه نمایید.";
+                        TempData["Msg"] = "لطفا به تعداد موجود ،محصول به سبد خریدتان اضافه نمایید.";
                         #endregion
                         return RedirectToPage("Product-Details", new { Id = ProductId });
                     }
@@ -177,12 +187,18 @@ namespace FS.FruitStore.Pages
                 }
                 else
                 {
-                    TempData["error"] = "لطفا به تعداد موجود محصول، به سبد خریدتان اضافه نمایید.";
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "لطفا به تعداد موجود،محصول به سبد خریدتان اضافه نمایید.";
+                    #endregion
                     return RedirectToPage("Product-Details", new { Id = ProductId });
                 }
 
             }
-            TempData["success"] = "با موفقیت به سبد خرید اضافه گردید";
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
 
             await _db.SaveChangesAsync();
 
@@ -215,7 +231,7 @@ namespace FS.FruitStore.Pages
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
             if (Comments == null)
@@ -224,7 +240,7 @@ namespace FS.FruitStore.Pages
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.NOTFOUND;
                 #endregion
-                return NotFound();
+                return RedirectToPage("/NotFound");
             }
 
 

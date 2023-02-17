@@ -1,5 +1,6 @@
-﻿using Utilities.Roles;
-using FS.DataAccess;
+﻿using FS.DataAccess;
+using FS.Models.Models;
+using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,9 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FS.Models.ViewModels;
-using Utilities.Convertors;
-using FS.Models.Models;
+using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Orders
 {
@@ -68,7 +67,7 @@ namespace FS.FruitStore.Pages.Admin.Orders
                  .Where(a => a.FactorId == Id)
                  .FirstOrDefaultAsync();
 
-            if (selectedOrder == null || selectedOrder.DeliverState > 0)
+            if (selectedOrder == null || selectedOrder.DeliverState != 1)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
