@@ -1,5 +1,5 @@
 ﻿@page
-@model FS.FruitStore.Pages.Users.DetailsModel
+@model FS.FruitStore.Pages.Admin.Users.DetailsModel
 @{
     ViewData["Title"] = "جزئیات کاربر";
 }
@@ -11,10 +11,9 @@
         <div class="row">
             <partial name="_Panel" />
             <div class="col-lg-9 col-12">
-
                 <div class="card my-5 pb-4 text-center">
                     <div class="card-header">
-                        <h4 class="h4"> جزئیات اطلاعات کاربر "@Model.ApplicationUser.LastName"   </h4>
+                        <h4 class="h4 text-center"> جزئیات اطلاعات کاربر "@Model.ApplicationUser.LastName"   </h4>
                     </div>
                     <div class="card-body">
                         <div class="row">

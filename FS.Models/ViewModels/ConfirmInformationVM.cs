@@ -11,13 +11,6 @@ namespace FS.Models.ViewModels
 
         public string Description { get; set; }
 
-        #region Post Types
-        public SelectList PostTypes { get; set; }
-
-        [Required(ErrorMessage ="لطفا نوع پست را تعیین کنید!")]
-        public string SelectedPostType { get; set; }
-        #endregion
-
         #region Payment Types
         public SelectList PaymentTypes { get; set; }
 

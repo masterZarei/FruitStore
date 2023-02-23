@@ -12,13 +12,10 @@
     <link rel="stylesheet" href="~/css/alert.css">
     <link rel="stylesheet" href="~/FontAwesome.Pro.6.1.2/Web/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">*@
-
 </head>
 
 <body>
     <!-- #region Top Header-->
-
     <div class="top-header container">
         <div class="searchBox">
             <div class="input-group">
@@ -88,9 +85,6 @@
 
     <div class="container">
         @RenderBody()
-
-
-
     </div>
     @await Component.InvokeAsync("FooterMgmt")
 
@@ -101,9 +95,6 @@
     <script type="text/javascript" src="~/js/Script.js"></script>
     <script type="text/javascript" src="~/js/alert.js"></script>
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
-@*    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>*@
 
     @await RenderSectionAsync("Scripts", required: false)
     @if (TempData["Msg"] != null && TempData["State"] != null)

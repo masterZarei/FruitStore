@@ -17,7 +17,7 @@ namespace FS.FruitStore.Pages.Admin.Products
         {
             _db = db;
         }
-
+        #region Cat
         [BindProperty]
         public List<Category> Category { get; set; }
         //لیست رو پر میکنه
@@ -28,6 +28,19 @@ namespace FS.FruitStore.Pages.Admin.Products
         public string SelectedCat { get; set; }
         [BindProperty]
         public List<Category> ProdCats { get; set; }
+        #endregion
+        #region Unit
+        [BindProperty]
+        public List<Unit> Unit { get; set; }
+        //لیست رو پر میکنه
+        public SelectList Units { get; set; }
+
+        [BindProperty]
+        //آیتم انتخابی رو نگه میداره
+        public string SelectedUnit { get; set; }
+        [BindProperty]
+        public List<Unit> ProdUnits { get; set; }
+        #endregion
 
         [BindProperty]
         public Product Product { get; set; }
@@ -37,9 +50,14 @@ namespace FS.FruitStore.Pages.Admin.Products
         public async Task<IActionResult> OnGetAsync(int Id)
         {
             ProdCats = await (from a in _db.Categories
-                        join b in _db.CategoryToProducts on a.Id equals b.CategoryId
-                        where b.ProductId == Id
-                        select a).ToListAsync();
+                              join b in _db.CategoryToProducts on a.Id equals b.CategoryId
+                              where b.ProductId == Id
+                              select a).ToListAsync();
+
+            ProdUnits = await (from a in _db.Units
+                               join b in _db.UnitToProducts on a.Id equals b.UnitId
+                               where b.ProductId == Id
+                               select a).ToListAsync();
 
             if (Id == 0)
             {
@@ -47,25 +65,30 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.IDINVALID;
                 #endregion
-            return RedirectToPage("Index");
+                return RedirectToPage("Index");
             }
 
             Category = (from a in _db.Categories
                         where !ProdCats.Contains(a)
                         select a).ToList();
+            Unit = (from a in _db.Units
+                        where !ProdUnits.Contains(a)
+                        select a).ToList();
 
-            if (Category.Count == 0) return RedirectToPage("Index");
+            if (Category.Count == 0 && Unit.Count == 0) return RedirectToPage("Index");
 
 
             if (Category != null)
                 Cats = new SelectList(Category, "Name", "Name");
 
+            if (Unit != null)
+                Units = new SelectList(Unit, "Name", "Name");
 
 
-            Product = _db
+            Product = await _db
                 .Products
                 .Where(a => a.ProductId == Id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return Page();
         }
@@ -154,6 +177,70 @@ namespace FS.FruitStore.Pages.Admin.Products
             #endregion
             return RedirectToPage("AddCategoryToProduct", new { Id = Product.ProductId });
 
+        }
+        public async Task<IActionResult> OnPostAddUnit()
+        {
+            if (SelectedUnit == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+                return RedirectToPage("/NotFound");
+            }
+            var findUnit = await _db.Units
+                .Where(a => a.Name == SelectedUnit)
+                .FirstOrDefaultAsync();
+            if (findUnit == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
+                return RedirectToPage("/NotFound");
+            }
+            _db.Add(
+                new UnitToProduct()
+                {
+                    ProductId = Product.ProductId,
+                    UnitId = findUnit.Id,
+                });
+            await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
+            return RedirectToPage("AddCategoryToProduct", new { Id = Product.ProductId });
+        }
+        public async Task<IActionResult> OnPostRemoveUnit(int Id)
+        {
+            if (Id == 0)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.IDINVALID;
+                #endregion
+                return RedirectToPage("/NotFound");
+            }
+            var findUnit = await _db.UnitToProducts
+                .Include(a=>a.Unit)
+                .Where(a => a.UnitId == Id && a.ProductId == Product.ProductId)
+                .FirstOrDefaultAsync();
+            if (findUnit == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+                return RedirectToPage("/NotFound");
+            }
+            _db.Remove(findUnit);
+            await _db.SaveChangesAsync();
+            #region Notif
+            TempData["State"] = Notifs.Success;
+            TempData["Msg"] = Notifs.SUCCEEDED;
+            #endregion
+            return RedirectToPage("AddCategoryToProduct", new { Id = Product.ProductId });
         }
     }
 }

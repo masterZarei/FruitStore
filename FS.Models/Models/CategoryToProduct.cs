@@ -12,7 +12,6 @@ namespace FS.Models.Models
         public virtual Category Category { get; set; }
         public int CategoryId { get; set; }
         //
-
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
         public int ProductId { get; set; }

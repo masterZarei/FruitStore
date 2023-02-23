@@ -23,30 +23,27 @@
         </div>
         <div class="indicator"></div>
     </section>
-
 </div>
 
 <h2 class="mt-5 mb-4">
-    محصولات <a href="~/AllProducts" class="font-weight-bold text-success"
-               style="font-size: 16px !important"> همه محصولات </a>
+    محصولات <a href="~/AllProducts" class="font-weight-bold text-success" style="font-size: 16px !important"> همه محصولات </a>
 </h2>
 <div class="row">
     @if (Model.Product.Any())
     {
-
-        @foreach (var item in Model.Product)
+        @foreach (var item in Model.Product.Take(16))
         {
-            <div class="col-lg-3 col-md-3 col-12 my-1">
+            <div class="col-lg-3 col-md-3 col-12 my-2">
                 <a asp-page="Product-Details" asp-route-Id="@item.ProductId">
                     <div class="card product-box">
                         <div class="mother-imageBox">
                             <img class="card-img-top" src="~/ProductImages/@item.ProductPic" alt="this is a img" height="250px">
                         </div>
                         <div class="card-body product-box-body">
-                            <h5 class="card-title h5 text-dark" style="font-size: 18px; font-weight: 600;">
+                            <h5 class="card-title h5 text-center text-success" style="font-size: 18px; font-weight: 600;">
                                 @item.Name
                             </h5>
-                            <p class="h6 text-dark" style="font-weight: 600"> @item.Price.ToToman() </p>
+                            <p class="h6 text-primary text-center" style="font-weight: 600"> @item.Price.ToToman() </p>
                         </div>
                     </div>
                 </a>
@@ -58,14 +55,12 @@
         <h4 class="m-auto alert alert-warning"> محصولی وجود ندارد </h4>
     }
 </div>
-<a href="~/AllProducts" class="text-orange mt-2 font-weight-bold text-center d-block"> مشاهده بیشتر </a>
-</div>
-
+<a href="~/AllProducts" class="text-orange mt-2 font-weight-bold text-center d-block"> مشاهده همه محصولات </a>
 <!-- #region Our Services-->
-<div class="our-services">
-    <div class="container">
-        @if (Model.BenefitBars.Any())
-        {
+@if (Model.BenefitBars.Any())
+{
+    <div class="our-services">
+        <div class="container">
             <div class="row d-flex justify-content-lg-around flex-wrap services-box">
                 @foreach (var item in Model.BenefitBars)
                 {
@@ -74,9 +69,8 @@
                         <h6 class="mr-1"> @item.Text </h6>
                     </div>
                 }
-
             </div>
-        }
+        </div>
     </div>
-</div>
+}
 <!-- #endregion -->

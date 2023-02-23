@@ -39,7 +39,8 @@ namespace FS.Models.Models
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
-
-        public UnitToProduct UnitToProduct { get; set; }
+        //
+        public double Discount { get; set; }
+        //
     }
 }

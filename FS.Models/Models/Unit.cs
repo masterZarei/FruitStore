@@ -1,4 +1,5 @@
 ﻿using FS.Models.BaseEntities;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FS.Models.Models
@@ -16,7 +17,7 @@ namespace FS.Models.Models
         [Display(Name = "توضیحات واحد")]
         [MaxLength(500)]
         public string Description { get; set; }
-
+        public List<Product> Products { get; set; }
 
     }
 }

@@ -1,0 +1,52 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Discounts.IndexModel
+
+@{
+    ViewData["Title"] = "مدیریت تخفیفات";
+}
+
+<div class="row">
+    <partial name="_Panel" />
+    <div class="col-lg-9 col-12 mt-5">
+        <form method="post">
+            <div class="card mb-4 mt-2 pb-4 text-center">
+                <div class="card-header d-flex">
+                    <a class="btn btn-info" asp-page="Create"> ایجاد تخفیف جدید </a>
+                    <h4 class="text-center h4 m-auto text-dark"> مدیریت تخفیف ها </h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover table-striped table-responsive-sm">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"> درصد </th>
+                                <th class="text-center"> مناسبت </th>
+                                <th class="text-center"> مدیریت </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Discount)
+                            {
+                                <tr>
+                                    <td class="text-center">@item.Percent%</td>
+                                    <td class="text-center">@item.Occasion</td>
+                                    <td class="text-center">
+                                        <button asp-page-handler="Remove" type="submit" class="align-middle btn text-primary" asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+                                        <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle text-primary">
+                                            <i class="fa fa-list"></i>
+                                        </a>
+                                        <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle text-primary">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+

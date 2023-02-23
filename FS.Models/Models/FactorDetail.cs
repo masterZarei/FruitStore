@@ -14,6 +14,8 @@ namespace FS.Models.Models
         //
         [ForeignKey("ProductId")]
         public virtual Product Product { get; set; }
+        //
+        public string Unit { get; set; }
         [Required]
         public int ProductId { get; set; }
         //

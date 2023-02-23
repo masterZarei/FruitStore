@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Utilities.Roles;
 
-namespace FS.FruitStore.Pages.Users
+namespace FS.FruitStore.Pages.Admin.Users
 {
     [BindProperties]
     [Authorize(Roles = SD.AdminEndUser)]

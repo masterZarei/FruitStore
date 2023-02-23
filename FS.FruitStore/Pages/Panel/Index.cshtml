@@ -11,29 +11,30 @@
 
         <div class="card my-5 pb-4 text-center">
             <div class="card-header">
-                <h4 class="h4"> اطلاعات شخصی </h4>
+                <h4 class="h4 text-center"> اطلاعات شخصی </h4>
             </div>
             <div class="card-body">
-                <table class="table table-light table-striped">
+                <table class="table table-light table-hover table-striped">
                     <tbody>
                         <tr>
-                            <td> نام: @Model.ApplicationUser.Name</td>
-                            <td> نام خانوادگی: @Model.ApplicationUser.LastName</td>
+                            <td class="text-center"> نام: @Model.ApplicationUser.Name</td>
+                            <td class="text-center"> نام خانوادگی: @Model.ApplicationUser.LastName</td>
                         </tr>
                         <tr>
-                            <td> شماره تلفن:  @Model.ApplicationUser.PhoneNumber</td>
-                            <td> ایمیل: @Html.Raw(Model.retString(Model.ApplicationUser.Email))</td>
+                            <td class="text-center"> شماره تلفن:  @Model.ApplicationUser.PhoneNumber</td>
+                            <td class="text-center"> ایمیل: @Html.Raw(Model.retString(Model.ApplicationUser.Email))</td>
                         </tr>
                         <tr>
-                            <td>  تاریخ ثبت نام: @Model.ApplicationUser.reg_Date.ToShamsi()</td>
-                            <td> آدرس: @Html.Raw(Model.retString(Model.ApplicationUser.Address))</td>
+                            <td class="text-center">  تاریخ ثبت نام: @Model.ApplicationUser.reg_Date.ToShamsi()</td>
+                            <td class="text-center"> آدرس: @Html.Raw(Model.retString(Model.ApplicationUser.Address))</td>
                         </tr>
                         <tr>
-                            <td>  استان: @Html.Raw(Model.retString(Model.ApplicationUser.State))</td>
-                            <td>  شهر: @Html.Raw(Model.retString(Model.ApplicationUser.City))</td>
+                            <td class="text-center">  استان: @Html.Raw(Model.retString(Model.ApplicationUser.State))</td>
+                            <td class="text-center">  شهر: @Html.Raw(Model.retString(Model.ApplicationUser.City))</td>
                         </tr>
                         <tr>
-                            <td> کد پستی: @Html.Raw(Model.retString(Model.ApplicationUser.PostalCode))</td>
+                            <td class="text-center"> کد پستی: @Html.Raw(Model.retString(Model.ApplicationUser.PostalCode))</td>
+                            <td class="text-center"> احراز هویت کاربر: @(Model.ApplicationUser.isVerified ? Html.Raw("<span class='btn btn-success'>تایید شده</span>") : Html.Raw("<span class='btn btn-secondary'>تایید نشده</span>"))</td>
                         </tr>
 
 

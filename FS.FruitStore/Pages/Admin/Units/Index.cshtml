@@ -10,8 +10,8 @@
     <div class="col-lg-9 col-12">
         <div class="card mt-4">
             <div class="card-header d-flex">
-                <a href="Units/Create">
-                    <button class="btn btn-purple text-right"> <i class="fa fa-plus"></i> ایجاد </button>
+                <a class="btn btn-purple text-right" href="Units/Create">
+                     <i class="fa fa-plus"></i> ایجاد 
                 </a>
                 <h4 class="h4 text-center m-auto"> مدیریت واحدها </h4>
             </div>
@@ -34,12 +34,12 @@
                                     <tr>
                                         <td class="text-center"> @item.Name </td>
                                         <td class=" text-center">
-                                            <button asp-page-handler="Remove" type="submit" class="align-middle btn text-primary" asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
+                                            <button asp-page-handler="Remove" type="submit" class="align-middle btn text-primary mr-n2" asp-route-Id="@item.Id"><i class="fa fa-trash"></i></button>
 
-                                            <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle btn text-primary">
+                                            <a asp-page="Details" asp-route-Id="@item.Id" class="align-middle btn text-primary mr-n2">
                                                 <i class="fa fa-list"></i>
                                             </a>
-                                            <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle btn text-primary">
+                                            <a asp-page="Edit" asp-route-Id="@item.Id" class="align-middle btn text-primary mr-n2">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                         </td>

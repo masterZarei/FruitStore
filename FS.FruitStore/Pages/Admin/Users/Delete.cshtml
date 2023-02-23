@@ -1,19 +1,19 @@
 ﻿@page
-@model FS.FruitStore.Pages.Users.DeleteModel
+@model FS.FruitStore.Pages.Admin.Users.DeleteModel
 @{
     ViewData["Title"] = "حذف کاربر";
 }
 
 <div class="container">
 
-        <form method="post">
-    <div class="row">
+    <form method="post">
+        <div class="row">
             <partial name="_Panel" />
 
             <div class="col-lg-9 col-12">
                 <div class="card my-5 pb-4 text-center">
                     <div class="card-header">
-                        <h4 class="h4"> غیرفعال کردن کاربر '@Model.ApplicationUser.Name' </h4>
+                        <h4 class="h4 text-center"> غیرفعال کردن کاربر '@Model.ApplicationUser.Name' </h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -46,6 +46,6 @@
                     </div>
                 </div>
             </div>
-    </div>
-        </form>
+        </div>
+    </form>
 </div>

@@ -37,17 +37,13 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
 
 
             Comments = await _db.Comments
-                .Where(a => a.Product_Id == Id && string.IsNullOrEmpty(a.Answer))
                 .Include(a => a.Product)
                 .ThenInclude(a=> a.User)
+                .Where(a => a.Product_Id == Id && string.IsNullOrEmpty(a.Answer))
                 .ToListAsync();
 
             if (Comments.Count < 1)
             {
-                #region Notif
-                TempData["State"] = Notifs.Error;
-                TempData["Msg"] = "تعداد کامنت ها از 1 کمتر است";
-                #endregion
                 return RedirectToPage("Index");
             }
 

@@ -9,11 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.Convertors;
-using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Payments
 {
@@ -58,7 +56,6 @@ namespace FS.FruitStore.Pages.Payments
                 .Where(a => a.Id == userId)
                 .FirstOrDefaultAsync()
             };
-            var AllPostTypes = PostTypes.GetTypes;
             var AllPaymentTypes = PayWays.GetWays;
 
             bool adminConsent = _db.Logos.FirstOrDefault().DeliverAtTheSameDate;
@@ -76,7 +73,6 @@ namespace FS.FruitStore.Pages.Payments
             };
             CIModel.DeliverTime = new SelectList(DeliverTime, "Value", "Name");
             CIModel.DeliverDate = new SelectList(DeliverDates, "Value", "Name");
-            CIModel.PostTypes = new SelectList(AllPostTypes, "Value", "Name");
             CIModel.PaymentTypes = new SelectList(AllPaymentTypes, "Value", "Name");
 
             return Page();
@@ -117,13 +113,6 @@ namespace FS.FruitStore.Pages.Payments
                         currentUser.Address = CIModel.ApplicationUser.PostalCode;
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
-                        factor.Post_Type = CIModel.SelectedPostType;
-                        if (CIModel.SelectedPostType == "پست معمولی")
-                            factor.FactorDetails[0].Price += 12000;
-
-                        if (CIModel.SelectedPostType == "پست پیشتاز")
-                            factor.FactorDetails[0].Price += 18000;
-
                         factor.Payment_Type = CIModel.SelectedPaymentType;
                         factor.Description = CIModel.Description;
                         factor.DeliverState = 1;
@@ -149,13 +138,6 @@ namespace FS.FruitStore.Pages.Payments
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
                         currentUser.Address = CIModel.ApplicationUser.PostalCode;
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-
-                        factor.Post_Type = CIModel.SelectedPostType;
-                        if (CIModel.SelectedPostType == "پست معمولی")
-                            factor.FactorDetails[0].Price += 12000;
-
-                        if (CIModel.SelectedPostType == "پست پیشتاز")
-                            factor.FactorDetails[0].Price += 18000;
 
                         factor.Payment_Type = CIModel.SelectedPaymentType;
                         factor.Description = CIModel.Description;
@@ -187,12 +169,6 @@ namespace FS.FruitStore.Pages.Payments
                             currentUser.Address = CIModel.ApplicationUser.PostalCode;
                             currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
-                            factor.Post_Type = CIModel.SelectedPostType;
-                            if (CIModel.SelectedPostType == "پست معمولی")
-                                factor.FactorDetails[0].Price += 12000;
-
-                            if (CIModel.SelectedPostType == "پست پیشتاز")
-                                factor.FactorDetails[0].Price += 18000;
 
                             factor.Payment_Type = CIModel.SelectedPaymentType;
                             factor.Description = CIModel.Description;
@@ -206,12 +182,17 @@ namespace FS.FruitStore.Pages.Payments
                             {
                                 var products = await _db.Products.FindAsync(item.ProductId);
                                 products.Count -= item.Count;
+
+                                if (products.Discount > 0)
+                                {
+                                    products.Price = DiscountApplier.Apply(products.Price, products.Discount);
+                                }
                                 _db.Update(products);
                             }
                             _db.Add(new WalletHistory
                             {
                                 NewWalletAmount = currentUser.WalletAmount,
-                                State = true,
+                                State = false,
                                 TrackingCode = int.Parse(factor.PurchaseNumber),
                                 UserId = currentUser.Id,
                                 TransactionAmount = FullFactorPrice,

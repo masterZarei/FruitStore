@@ -22,32 +22,32 @@
                             <table class="table table-light table-hover table-responsive-sm table-striped table-bordered ">
                                 <thead class="thead-light text-center">
                                     <tr>
-                                        <th> نام</th>
-                                        <th> نام خانوادگی </th>
-                                        <th> شماره تلفن </th>
-                                        <th> نقش </th>
-                                        <th>   </th>
+                                        <th class="text-center"> نام</th>
+                                        <th class="text-center"> نام خانوادگی </th>
+                                        <th class="text-center"> شماره تلفن </th>
+                                        <th class="text-center"> نقش </th>
+                                        <th class="text-center">   </th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
                                     @foreach (var item in @Model.UsersListViewModel.ApplicationUserList)
                                     {
                                         <tr>
-                                            <td> @item.Name </td>
-                                            <td> @item.LastName </td>
-                                            <td> @item.PhoneNumber </td>
-                                            <td>
+                                            <td class="text-center"> @item.Name </td>
+                                            <td class="text-center"> @item.LastName </td>
+                                            <td class="text-center"> @item.PhoneNumber </td>
+                                            <td class="text-center">
                                                 @{
                                                     //نقش کاربر عادی رو بگیر
                                                     var role = Model._userManager.GetRolesAsync(new IdentityUser() { Id = item.Id }).Result[0].ToString();
                                                 }
                                                 @role
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <a asp-route-userId="@item.Id" asp-page="Delete"> <i class="fa fa-trash"></i> </a>
                                                 <a asp-route-userId="@item.Id" asp-page="Edit"> <i class="fa fa-edit"></i> </a>
                                                 <a asp-route-userId="@item.Id" asp-page="Details"> <i class="fa fa-list"></i> </a>
-                                            </td>
+                                            </td class="text-center">
                                         </tr>
                                     }
                                 </tbody>
@@ -55,7 +55,7 @@
                         }
                         else
                         {
-                            <h1 class="text-info">کاربری یافت نشد</h1>
+                            <h1 class="text-info class="text-center"">کاربری یافت نشد</h1>
                         }
                     </div>
                 </div>

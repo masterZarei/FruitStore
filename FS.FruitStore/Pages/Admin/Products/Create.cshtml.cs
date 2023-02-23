@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Utilities;
+using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
@@ -33,31 +34,34 @@ namespace FS.FruitStore.Pages.Admin.Products
         [BindProperty]
         public IFormFile ImgUp1 { get; set; }
 
-        #region Unit
+      
+        #region Discount
         //لیست رو پر میکنه
-        public SelectList Units { get; set; }
+        public SelectList Discounts { get; set; }
 
         [BindProperty]
         //آیتم انتخابی رو نگه میداره
-        public string SelectedUnit { get; set; }
+        public string SelectedDiscount { get; set; }
 
-        public string CurrentUnit { get; set; }
+        public string CurrentDiscount { get; set; }
         #endregion
         public async Task<IActionResult> OnGetAsync()
         {
-            // Units
-            var AllUnits = await _db
-                .Units
-                .ToListAsync();
-            if (AllUnits != null)
-            {
-                Units = new SelectList(AllUnits, "Name", "Name");
-            }
-
+            initSelectoptions();
             return Page();
 
         }
-        
+        async void initSelectoptions()
+        {
+
+            //Discounts
+            var AllDiscounts = await _db.Discounts
+                .ToListAsync();
+            if (AllDiscounts != null)
+                Discounts = new SelectList(AllDiscounts, "Percent", "Percent");
+
+
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -67,6 +71,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
                 #endregion
+                initSelectoptions();
                 return Page();
             }
 
@@ -75,7 +80,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 .Where(a => a.Name == Product.Name)
                 .FirstOrDefaultAsync();
 
-            if(checkIfRedundunt!=null)
+            if (checkIfRedundunt != null)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
@@ -128,8 +133,12 @@ namespace FS.FruitStore.Pages.Admin.Products
                 }
             }
 
-           
-           
+            if (SelectedDiscount != null && SelectedDiscount != "بدون تخفیف")
+            {
+                Product.Discount = Convert.ToDouble(SelectedDiscount);
+            }
+            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name);
+            Product.UserId = userId.Id;
             _db.Products.Add(Product);
             await _db.SaveChangesAsync();
 
@@ -138,24 +147,13 @@ namespace FS.FruitStore.Pages.Admin.Products
                 .OrderByDescending(a => a.CreateDate)
                 .FirstOrDefaultAsync();
 
-            var UnitToAssign = await _db
-                .Units
-                .FirstOrDefaultAsync(a => a.Name == SelectedUnit);
-
-            var newUnit = new UnitToProduct()
-            {
-                ProductId = Product.ProductId,
-                UnitId = UnitToAssign.Id
-
-            };
-            _db.Add(newUnit);
+            
             await _db.SaveChangesAsync();
 
             #region Notif
             TempData["State"] = Notifs.Success;
             TempData["Msg"] = Notifs.SUCCEEDED;
             #endregion
-
             return RedirectToPage("./AddCategoryToProduct", new { Id = Product.ProductId });
         }
 

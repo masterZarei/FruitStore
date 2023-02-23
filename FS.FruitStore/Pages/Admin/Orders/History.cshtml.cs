@@ -42,7 +42,7 @@ namespace FS.FruitStore.Pages.Admin.Orders
                 {
                     ID = item.User.Id,
                     FullName = $"{item.User.Name} {item.User.LastName}",
-                    OrderCount = Order.Count,
+                    OrderCount = item.FactorDetails.Count,
                     OrderId = item.FactorId
                 });
             }

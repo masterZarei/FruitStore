@@ -29,7 +29,8 @@ namespace FS.FruitStore.Pages.Admin.Products
         [BindProperty]
         public List<Category> ProdCats { get; set; }
 
-        public string ProductUnit;
+        [BindProperty]
+        public List<Unit> ProdUnits { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? Id)
         {
@@ -47,13 +48,6 @@ namespace FS.FruitStore.Pages.Admin.Products
                 .Products
                 .FirstOrDefaultAsync(u => u.ProductId == Id);
 
-            //Getting unit
-            var checkProductUnit = new GetProductInfo(_context).GetUnit(Product.ProductId);
-
-            if (checkProductUnit == null)
-                ProductUnit = "0";
-            else
-                ProductUnit = new GetProductInfo(_context).GetUnit(Product.ProductId).Name;
 
             if (Product == null)
             {
@@ -68,6 +62,11 @@ namespace FS.FruitStore.Pages.Admin.Products
                               join b in _context.CategoryToProducts on a.Id equals b.CategoryId
                               where b.ProductId == Product.ProductId
                               select a).ToListAsync();
+
+            ProdUnits = await (from a in _context.Units
+                               join b in _context.UnitToProducts on a.Id equals b.UnitId
+                               where b.ProductId == Id
+                               select a).ToListAsync();
 
             return Page();
         }

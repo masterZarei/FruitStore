@@ -14,7 +14,7 @@
         <div class="col-lg-9 col-12">
             <div class="card my-5 pb-4 text-center p-2">
                 <div class="card-header">
-                    <h4 class="h4">جزئیات محصول "@Model.Product.Name"</h4>
+                    <h4 class="h4 text-center">جزئیات محصول "@Model.Product.Name"</h4>
                 </div>
                 <form method="get">
 
@@ -57,18 +57,25 @@
                                 @Model.Product.Price.ToToman()
                             </div>
 
-                            <h6 class="text-right my-3"> واحد محصول </h6>
+                            <h6 class="text-right my-3"> واحدهای های محصول </h6>
+                            @if (Model.ProdUnits.Any())
+                            {
 
-                            @if (Model.ProductUnit == "0")
+                                @foreach (var item in Model.ProdUnits)
+                                {
+
+                                    <label style="font-size: 0.9rem; padding:5px !important" class="btn btn-secondary my-2">
+                                        @item.Name
+                                    </label>
+                                }
+                            }
+                            else
                             {
                                 <div class="alert alert-info my-2">
 
                                     <h6 class="text-right my-3"> واحدی برای محصول انتخاب نشده است</h6>
                                 </div>
-                            }
-                            else
-                            {
-                                <div class="form-control mt-2"> @Model.ProductUnit </div>
+
                             }
 
 

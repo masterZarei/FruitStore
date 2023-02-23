@@ -173,6 +173,27 @@ namespace DataAccess.Migrations
                     b.ToTable("ContactWays");
                 });
 
+            modelBuilder.Entity("FS.Models.Models.Discount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Occasion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Percent")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Discounts");
+                });
+
             modelBuilder.Entity("FS.Models.Models.Factor", b =>
                 {
                     b.Property<int>("FactorId")
@@ -238,6 +259,9 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DetailId");
 
@@ -311,6 +335,12 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Discount")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("DiscountId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -325,6 +355,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("ProductPic2")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UnitId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -334,6 +367,10 @@ namespace DataAccess.Migrations
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("DiscountId");
+
+                    b.HasIndex("UnitId");
 
                     b.HasIndex("UserId");
 
@@ -423,17 +460,14 @@ namespace DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ProductId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<int>("UnitId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("UnitId");
 
@@ -796,6 +830,14 @@ namespace DataAccess.Migrations
                         .WithMany("Products")
                         .HasForeignKey("CategoryId");
 
+                    b.HasOne("FS.Models.Models.Discount", null)
+                        .WithMany("Products")
+                        .HasForeignKey("DiscountId");
+
+                    b.HasOne("FS.Models.Models.Unit", null)
+                        .WithMany("Products")
+                        .HasForeignKey("UnitId");
+
                     b.HasOne("FS.Models.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -823,8 +865,8 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("FS.Models.Models.UnitToProduct", b =>
                 {
                     b.HasOne("FS.Models.Models.Product", "Product")
-                        .WithOne("UnitToProduct")
-                        .HasForeignKey("FS.Models.Models.UnitToProduct", "ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -904,14 +946,19 @@ namespace DataAccess.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("FS.Models.Models.Discount", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("FS.Models.Models.Factor", b =>
                 {
                     b.Navigation("FactorDetails");
                 });
 
-            modelBuilder.Entity("FS.Models.Models.Product", b =>
+            modelBuilder.Entity("FS.Models.Models.Unit", b =>
                 {
-                    b.Navigation("UnitToProduct");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

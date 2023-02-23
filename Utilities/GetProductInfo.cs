@@ -1,11 +1,8 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utilities
 {
@@ -19,19 +16,19 @@ namespace Utilities
             _db = db;
         }
 
-        public Unit GetUnit(int productId)
+        public List<Unit> GetUnit(int productId)
         {
             try
             {
 
-                var data = _db.UnitToProducts
+                var data =  _db.UnitToProducts
                      .Where(a => a.ProductId == productId)
                      .Include(u => u.Unit)
-                     .FirstOrDefault();
+                     .ToList();
                 if (data == null)
                     return null;
 
-                return data.Unit;
+                return (List<Unit>)data.Select(a=>a.Unit);
             }
             catch
             {

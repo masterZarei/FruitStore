@@ -49,10 +49,6 @@ namespace FS.FruitStore.Pages.Admin.Products
                 return RedirectToPage("/NotFound");
             }
 
-            #region Notif
-            TempData["State"] = Notifs.Success;
-            TempData["Msg"] = Notifs.SUCCEEDED;
-            #endregion
             return Page();
         }
         public async Task<IActionResult> OnPostAsync(int? Id)

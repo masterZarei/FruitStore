@@ -32,14 +32,10 @@ namespace FS.FruitStore.Pages.Verification
                                 .GetInfoByUsername(User.Identity.Name);
                 ApplicationUser = await _db.Users.FindAsync(userId);
             }
-
-
             return Page();
         }
         public async Task<IActionResult> OnPost()
         {
-
-
             if (string.IsNullOrEmpty(EnteredCode))
             {
                 #region Notif
@@ -48,7 +44,6 @@ namespace FS.FruitStore.Pages.Verification
                 #endregion
                 return Page();
             }
-
             var user = await _db.Users
                 .FindAsync(ApplicationUser.Id);
 
@@ -62,7 +57,6 @@ namespace FS.FruitStore.Pages.Verification
                 #endregion
                 return Page();
             }
-
             _db.Update(user);
             await _db.SaveChangesAsync();
             #region Notif
@@ -70,8 +64,6 @@ namespace FS.FruitStore.Pages.Verification
             TempData["Msg"] = Notifs.SUCCEEDED;
             #endregion
             return Redirect("/");
-
-
         }
     }
 }

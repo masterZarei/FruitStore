@@ -21,8 +21,6 @@
                 <label class="my-2"> تلفن همراه : <span class="text-danger align-middle d-inline">*</span></label>
                 <input requierd asp-for="CIModel.ApplicationUser.PhoneNumber" type="text" class="form-control form-control-information w-75"
                        placeholder="01235447891">
-                <label class="my-2"> نوع پست </label>
-                <select asp-for="CIModel.SelectedPostType" asp-items="@Model.CIModel.PostTypes" class="custom-select"> </select>
 
                 <label class="my-2"> تاریخ دریافت </label>
                 <select asp-for="CIModel.SelectedDeliverDate" asp-items="@Model.CIModel.DeliverDate" class="custom-select"> </select>

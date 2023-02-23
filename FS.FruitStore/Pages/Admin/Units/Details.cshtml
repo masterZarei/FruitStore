@@ -9,9 +9,11 @@
 
     <div class="col-lg-9 col-12">
         <div class="card my-5 pb-4 text-center p-2">
-            <h3>جزئیات واحد "@Model.Unit.Name"</h3>
             <form method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="Unit.Id" />
+                <div class="card-header">
+                    <h4 class="h4 text-center">جزئیات واحد "@Model.Unit.Name"</h4>
+                </div>
                 <div class="row p-3">
 
                     <h6 class="text-right my-3"> نام واحد </h6>

@@ -12,7 +12,7 @@
             <input type="hidden" asp-for="Users.Id" />
             <div class="card my-5 pb-4 text-center">
                 <div class="card-header">
-                    <h4 class="h4"> ویرایش اطلاعات شخصی </h4>
+                    <h4 class="h4 text-center"> ویرایش اطلاعات شخصی </h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -33,9 +33,6 @@
                                    placeholder="شهر خود را وارد کنید . . . ">
 
 
-                            <h6 class="my-3 text-right"> آدرس </h6>
-                            <textarea asp-for="Users.Address" class="form-control"></textarea>
-
                         </div>
                         <div class="col-lg-6 col-12">
                             <h6 class="my-3 text-right"> نام خانوادگی : </h6>
@@ -47,8 +44,8 @@
                             <h6 class="my-3 text-right"> کد پستی : </h6>
                             <input asp-for="Users.PostalCode" class="form-control mt-2">
 
-                            <a style="background: #eee" class="btn btn-block mt-5" href="/Identity/Account/Manage/ChangePassword">تغییر رمز عبور</a>
-
+                            <h6 class="my-3 text-right"> آدرس </h6>
+                            <textarea asp-for="Users.Address" class="form-control"></textarea>
                         </div>
 
 

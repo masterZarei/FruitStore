@@ -161,7 +161,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
         }
         public async Task<IActionResult> OnPostAddCW()
         {
-            if (SelectedCwId < 0)
+            if (SelectedCwId == 0)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;

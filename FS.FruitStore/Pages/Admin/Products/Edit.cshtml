@@ -15,7 +15,12 @@
         <partial name="_Panel" />
 
         <div class="col-lg-9 col-12">
-            <div class="card my-5 pb-4 text-center p-2">
+            <div class="card my-5 pb-4">
+                <div class="card-header">
+                    <h4 class="text-center h4 text-dark"> ویرایش محصول </h4>
+                </div>
+
+                <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="Product.ProductId" />
                     <input type="hidden" asp-for="Product.ProductPic" />
@@ -55,12 +60,22 @@
                             <span asp-validation-for="Product.Price" class="text-danger"></span>
 
                             <h6 class="text-right my-3"> واحد محصول </h6>
-                            @if (Model.CurrentUnit == null)
+                            <div class="input-group my-3">
+                                <!-- سلکت اپشن انتخاب واحد -->
+                                <select class="custom-select" asp-for="SelectedUnit" asp-items="Model.Units">
+                                </select>
+                                <div class="input-group-append">
+                                    <!-- دکمه اضافه کردن -->
+                                    <button asp-page-handler="AddUnit" type="submit" class="btn btn-secondary"> اضافه کردن </button>
+                                </div>
+                            </div>
+                            @foreach (var item in Model.ProdUnits)
                             {
-                                <p class="text-danger font-weight-bold">*واحدی برای محصول انتخاب نشده است*</p>
+
+                                <button style="font-size: 0.9rem; padding:5px !important" type="submit" asp-page-handler="RemoveUnit" asp-route-Id="@item.Id" class="btn btn-secondary my-2">
+                                    @item.Name @Html.Raw(Xicon)
+                                </button>
                             }
-                            <select class="custom-select" asp-for="SelectedUnit" asp-items="Model.Units">
-                            </select>
 
                             <h6 class="text-right my-3"> دسته بندی محصول </h6>
                             <div class="input-group my-3">
@@ -106,6 +121,7 @@
                         </div>
                     </div>
                 </form>
+                </div>
             </div>
         </div>
     </div>

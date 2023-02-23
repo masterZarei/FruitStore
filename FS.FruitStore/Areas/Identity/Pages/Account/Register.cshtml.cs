@@ -82,13 +82,11 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = new User()
@@ -118,7 +116,10 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     // به کاربر نقش ادمین بده
                     await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
                     }
+                    else
+                    {
                     await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
+                    }
 
 
                     //کد تایید باید ارسال شود

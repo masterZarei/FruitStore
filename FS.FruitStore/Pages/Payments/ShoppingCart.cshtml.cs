@@ -29,7 +29,8 @@ namespace FS.FruitStore.Pages.Payments
 
             Factor = await _db.Factors.Where(o => o.UserId == userId && o.IsFinally == false)
                 .Include(o => o.FactorDetails)
-                .ThenInclude(c => c.Product).FirstOrDefaultAsync();
+                .ThenInclude(c => c.Product)
+                .FirstOrDefaultAsync();
 
 
             return Page();

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilities;
 using Utilities.Convertors;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FS.FruitStore.Pages
 {
@@ -27,13 +28,21 @@ namespace FS.FruitStore.Pages
         [BindProperty]
         public List<Category> ProdCats { get; set; }
 
-        #region
+        #region Comments
         [BindProperty]
         public Comments Comments { get; set; }
         [BindProperty]
         public List<Comments> lstComments { get; set; }
         #endregion
+        #region Icons
+        //لیست رو پر میکنه
+        public SelectList Unit { get; set; }
 
+        [BindProperty]
+        //آیتم انتخابی رو نگه میداره
+        public string SelectedUnit { get; set; }
+
+        #endregion
 
         [BindProperty]
         public List<Rating> Rating { get; set; }
@@ -52,9 +61,11 @@ namespace FS.FruitStore.Pages
 
             Product = await _db.Products
                 .Where(a => a.ProductId == id)
+                .OrderByDescending(a=>a.CreateDate)
                 .FirstOrDefaultAsync();
 
             SuggestProduct = await _db.Products
+                .OrderByDescending(a=>a.CreateDate)
                 .Take(4)
                 .ToListAsync();
 
@@ -74,17 +85,21 @@ namespace FS.FruitStore.Pages
                               where b.ProductId == Product.ProductId
                               select a).ToListAsync();
             //Getting unit
-            var checkProductUnit = new GetProductInfo(_db).GetUnit(Product.ProductId);
 
-            if (checkProductUnit == null)
-                ProductUnit = "---";
-            else
-                ProductUnit = checkProductUnit.Name;
+            var productUnits = await _db.UnitToProducts
+                .Include(a=>a.Unit)
+                .Where(a => a.ProductId == Product.ProductId)
+                .Select(a=>a.Unit)
+                .ToListAsync();
 
-            //کامنته ای محصول
+            if (productUnits != null)
+                Unit = new SelectList(productUnits,"Name", "Name");
+
+            //کامنتهای محصول
             lstComments = await _db.Comments
                 .Include(a=>a.User)
                 .Where(a => a.Product_Id == id && a.isVerified == true)
+                .OrderByDescending(a=>a.CreateDate)
                 .ToListAsync();
 
 
@@ -150,7 +165,8 @@ namespace FS.FruitStore.Pages
                             FactorId = factor.FactorId,
                             ProductId = currentProduct.ProductId,
                             Price = currentProduct.Price,
-                            Count = Product.Count
+                            Count = Product.Count,
+                            Unit = SelectedUnit
                         });
                     }
                     else
@@ -181,7 +197,8 @@ namespace FS.FruitStore.Pages
                         FactorId = factor.FactorId,
                         ProductId = currentProduct.ProductId,
                         Price = currentProduct.Price,
-                        Count = Product.Count
+                        Count = Product.Count,
+                        Unit = SelectedUnit
                     });
 
                 }

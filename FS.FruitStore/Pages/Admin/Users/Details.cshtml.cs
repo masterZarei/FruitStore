@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Roles;
 
-namespace FS.FruitStore.Pages.Users
+namespace FS.FruitStore.Pages.Admin.Users
 {
     [Authorize(Roles = SD.AdminEndUser)]
     public class DetailsModel : PageModel

@@ -11,7 +11,7 @@
 
 <div class="col-12 col-lg-3 over-flow-unset">
     <div class="text-right mt-5 over-flow-unset">
-        <div class="list-group p-0 mb-5 over-flow-unset">
+        <div class="list-group p-0 mb-5 over-flow-unset ">
             @if (User.Identity.IsAuthenticated)
             {
                 <a href="/Panel" class="list-group-item list-group-item-action BlackText">
@@ -49,6 +49,9 @@
                     <a href="/Admin/Units" class="list-group-item list-group-item-action BlackText">
                         مدیریت واحد ها <i class="fa fa-list "></i>
                     </a>
+                    <a href="/Admin/Discounts" class="list-group-item list-group-item-action BlackText">
+                        مدیریت تخفیف ها <i class="fa fa-percent "></i>
+                    </a>
                     <a href="/Admin/Users" class="list-group-item list-group-item-action BlackText">
                         مدیریت کاربران <i class="fa fa-user" aria-hidden="true"></i>
                     </a>
@@ -68,17 +71,11 @@
                         مدیریت نوار مزایا و خدمات <i class="fas fa-paint-brush"></i>
                     </a>
                     <a href="/Admin/Preferences/LogoManagement/" class="list-group-item list-group-item-action dropdown-item border-bottom py-2 over-flow-unset BlackText">
-                        مدیریت لوگو <i class="fas fa-paint-brush"></i>
+                       مدیریت لوگو و تاریخ سفارش <i class="fas fa-paint-brush"></i>
                     </a>
                     <a href="/Admin/Preferences/FooterManagement/Footer-mgmt" class="list-group-item dropdown-item border-bottom py-2 over-flow-unset list-group-item-action BlackText">
                         مدیریت فوتر <i class="fas fa-paint-brush"></i>
                     </a>
-                    <div class="dropdown list-group-item list-group-item-action over-flow-unset">
-						<a href=# class="dropdown-toggle btn btn-block btn-primary over-flow-unset" data-toggle="dropdown"> مدیریت قالب سایت </a>
-						<ul class="dropdown-menu dropdown-menu-right text-right over-flow-unset">
-                            
-						</ul>
-					</div>
 
                 }
 

@@ -28,5 +28,6 @@ namespace FS.DataAccess
         public DbSet<BenefitBar> BenefitBars { get; set; }
         public DbSet<Footer> Footers { get; set; }
         public DbSet<Logo> Logos { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
     }
 }

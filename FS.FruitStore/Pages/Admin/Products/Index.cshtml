@@ -25,11 +25,11 @@
                     <table class="table table-bordered text-center table-hover mt-4 table-responsive-sm">
                         <thead class="thead-light">
                             <tr>
-                                <th> عکس </th>
-                                <th> نام </th>
-                                <th> قیمت </th>
-                                <th> تعداد </th>
-                                <th> مدیریت </th>
+                                <th class="text-center"> عکس </th>
+                                <th class="text-center"> نام </th>
+                                <th class="text-center"> قیمت </th>
+                                <th class="text-center"> تعداد </th>
+                                <th class="text-center"> مدیریت </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,13 +38,13 @@
                                 @foreach (var item in Model.Product)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="text-center">
                                             <img src="~/ProductImages/@item.ProductPic" alt="product-image" width="50px" height="50px">
                                         </td>
-                                        <td> @item.Name </td>
-                                        <td> @item.Price.ToToman() </td>
-                                        <td> @item.Count </td>
-                                        <td>
+                                        <td class="text-center"> @item.Name </td>
+                                        <td class="text-center"> @item.Price.ToToman() </td>
+                                        <td class="text-center"> @item.Count </td>
+                                        <td class="text-center">
 
                                             <a asp-page="Delete" asp-route-Id="@item.ProductId"> <i class="fa fa-trash"></i> </a>
                                             <a asp-page="Edit" asp-route-Id="@item.ProductId"> <i class="fa fa-edit"></i> </a>

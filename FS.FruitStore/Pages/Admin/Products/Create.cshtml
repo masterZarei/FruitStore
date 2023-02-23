@@ -44,11 +44,12 @@
                             <h6 class="text-right my-3"> قیمت محصول </h6>
                             <input asp-for="Product.Price" id="product-name"
                                    placeholder="قیمت محصول را وارد کنید . . . " class="form-control mt-2">
-                            <span asp-validation-for="Product.Price" class="text-danger"></span>
+                            <span asp-validation-for="Product.Price" class="text-danger"></span>                            
 
-                            <h6 class="text-right my-3"> واحد محصول </h6>
-                            <p class="text-dark font-weight-bold">واحد فعلی : @Model.CurrentUnit</p>
-                            <select class="custom-select" asp-for="SelectedUnit" asp-items="Model.Units">
+
+                            <h6 class="text-right my-3"> تخفیف محصول </h6>
+                            <select class="custom-select" asp-for="SelectedDiscount" asp-items="Model.Discounts">
+                                <option>بدون تخفیف</option>
                             </select>
 
                             <div class="custom-file my-3">
@@ -91,14 +92,14 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
 
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     $('#imgPreview').attr('src', e.target.result);
                 }
 
                 reader.readAsDataURL(input.files[0]); // convert to base64 string
             }
         }
-        $("#imgUp").change(function() {
+        $("#imgUp").change(function () {
             readURL(this);
         });
 
@@ -118,7 +119,7 @@
         });
 
         //نمایش اسم عکس روی اینپوت
-        $(".custom-file-input").on("change", function() {
+        $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });

@@ -13,7 +13,7 @@
 <div class="d-block mx-auto" id="shopping-basket">
     <div class="card my-5 pb-4 text-center">
         <div class="card-header bg-transparent">
-            <h4 class="h4"> سبد خرید </h4>
+            <h4 class="text-center h4"> سبد خرید </h4>
         </div>
         <form method="post">
             <input type="hidden" asp-for="@Model.Factor.FactorId" />
@@ -28,6 +28,7 @@
                             <tr>
                                 <th class="text-center"> محصولات شما </th>
                                 <th class="text-center"> تعداد </th>
+                                <th class="text-center"> واحد </th>
                                 <th class="text-center"> قیمت کل </th>
                                 <th class="text-center"> حذف </th>
                             </tr>
@@ -54,6 +55,9 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td class="text-center">
+                                        @item.Unit
+                                    </td>
                                     <td class="text-center fs-sm-smaller"><br> @((item.Count*item.Price).ToToman()) </td>
                                     <td> <button type="submit" asp-page-handler="RemoveThisCart" asp-route-DetailId="@item.DetailId"  class="btn btn-danger text-center fs-sm-smaller mt-3"> &times; </button> </td>
                                 </tr>
@@ -63,7 +67,8 @@
                             }
                         </tbody>
                     </table>
-                    <h5 class="h4 text-left"> قیمت کل: @(Model.Factor.FactorDetails.Sum((s=>s.Count * s.Price)).ToToman()) </h5>
+                    <h5 class="h5 text-left"> قیمت کل: @(Model.Factor.FactorDetails.Sum(s=>s.Count * s.Price).ToToman()) </h5>
+                    <h5 class="h5 text-left"> قیمت با تخفیف: @(Model.Factor.FactorDetails.Sum(s => s.Count * (DiscountApplier.Apply(s.Product.Price, s.Product.Discount)) ).ToToman()) </h5>
                     <hr>
                     <a asp-page="ConfirmInformation" asp-route-Id="@Model.Factor.FactorId" class="btn btn-info float-left mt-3"> ادامه ثبت سفارش | <i class="fa fa-solid fa-chevron-left align-middle mx-1"></i></a>
                 }

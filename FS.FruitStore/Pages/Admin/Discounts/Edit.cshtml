@@ -1,0 +1,38 @@
+﻿@page
+@model FS.FruitStore.Pages.Admin.Discounts.EditModel
+
+@{
+    ViewData["Title"] = "ویرایش تخفیف";
+}
+<div class="row">
+    <partial name="_Panel" />
+    <div class="col-lg-9 col-12 mt-5">
+        <div class="card mb-4 mt-2 pb-4 text-center">
+            <div class="card-header d-flex">
+                <h4 class="h4 text-center m-auto text-dark"> ایجاد تخفیف </h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" asp-for="Discount.Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <h5> درصد </h5>
+                    <input asp-for="Discount.Percent" class="form-control w-75">
+                    <h5 class="my-3"> توضیحات </h5>
+                    <input asp-for="Discount.Occasion" class="form-control">
+                    <div class="row mt-3">
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <button type="submit" class="btn btn-block btn-success"> ثبت </button>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12 my-1">
+                            <a asp-page="./Index" class="btn btn-block btn-secondary"> بازگشت </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

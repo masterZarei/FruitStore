@@ -86,6 +86,9 @@ namespace FS.FruitStore.Pages.Admin.Preferences.ContactWays_Management
             if (ContactWays.IsLink && !ContactWays.Address.Contains("https://"))
                 ContactWays.Address = $"https://{ContactWays.Address}";
 
+            if (!ContactWays.IsLink && ContactWays.Address.Contains("https://"))
+                ContactWays.Address.Replace("https://","");
+
             _context.Update(ContactWays);
             await _context.SaveChangesAsync();
             #region Notif

@@ -15,10 +15,14 @@
                 <div class="d-flex justify-content-center">
                     <img class="img-thumbnail img-fluid" width="60" id="thumb1"
                          height="60px" src="~/ProductImages/@Model.Product.ProductPic" />
-                    <img class="img-thumbnail img-fluid" width="60" id="thumb2"
-                         height="60px" src="~/ProductImages/@Model.Product.ProductPic2" />
+                    @if (@Model.Product.ProductPic2 != null)
+                    {
 
-               </div>
+                        <img class="img-thumbnail img-fluid" width="60" id="thumb2"
+                         height="60px" src="~/ProductImages/@Model.Product.ProductPic2" />
+                    }
+
+                </div>
             </div>
         </div>
         <div class="col-lg-6 ml-n5 col-md-6 col-12 mb-md-5">
@@ -31,35 +35,51 @@
                 <!-- یه متن کوچیک درباره محصول -->
                 <h5 class="h5 text-muted font-weight-lighter">  تعداد موجود : @Model.Product.Count @Model.ProductUnit </h5>
                 <hr>
-                <div class="d-flex justify-content-between">
+                <div>
                     <!-- قیمت محصول -->
-                    <h4 class="h5 text-danger text-right">
-                        @Model.Product.Price.ToToman()
+                    @if (Model.Product.Discount > 0)
+                    {
 
-                    </h4>
+                            <s class="h6 text-danger text-right" style="text-decoration:line-through">
+                                @Model.Product.Price.ToToman()
+                            </s>
+                        <h4 class="h4 text-danger text-right">
+                            قیمت با تخفیف :  @(DiscountApplier.Apply(Model.Product.Price, Model.Product.Discount).ToToman())
+                        </h4>
+                    }
+                    else
+                    {
+                        <h4 class="h5 text-danger text-right">
+                            @Model.Product.Price.ToToman()
+                        </h4>
+                    }
                 </div>
                 <!-- تعداد محصول -->
                 <div class="d-flex justify-content-between">
-                    <div class="input-group width-lg-25 w-lg-25 w-25">
-                        <div class="input-group-prepend">
-                            <input type="button" onclick="Increse()" class="btn input-group-text" value="+">
+                    <div class="d-flex justify-content-between">
+                        <div class="input-group width-lg-25 w-lg-25 w-25">
+                            <div class="input-group-prepend">
+                                <input type="button" onclick="Increse()" class="btn input-group-text" style="height: 38px;" value="+">
+                            </div>
+                            <input id="countHolder" asp-for="Product.Count" class="form-control text-center" type="text" placeholder="1">
+                            <div class="input-group-append">
+                                <input type="button" value="-" style="height: 38px;" onclick="Decrese()" class="btn input-group-text">
+                            </div>
                         </div>
-                        <input id="countHolder" asp-for="Product.Count" class="form-control text-center" type="text" placeholder="1">
-                        <div class="input-group-append">
-                            <input type="button" value="-" onclick="Decrese()" class="btn input-group-text">
+                        <div>
+                            <select class="custom-select" asp-for="SelectedUnit" asp-items="Model.Unit"></select>
                         </div>
-                    </div>
-                    <div>
-                        @if (Model.Rating.Any())
-                        {
-                            <h6> تعداد افراد : <span>@Model.Rating.Count</span></h6>
-                            <h4> رتبه فعلی : <span>@(Convert.ToDouble(Model.Rating.Sum(a => a.Rate)) / 10)</span></h4>
-                        }
 
+                        <div style="margin-right: 200px;">
+
+                            @if (Model.Rating.Any())
+                            {
+                                <h6 class="d-block"> تعداد افراد : <span>@Model.Rating.Count</span></h6> <br />
+                                <h4 class="d-block"> رتبه فعلی : <span>@(Convert.ToDouble(Model.Rating.Sum(a => a.Rate)) / 10)</span></h4>
+                            }
+                        </div>
                     </div>
                 </div>
-
-
 
                 <div class="d-flex justify-content-center align-content-center" id="box">
                     <button type="submit" asp-page-handler="Rating" asp-route-ProductId="@Model.Product.ProductId" asp-route-Rate="1" class="star-icon" id="button1"><i class="fas fa-star"></i></button>
@@ -231,7 +251,7 @@
     const tmb2 = document.querySelector("#thumb2")
     let OrgImage = document.querySelector("#OrgImage")
 
-    tmb1.addEventListener("click",()=>{
+    tmb1.addEventListener("click", () => {
         OrgImage.src = tmb1.src
     })
     tmb2.addEventListener("click", () => {
