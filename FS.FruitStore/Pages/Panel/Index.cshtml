@@ -1,53 +1,194 @@
 ﻿@page
+@using Utilities.Roles;
 @model FS.FruitStore.Pages.Panel.IndexModel
 @{
-    ViewData["Title"] = "مدیریت اطلاعات شخصی";
 }
-<div class="row">
 
-    <partial name="_Panel" />
-
-    <div class="col-lg-9 col-12">
-
-        <div class="card my-5 pb-4 text-center">
-            <div class="card-header">
-                <h4 class="h4 text-center"> اطلاعات شخصی </h4>
-            </div>
-            <div class="card-body">
-                <table class="table table-light table-hover table-striped">
-                    <tbody>
-                        <tr>
-                            <td class="text-center"> نام: @Model.ApplicationUser.Name</td>
-                            <td class="text-center"> نام خانوادگی: @Model.ApplicationUser.LastName</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center"> شماره تلفن:  @Model.ApplicationUser.PhoneNumber</td>
-                            <td class="text-center"> ایمیل: @Html.Raw(Model.retString(Model.ApplicationUser.Email))</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">  تاریخ ثبت نام: @Model.ApplicationUser.reg_Date.ToShamsi()</td>
-                            <td class="text-center"> آدرس: @Html.Raw(Model.retString(Model.ApplicationUser.Address))</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">  استان: @Html.Raw(Model.retString(Model.ApplicationUser.State))</td>
-                            <td class="text-center">  شهر: @Html.Raw(Model.retString(Model.ApplicationUser.City))</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center"> کد پستی: @Html.Raw(Model.retString(Model.ApplicationUser.PostalCode))</td>
-                            <td class="text-center"> احراز هویت کاربر: @(Model.ApplicationUser.isVerified ? Html.Raw("<span class='btn btn-success'>تایید شده</span>") : Html.Raw("<span class='btn btn-secondary'>تایید نشده</span>"))</td>
-                        </tr>
-
-
-                    </tbody>
-                </table>
-
-
-                <div>
-                    <a asp-page="Edit" asp-route-userId="@Model.ApplicationUser.Id" class="btn btn-danger m-auto px-5">
-                        ویرایش
-                    </a>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row mt-5 mr-n5">
+        <!-- #region جدول اطلاعات شخصی-->
+        <div class="col-lg-2 col-md-3 col-12 mb-3">
+            <a href="/Panel/PersonalInfo">
+                <div class="shadow panel-cards">
+                    <i class="fas fa-info-circle w-100 icon-panel-boxs"></i>
+                    اطلاعات شخصی
                 </div>
+            </a>
+        </div>
+        @if (!User.IsInRole(SD.AdminEndUser))
+        {
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Panel/MyFactors">
+                    <div class="shadow panel-cards">
+                        <i class="fa-solid fa-table-list w-100 icon-panel-boxs"></i>
+                        فاکتور های من
+                    </div>
+                </a>
             </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Panel/Wallet">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-wallet w-100 icon-panel-boxs" aria-hidden="true"></i>
+                        کیف پول
+                    </div>
+                </a>
+            </div>
+        }
+        @if (User.IsInRole(SD.AdminEndUser))
+        {
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Products">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-shopping-bag w-100 icon-panel-boxs" aria-hidden="true"></i>
+                        مدیریت محصول
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Orders">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-shopping-cart w-100 icon-panel-boxs"></i>
+                        سفارشات
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/CommentManagement">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-comments w-100 icon-panel-boxs" aria-hidden="true"></i>
+                        کامنت ها
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/FactorManagement">
+                    <div class="shadow panel-cards">
+                        <i class="fa-solid fa-table-list w-100 icon-panel-boxs"></i>
+                        مدیریت فاکتور ها
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Categories">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-filter w-100 icon-panel-boxs"></i>
+                        مدیریت دسته بندی ها
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Units">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-list w-100 icon-panel-boxs "></i>
+                        مدیریت واحد ها
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Discounts">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-percent w-100 icon-panel-boxs "></i>
+                        مدیریت تخفیف ها
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Users">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-user w-100 icon-panel-boxs" aria-hidden="true"></i>
+                        مدیریت کاربران
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/WalletManagement">
+                    <div class="shadow panel-cards">
+                        <i class="fa fa-wallet w-100 icon-panel-boxs" aria-hidden="true"></i>
+                        مدیریت کیف پول
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Preferences/Slider-Management/">
+                    <div class="shadow panel-cards">
+                        <i class="fas fa-paint-brush w-100 icon-panel-boxs"></i>
+                        مدیریت اسلایدر
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Preferences/AboutUs-Management/AboutUs-mgmt">
+                    <div class="shadow panel-cards">
+                        <i class="fas fa-paint-brush w-100 icon-panel-boxs"></i>
+                        مدیریت صفحه درباره ما
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Preferences/ContactWays-Management/">
+                    <div class="shadow panel-cards">
+                        <i class="fas fa-paint-brush w-100 icon-panel-boxs"></i>
+                        مدیریت راه های ارتباطی
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Preferences/BenefitsBarManagement/">
+                    <div class="shadow panel-cards">
+                        <i class="fas fa-paint-brush w-100 icon-panel-boxs"></i>
+                        مدیریت مزایا و خدمات
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Preferences/LogoManagement/">
+                    <div class="shadow panel-cards">
+                        <i class="fas fa-paint-brush w-100 icon-panel-boxs"></i>
+                        مدیریت لوگو و تاریخ سفارش
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-12 mb-3">
+                <a href="/Admin/Preferences/FooterManagement/Footer-mgmt">
+                    <div class="shadow panel-cards">
+                        <i class="fas fa-paint-brush w-100 icon-panel-boxs"></i>
+                        مدیریت فوتر
+                    </div>
+                </a>
+            </div>
+        }
+        <div class="col-lg-2 col-md-3 col-12 mb-3">
+            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <div class="shadow panel-cards">
+                    <i class="fa fa-sign-out w-100 icon-panel-boxs" aria-hidden="true"></i>
+                    <input class="btn btn-danger btn-block" type="submit" value="خروج">
+                </div>
+            </a>
         </div>
     </div>
-</div>
+}
+<style>
+    .panel-cards {
+        padding: 18px 15px;
+        border-radius: 5px;
+        width: 180px;
+        height: 120px;
+        text-align: center;
+        font-size: 15px;
+        transition: all ease .3s;
+        font-weight: 500;
+        overflow: hidden;
+    }
+
+        .panel-cards:hover {
+            transform: scale(1.1);
+            font-weight: 800;
+            overflow: hidden;
+        }
+
+    .icon-panel-boxs {
+        font-size: 30px;
+        margin: 10px 0;
+    }
+</style>

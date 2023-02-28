@@ -50,8 +50,6 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
 
         public async Task<IActionResult> OnPostAsync(int Id)
         {
-            //   Methods mtd = new Methods(_db);
-
             var cmt = await _db.Comments
                 .Where(a => a.Id == Id)
                 .FirstOrDefaultAsync();

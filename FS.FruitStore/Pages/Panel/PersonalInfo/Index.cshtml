@@ -1,0 +1,53 @@
+﻿@page
+@model FS.FruitStore.Pages.Panel.PersonalInfo.IndexModel
+@{
+    ViewData["Title"] = "مدیریت اطلاعات شخصی";
+}
+<div class="row">
+
+    <partial name="_Panel" />
+
+    <div class="col-lg-9 col-12">
+
+        <div class="card my-5 pb-4 text-center">
+            <div class="card-header">
+                <h4 class="h4 text-center"> اطلاعات شخصی </h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-light table-hover table-striped">
+                    <tbody>
+                        <tr>
+                            <td class="text-center"> نام: @Model.ApplicationUser.Name</td>
+                            <td class="text-center"> نام خانوادگی: @Model.ApplicationUser.LastName</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"> شماره تلفن:  @Model.ApplicationUser.PhoneNumber</td>
+                            <td class="text-center"> ایمیل: @Html.Raw(Model.retString(Model.ApplicationUser.Email))</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">  تاریخ ثبت نام: @Model.ApplicationUser.reg_Date.ToShamsi()</td>
+                            <td class="text-center"> آدرس: @Html.Raw(Model.retString(Model.ApplicationUser.Address))</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">  استان: @Html.Raw(Model.retString(Model.ApplicationUser.State))</td>
+                            <td class="text-center">  شهر: @Html.Raw(Model.retString(Model.ApplicationUser.City))</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"> کد پستی: @Html.Raw(Model.retString(Model.ApplicationUser.PostalCode))</td>
+                            <td class="text-center"> احراز هویت کاربر: @(Model.ApplicationUser.isVerified ? Html.Raw("<span class='btn btn-success'>تایید شده</span>") : Html.Raw("<span class='btn btn-secondary'>تایید نشده</span>"))</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+
+                <div>
+                    <a asp-page="Edit" asp-route-userId="@Model.ApplicationUser.Id" class="btn btn-danger m-auto px-5">
+                        ویرایش
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

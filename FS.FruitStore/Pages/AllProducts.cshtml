@@ -25,17 +25,17 @@
                 {
 
 
-                    <div class="col-lg-3 col-md-3 col-12 my-1">
+                    <div class="col-lg-3 col-md-3 col-12 my-2">
                         <a asp-page="Product-Details" asp-route-Id="@item.ProductId">
                             <div class="card product-box">
                                 <div class="mother-imageBox">
                                     <img class="card-img-top" src="~/ProductImages/@item.ProductPic" alt="this is a img" height="250px">
                                 </div>
                                 <div class="card-body product-box-body">
-                                    <h5 class="card-title h5 text-dark" style="font-size: 18px; font-weight: 600;">
+                                    <h5 class="card-title h5 text-center text-success" style="font-size: 18px; font-weight: 600;">
                                         @item.Name
                                     </h5>
-                                    <p class="h6 text-dark" style="font-weight: 600"> @item.Price.ToToman() </p>
+                                    <p class="h6 text-primary text-center" style="font-weight: 600"> @item.Price.ToToman() </p>
                                 </div>
                             </div>
                         </a>

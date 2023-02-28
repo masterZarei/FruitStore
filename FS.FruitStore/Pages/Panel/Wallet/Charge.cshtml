@@ -16,18 +16,12 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="card-body pt-2">
                     <div class="chargh-inp">
-                        <h5 class="ml-3 mt-2"> مبلغ شارژ  : </h5>
+                        <h5 class="ml-3 my-2"> مبلغ شارژ  : </h5>
                         <input asp-for="Amount" class="form-control mr-2" style="width: 200px !important;">
                     </div>
 
-                    <div class="btn-chargh-box">
-                        <button class="btn btn-success btn-chargh" onclick="charghFunc('1000000')"> 1 میلیون تومان </button>
-                        <button class="btn btn-warning btn-chargh" onclick="charghFunc('500000')"> 500 تومان </button>
-                        <button class="btn btn-primary btn-chargh" onclick="charghFunc('200000')"> 200 تومان </button>
-                        <button class="btn btn-danger btn-chargh" onclick="charghFunc('100000')"> 100 تومان </button>
-                    </div>
 
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-lg-6 col-md-6 col-12 mt-3">
                             <button type="submit" asp-route-Id="@Model.ApplicationUser.Id" class="btn btn-success btn-block"> شارژ </button>
                         </div>
@@ -35,6 +29,7 @@
                             <button class="btn btn-secondary btn-block"> بازگشت </button>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>

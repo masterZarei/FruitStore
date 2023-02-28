@@ -28,7 +28,7 @@ namespace FS.FruitStore.Pages.Admin.Users
         public UsersListViewModel UsersListViewModel { get; set; }
 
 
-        public async Task<IActionResult> OnGet(int pageId = 1, string searchName = null, string searchPhone = null)
+        public async Task<IActionResult> OnGet()
         {
 
             UsersListViewModel = new UsersListViewModel

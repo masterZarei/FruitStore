@@ -23,8 +23,6 @@ namespace Mahshop.Pages.FactorManagement
         public List<Factor> Factors { get; set; }
         public async Task<IActionResult> OnGet()
         {
-
-
             Factors = await _db.Factors
                 .Include(a=>a.FactorDetails)
                 .Where(a => a.IsFinally == true && a.FactorDetails.Count >= 1)
@@ -32,8 +30,6 @@ namespace Mahshop.Pages.FactorManagement
                 .ToListAsync();
 
             return Page();
-
-          
         }
     }
 }

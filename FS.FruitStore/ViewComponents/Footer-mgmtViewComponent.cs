@@ -1,4 +1,5 @@
 ﻿using FS.DataAccess;
+using FS.Models.Models;
 using FS.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +17,27 @@ namespace Mahshop.ViewComponents
         {
             _context = context;
         }
-
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            FooterMgmtViewModel logged = new FooterMgmtViewModel()
+            FooterMgmtViewModel logged = new FooterMgmtViewModel();
+
+            var checkFooter = _context.Footers.FirstOrDefault();
+            if (checkFooter != null)
             {
-                Footer = await _context.Footers.FirstOrDefaultAsync(),
-                ContactWays = await _context.ContactWays.Where(a=>a.IsInFooter.Equals(true)).ToListAsync()
-            };
+
+                logged = new FooterMgmtViewModel()
+                {
+                    Footer = await _context.Footers.FirstOrDefaultAsync(),
+                    ContactWays = await _context.ContactWays.Where(a => a.IsInFooter.Equals(true)).ToListAsync()
+                };
+            }
+            else
+            {
+                logged = new FooterMgmtViewModel()
+                {
+                    ContactWays = await _context.ContactWays.Where(a => a.IsInFooter.Equals(true)).ToListAsync()
+                };
+            }
 
             return View("/Pages/Shared/Components/FooterMgmt.cshtml", logged);
 

@@ -1,11 +1,15 @@
 ﻿@page
-@model AccessDeniedModel
+@model FS.FruitStore.Areas.Identity.Pages.Account.AccessDeniedModel
 @{
     ViewData["Title"] = "دسترسی نامعتبر";
 }
-<div class="AccessDenied">
-    <h1>  403 </h1>
-    <h4>Access Denied</h4>
-    <p>  نتیجه ای یافت نشد... </p>
-    <a href="index.html" class="error-404"> خانه </a>
+
+<div>
+    <div class="content alert-danger py-5">
+        <h2 class="h2 text-center"> دسترسی نامعتبر </h2>
+        <h4 class="h4 text-danger text-center"> حساب کاربری شما مسدود شده است!  </h4>
+        <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post" class="d-block mx-auto text-center">
+            <input class="btn btn-danger" type="submit" value="خروج">
+        </a>
+    </div>
 </div>

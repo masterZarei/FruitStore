@@ -29,6 +29,7 @@
                                 <th class="text-center"> نام </th>
                                 <th class="text-center"> قیمت </th>
                                 <th class="text-center"> تعداد </th>
+                                <th class="text-center"> وضعیت </th>
                                 <th class="text-center"> مدیریت </th>
                             </tr>
                         </thead>
@@ -44,6 +45,7 @@
                                         <td class="text-center"> @item.Name </td>
                                         <td class="text-center"> @item.Price.ToToman() </td>
                                         <td class="text-center"> @item.Count </td>
+                                        <td class="text-center @(item.isVerified ? " text-success" : "text-danger font-weight-bold") "> @(item.isVerified ? "فعال" : "غیرفعال") </td>
                                         <td class="text-center">
 
                                             <a asp-page="Delete" asp-route-Id="@item.ProductId"> <i class="fa fa-trash"></i> </a>

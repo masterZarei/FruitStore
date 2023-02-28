@@ -11,6 +11,7 @@
     <Content Remove="Pages\Admin\Preferences\LogoManagement\Index.cshtml" />
     <Content Remove="Pages\AllProducts.cshtml" />
     <Content Remove="Pages\NotFound.cshtml" />
+    <Content Remove="Pages\Panel\Index.cshtml" />
     <Content Remove="Pages\Panel\Wallet\Index.cshtml" />
   </ItemGroup>
 
@@ -45,6 +46,7 @@
     <_ContentIncludedByDefault Remove="Pages\Admin\Preferences\LogoManagement\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\AllProducts.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\NotFound.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Panel\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +57,7 @@
     <None Include="Pages\Admin\Orders\Index.cshtml" />
     <None Include="Pages\AllProducts.cshtml" />
     <None Include="Pages\NotFound.cshtml" />
+    <None Include="Pages\Panel\Index.cshtml" />
     <None Include="Pages\Panel\Wallet\Index.cshtml" />
   </ItemGroup>
 
@@ -68,6 +71,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Admin\Preferences\LogoManagement\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Panel\Index.cshtml" />
   </ItemGroup>
 
 </Project>

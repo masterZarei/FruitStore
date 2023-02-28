@@ -35,7 +35,8 @@ namespace FS.FruitStore.Pages.Admin.Categories
             }
 
 
-            Category = await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
+            Category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (Category == null)
             {

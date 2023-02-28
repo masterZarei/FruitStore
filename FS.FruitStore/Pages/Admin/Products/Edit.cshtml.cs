@@ -44,6 +44,7 @@ namespace FS.FruitStore.Pages.Admin.Products
 
         #endregion
 
+
         #region Unit
         [BindProperty]
         public List<Unit> Unit { get; set; }
@@ -55,6 +56,17 @@ namespace FS.FruitStore.Pages.Admin.Products
         public string SelectedUnit { get; set; }
         [BindProperty]
         public List<Unit> ProdUnits { get; set; }
+        #endregion
+
+        #region Discount
+        //لیست رو پر میکنه
+        public SelectList Discounts { get; set; }
+
+        [BindProperty]
+        //آیتم انتخابی رو نگه میداره
+        public string SelectedDiscount { get; set; }
+
+        public string CurrentDiscount { get; set; }
         #endregion
 
         [BindProperty]
@@ -111,9 +123,14 @@ namespace FS.FruitStore.Pages.Admin.Products
 
             if (Category != null)
                 Cats = new SelectList(Category, "Name", "Name");
-            
+
             if (Unit != null)
                 Units = new SelectList(Unit, "Name", "Name");
+
+            var AllDiscounts = await _context.Discounts
+                .ToListAsync();
+            if (AllDiscounts != null)
+                Discounts = new SelectList(AllDiscounts, "Percent", "Percent");
 
             return Page();
 
@@ -210,12 +227,20 @@ namespace FS.FruitStore.Pages.Admin.Products
                 var UnitToAssign = await _context
                     .Units
                     .FirstOrDefaultAsync(a => a.Name == SelectedUnit);
-                var newUnit = new UnitToProduct()
+                if (UnitToAssign != null)
                 {
-                    ProductId = Product.ProductId,
-                    UnitId = UnitToAssign.Id
-                };
-                _context.Add(newUnit);
+
+                    var newUnit = new UnitToProduct()
+                    {
+                        ProductId = Product.ProductId,
+                        UnitId = UnitToAssign.Id
+                    };
+                    _context.Add(newUnit);
+                }
+            }
+            if (SelectedDiscount != null && SelectedDiscount != "بدون تخفیف")
+            {
+                Product.Discount = Convert.ToDouble(SelectedDiscount);
             }
 
             _context.Update(Product);

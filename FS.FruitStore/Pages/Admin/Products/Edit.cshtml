@@ -50,6 +50,12 @@
                             <textarea asp-for="Product.Description" id="discription" cols="15" rows="5"
                                       placeholder="توضیحات محصول را وارد کنید" class="form-control"></textarea>
 
+                                <h6 class="text-right my-3"> تخفیف محصول </h6>
+                                <select class="custom-select" asp-for="SelectedDiscount" asp-items="Model.Discounts">
+                                    <option>بدون تخفیف</option>
+                                </select>
+                                <h6 class="h6 text-right my-3"> تخفیف فعلی: @(Model.Product.Discount == 0 ? "تخفیفی لحاظ نشده است" : Html.Raw($"{Model.Product.Discount}%")) </h6>
+
                         </div>
 
                         <div class="col-lg-6 col-12">
@@ -94,6 +100,8 @@
                                     @item.Name @Html.Raw(Xicon)
                                 </button>
                             }
+
+                                
 
                             <div class="custom-file my-3">
                                 <h6 class="custom-file-label text-right"> عکس محصول </h6>

@@ -1,49 +1,62 @@
 ﻿@using FS.Models.ViewModels
 @model FooterMgmtViewModel
 
-<!-- #region footer-->
-<div class="top-footer mt-5">
-    <div class="row">
-        <div class="col-lg-4 col-md-4 col-12">
-            <h4 class="text-dark text-center mt-4 mb-1"> درباره ما </h4>
-            <ul class="mr-5 mt-3">
-                <p> @Model.Footer.Description </p>
+@if (Model.Footer != null)
+{
 
-            </ul>
-        </div>
-        <div class="col-lg-4 col-md-4 col-12">
-            <h3 class="text-center mt-4 mb-1"> نماد های اعتماد </h3>
-            <div class="text-center d-flex justify-content-center align-items-center mt-3">
-                <img class="rounded img-fluid mx-1" src="~/Preferences/@Model.Footer.TrustSymbol" width="250px" height="200px">
-                <div class="border border-dark p-2 center-box-namads"></div>
-                <img class="rounded img-fluid mx-1" src="~/Preferences/@Model.Footer.TrustSymbol2" width="250px" height="250px">
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-12 mt-4">
-            <h3 class="text-right text-dark contact-title mt-4 mb-1"> راه‌های ارتباطی </h3>
-            <div class="ml-5 contact-foot  mt-3">
-                @foreach (var item in Model.ContactWays)
-                {
-                    <h4 class="mt-1">
-                        <i class="@item.Icon h5 align-middle"></i>
-                        <span class='h5 align-middle'> @(@item.IsLink ? Html.Raw($"<a href='{item.Address}'>{item.Name}</a>") : Html.Raw($"{item.Address}"))</span>
-                    </h4>
-                }
-            </div>
+    <!-- #region footer-->
+    <div class="top-footer mt-5">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-12">
+                <h4 class="text-dark text-center mt-4 mb-1"> درباره ما </h4>
+                <ul class="px-2 mt-3">
+                    <p>
+                        @if (Model.Footer.Description != null)
+                        {
+                            @Model.Footer.Description
+                        }
+                    </p>
 
-        </div>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12">
+                <h3 class="text-center mt-4 mb-1"> نماد های اعتماد </h3>
+                <div class="text-center d-flex justify-content-center align-items-center mt-3">
+                    <img class="rounded img-fluid mx-1" src="~/Preferences/@Model.Footer.TrustSymbol" width="250px" height="200px">
+                    <div class="border border-dark p-2 center-box-namads"></div>
+                    <img class="rounded img-fluid mx-1" src="~/Preferences/@Model.Footer.TrustSymbol2" width="250px" height="250px">
+                </div>
+            </div>
+            @if (Model.ContactWays.Any())
+            {
+                <div class="col-lg-4 col-md-4 col-12 mt-4">
+                    <h3 class="text-right text-dark contact-title mt-4 mb-1"> راه‌های ارتباطی </h3>
+                    <div class="ml-5 contact-foot  mt-3">
+
+                        @foreach (var item in Model.ContactWays)
+                        {
+                            <h4 class="mt-1">
+                                <i class="@item.Icon h5 align-middle"></i>
+                                <span class='h5 align-middle'> @(@item.IsLink ? Html.Raw($"<a href='{item.Address}'>{item.Name}</a>") : Html.Raw($"{item.Address}"))</span>
+                            </h4>
+                        }
+                    </div>
+
+                </div>
+            }
+            </div>
     </div>
-</div>
-
-<style>
-    html, body {
-        /*height: 100%;*/
     }
 
- /*   .top-footer::after {
-        width: 100%;
-        height: 300px;
-    }*/
+    <style>
+        html, body {
+            /*height: 100%;*/
+        }
 
-</style>
-<!-- #endregion -->
+        /*   .top-footer::after {
+                    width: 100%;
+                    height: 300px;
+                }*/
+
+    </style>
+    <!-- #endregion -->

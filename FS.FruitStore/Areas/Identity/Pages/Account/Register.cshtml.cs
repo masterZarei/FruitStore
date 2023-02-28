@@ -95,7 +95,7 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     Name = Input.Name,
                     PhoneNumber = Input.PhoneNumber,
                     LastName = Input.LastName,
-                    VerificationCode = Generator.RandomNumber(0,255)
+                    VerificationCode = Generator.RandomNumber(0, 255)
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -110,15 +110,15 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser));
                     }
-                    var doesAnyUserExist = await _db.Users.FirstOrDefaultAsync();
-                    if (doesAnyUserExist==null)
+                    var doesAnyUserExist = (_db.Users.ToList().Count==1);
+                    if (doesAnyUserExist)
                     {
-                    // به کاربر نقش ادمین بده
-                    await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
+                        // به کاربر نقش ادمین بده
+                        await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
                     }
                     else
                     {
-                    await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
+                        await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
                     }
 
 
@@ -136,7 +136,7 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     TempData["Msg"] = "ثبت نام با موفقیت انجام شد!";
                     #endregion
 
-                    return RedirectToPage("/Verification/VerifyPhonenumber", new {Id = user.Id});
+                    return RedirectToPage("/Verification/VerifyPhonenumber", new { Id = user.Id });
                 }
                 foreach (var error in result.Errors)
                 {
@@ -149,5 +149,5 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
         }
     }
 
-    
+
 }

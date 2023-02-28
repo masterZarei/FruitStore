@@ -92,7 +92,7 @@ namespace FS.FruitStore.Pages.Admin.Users
                 #endregion
                 return RedirectToPage("/NotFound");
             }
-
+            #region Mapping
             userInDb.Name = ApplicationUser.Name;
             userInDb.LastName = ApplicationUser.LastName;
             userInDb.PhoneNumber = ApplicationUser.PhoneNumber;
@@ -100,6 +100,7 @@ namespace FS.FruitStore.Pages.Admin.Users
             userInDb.Email = ApplicationUser.Email;
             userInDb.Address = ApplicationUser.Address;
             userInDb.NormalizedUserName = ApplicationUser.PhoneNumber;
+            #endregion
             
 
             //نقش کاربرو بگیر
@@ -112,7 +113,6 @@ namespace FS.FruitStore.Pages.Admin.Users
                 await _userManager.RemoveFromRoleAsync(new IdentityUser() { Id = ApplicationUser.Id }, userRoles.First());
                 //نقش انتخاب شده رو بهش بده
                 await _userManager.AddToRoleAsync(new IdentityUser() { Id = ApplicationUser.Id }, SelectedRole);
-                //تو جدول فروشندگان نیست؟
                
             }
 

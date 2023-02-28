@@ -58,7 +58,12 @@ namespace FS.FruitStore.Pages.Payments
             };
             var AllPaymentTypes = PayWays.GetWays;
 
-            bool adminConsent = _db.Logos.FirstOrDefault().DeliverAtTheSameDate;
+               var check = _db.Logos.FirstOrDefault();
+                bool adminConsent;
+            if (check != null)
+                adminConsent = check.DeliverAtTheSameDate;
+            else
+                adminConsent = false;
 
             var DeliverDates = new List<Dictionary>();
             int i = adminConsent ? 0 : 1;

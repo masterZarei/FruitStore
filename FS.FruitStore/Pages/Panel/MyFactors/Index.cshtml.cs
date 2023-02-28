@@ -28,6 +28,7 @@ namespace FS.FruitStore.Pages.Panel.MyFactors
             var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
 
             Order = await _db.Factors
+                .Include(a=>a.User)
                 .Where(a => a.UserId == userId && a.IsFinally.Equals(true))
                 .ToListAsync();
 

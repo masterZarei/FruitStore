@@ -84,6 +84,7 @@ namespace FS.FruitStore.Pages
                               join b in _db.CategoryToProducts on a.Id equals b.CategoryId
                               where b.ProductId == Product.ProductId
                               select a).ToListAsync();
+
             //Getting unit
 
             var productUnits = await _db.UnitToProducts
