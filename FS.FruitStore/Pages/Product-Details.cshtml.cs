@@ -159,7 +159,7 @@ namespace FS.FruitStore.Pages
                 // اگه نبود
                 else
                 {
-                    if (currentProduct.Count > Product.Count)
+                    if (currentProduct.Count >= Product.Count)
                     {
                         _db.FactorDetails.Add(new FactorDetail()
                         {
@@ -184,7 +184,7 @@ namespace FS.FruitStore.Pages
             // اگه فاکتور باز نداشت
             else
             {
-                if (currentProduct.Count > Product.Count)
+                if (currentProduct.Count >= Product.Count)
                 {
                     factor = new Factor
                     {

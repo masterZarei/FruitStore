@@ -21,9 +21,9 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly ApplicationDbContext _db;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        SignInManager<IdentityUser> _signInManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, 
+        public LoginModel(SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<IdentityUser> userManager,
             ApplicationDbContext db)
@@ -48,9 +48,6 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
-
-            [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -68,12 +65,11 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-        
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManager
-                    .PasswordSignInAsync(Input.PhoneNumber, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-
+                    .PasswordSignInAsync(Input.PhoneNumber, Input.Password, isPersistent: true, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {

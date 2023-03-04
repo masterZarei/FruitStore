@@ -81,7 +81,6 @@ namespace FS.FruitStore.Pages.Payments
             CIModel.PaymentTypes = new SelectList(AllPaymentTypes, "Value", "Name");
 
             return Page();
-
         }
 
         public async Task<IActionResult> OnPostAsync()

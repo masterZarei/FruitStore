@@ -56,24 +56,6 @@ namespace FS.FruitStore.Pages.Admin.Users
         }
         public async Task<IActionResult> OnPostAsync(string userId)
         {
-            #region Delete
-            //if (userId.Trim().Length == 0)
-            //{
-            //    return RedirectToPage("/NotFound");
-            //}
-
-            //ApplicationUser = await _context.ApplicationUsers.FindAsync(userId);
-
-            //if (ApplicationUser != null)
-            //{
-            //    _context.ApplicationUsers.Remove(ApplicationUser);
-
-
-
-            //    await _context.SaveChangesAsync();
-            //}
-            //return RedirectToPage("Index");
-            #endregion
 
             if (userId.Trim().Length == 0)
             {

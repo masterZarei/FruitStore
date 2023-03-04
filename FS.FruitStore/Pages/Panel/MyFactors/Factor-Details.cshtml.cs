@@ -21,7 +21,7 @@ namespace FS.FruitStore.Pages.Panel.MyFactors
         }
 
         [BindProperty]
-        public List<FactorDetail> FactorDetail { get; set; }
+        public Factor Factor { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int Id)
         {
@@ -34,12 +34,14 @@ namespace FS.FruitStore.Pages.Panel.MyFactors
                 return RedirectToPage("/NotFound");
             }
 
-            FactorDetail = await _db.FactorDetails
-                .Include(a=>a.Product)
+            Factor = await _db.Factors
+                .Include(a => a.FactorDetails)
+                .ThenInclude(a => a.Product)
                 .Where(a => a.FactorId == Id)
-                .ToListAsync();
+                .OrderByDescending(a => a.CreateDate)
+                .FirstOrDefaultAsync();
 
-            if (FactorDetail == null)
+            if (Factor == null)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;

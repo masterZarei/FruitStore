@@ -89,7 +89,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.FooterManagement
                 TempData["State"] = Notifs.Error;
                 TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
                 #endregion
-                return Page();
+                return RedirectToPage("Footer-mgmt");
             }
 
 

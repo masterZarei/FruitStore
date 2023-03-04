@@ -17,6 +17,8 @@ namespace FS.Models.ViewModels
         [Required(ErrorMessage = "لطفا نوع پرداخت را تعیین کنید!")]
         public string SelectedPaymentType { get; set; }
         #endregion
+
+
         #region Deliver
         public SelectList DeliverDate { get; set; }
         public SelectList DeliverTime { get; set; }

@@ -127,9 +127,9 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                     string code = user.VerificationCode;
                     var message = $"{name} عزیز\n کد تایید شما: \n {code}";
 
-                    await _smsService.SendPublicSMS("09367472136", message);
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //  await _smsService.SendPublicSMS("09367472136", message);
+                    user.LockoutEnabled = false;
+                    await _signInManager.SignInAsync(user, isPersistent: true);
 
                     #region Notif
                     TempData["State"] = Notifs.Success;

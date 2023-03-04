@@ -19,11 +19,26 @@
                     <input type="hidden" asp-for="Footer.TrustSymbol2" />
                     <div>
                         <label> راه های ارتباطی </label>
-                        <div class="d-flex justify-content-between">
-                            <select class="custom-select  mb-3" asp-for="SelectedCwId" asp-items="Model.CWs">
+                        @*<div class="d-flex justify-content-between">*@
+
+
+                        <div class="input-group mb-3">
+                            <select class="custom-select " asp-for="SelectedCwId" asp-items="Model.CWs">
                             </select>
-                            <button asp-page-handler="AddCW" class="btn btn-success"> افزودن </button>
+                            <div class="input-group-btn">
+                                <button asp-page-handler="AddCW" class="btn btn-success"> افزودن </button>
+
+                            </div>
                         </div>
+
+
+
+
+                        @*                            <select class="custom-select  mb-3" asp-for="SelectedCwId" asp-items="Model.CWs">
+                        </select>
+                        <button asp-page-handler="AddCW" class="btn btn-success"> افزودن </button>
+                        </div>
+                        *@
                         <table class="table table-bordered mx-3">
                             <thead>
                                 <tr>
