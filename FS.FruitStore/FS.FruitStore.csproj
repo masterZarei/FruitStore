@@ -13,6 +13,7 @@
     <Content Remove="Pages\NotFound.cshtml" />
     <Content Remove="Pages\Panel\Index.cshtml" />
     <Content Remove="Pages\Panel\Wallet\Index.cshtml" />
+    <Content Remove="wwwroot\css\style.css" />
   </ItemGroup>
 
   <ItemGroup>
