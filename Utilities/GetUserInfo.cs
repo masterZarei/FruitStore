@@ -1,11 +1,8 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace Utilities.Convertors
 {
@@ -23,30 +20,40 @@ namespace Utilities.Convertors
 
         public User GetInfoByUsername(string userName)
         {
-            var data = _db.Users.Where(a => a.UserName == userName).FirstOrDefault();
+            var data = _db.Users.FirstOrDefault(a => a.UserName == userName);
 
             return data;
 
         }
         public User GetInfoById(string Input)
         {
-            var data = _db.Users.Where(a => a.Id == Input).FirstOrDefault();
+            var data = _db.Users.FirstOrDefault(a => a.Id == Input);
 
             return data;
 
         }
-        public string GetRoleById(string Input)
+        public async Task<string> GetRoleByIdAsync(string Id)
         {
-            string result = _userManager.GetRolesAsync(new IdentityUser() { Id = Input }).Result[0].ToString();
+            if (_userManager == null)
+                return null;
 
-            return result;
+            var roles = await _userManager.GetRolesAsync(new User { Id = Id });
+
+            return roles.FirstOrDefault();
 
         }
-        public string GetRoleByUserName(string Input)
+        public async Task<string> GetRoleByUserNameAsync(string userName)
         {
-            string result = _userManager.GetRolesAsync(new IdentityUser() { UserName = Input }).Result[0].ToString();
+            if (_userManager == null)
+                return null;
 
-            return result;
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+                return null;
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return roles.FirstOrDefault();
 
         }
        

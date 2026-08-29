@@ -31,7 +31,8 @@
                                         <div class="col-lg-6 col-12">
                                             <span class="mt-1 h5"> محصول : @fd.Product.Name </span><br><br>
                                             <p class="mt-3 h6"> تعداد : @fd.Count @fd.Unit</p>
-                                            <p class="mt-3 "> تاریخ دریافت توسط کاربر : @item.Deliver_Date <br/> @item.Deliver_Time </p>
+                                            <p class="mt-3 "> تاریخ دریافت توسط کاربر : <br /> @item.Deliver_Time </p>
+                                            <p class="mt-3 "> شیوه پرداخت : @item.Deliver_Date <br /> @item.Payment_Type </p>
                                         </div>
                                         <div class="col-lg-4 col-12 d-block">
                                             @if (item.isCompleted)

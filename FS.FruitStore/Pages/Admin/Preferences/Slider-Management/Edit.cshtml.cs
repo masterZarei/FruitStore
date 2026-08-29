@@ -68,7 +68,7 @@ namespace FS.FruitStore.Pages.Admin.Preferences.Slider_Management
             }
             try
             {
-                var currentSlider = _context.Sliders.FindAsync(id).Result;
+                var currentSlider = await _context.Sliders.FindAsync(id);
 
                 string SaveDir = $"wwwroot/img";
 

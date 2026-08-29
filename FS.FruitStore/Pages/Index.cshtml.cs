@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FS.FruitStore.Pages
@@ -23,7 +24,9 @@ namespace FS.FruitStore.Pages
         public List<BenefitBar> BenefitBars  { get; set; }
         public async Task<ActionResult> OnGetAsync()
         {
-            Product = await _db.Products.ToListAsync();
+            Product = await _db.Products
+                .Where(a=>a.isVerified)
+                .ToListAsync();
 
             Sliders = await _db.Sliders.ToListAsync();
 

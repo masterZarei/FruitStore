@@ -201,9 +201,9 @@ namespace FS.FruitStore.Pages.Admin.Products
                 }
             }
 
-            var currentUnit = new GetProductInfo(_context).GetUnit(Product.ProductId);
+            var currentUnit = await new GetProductInfo(_context).GetUnitAsync(Product.ProductId);
 
-            if (currentUnit != null)
+            if (currentUnit.Any())
             {
                 var UnitToDelete = await _context
                     .UnitToProducts

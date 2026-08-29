@@ -61,7 +61,7 @@ namespace FS.FruitStore.Pages.Admin.Users
                 return RedirectToPage("/NotFound");
             }
             //نقش کاربر عادی رو بگیر
-            var userRoles = _userManager.GetRolesAsync(new IdentityUser() { Id = ApplicationUser.Id }).Result; //(ClaimsIdentity)User.Identity;
+            var userRoles = await _userManager.GetRolesAsync(new IdentityUser() { Id = ApplicationUser.Id }); //(ClaimsIdentity)User.Identity;
             //لیست رو با اطلاعات نقش ها پر کن و برای کاربر فعلی نقش خودش رو به صورت انخاب شده قرار بده
             Roles = new SelectList(_rolemanager.Roles, "Name", "Name", userRoles.First());
 
@@ -104,7 +104,7 @@ namespace FS.FruitStore.Pages.Admin.Users
             
 
             //نقش کاربرو بگیر
-            var userRoles = _userManager.GetRolesAsync(new IdentityUser() { Id = ApplicationUser.Id }).Result; //(ClaimsIdentity)User.Identity;
+            var userRoles = await _userManager.GetRolesAsync(new IdentityUser() { Id = ApplicationUser.Id }); //(ClaimsIdentity)User.Identity;
 
             //اگه عوض شده بود
             if (SelectedRole != userRoles.FirstOrDefault())

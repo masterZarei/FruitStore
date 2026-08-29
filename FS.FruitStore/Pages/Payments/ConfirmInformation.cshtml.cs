@@ -46,7 +46,7 @@ namespace FS.FruitStore.Pages.Payments
             var factor = await _db.Factors
                 .Where(a => a.FactorId == Id &&
                 a.UserId == userId && !a.IsFinally &&
-                a.FactorDetails.Count > 1)
+                a.FactorDetails.Count >= 1)
                 .FirstOrDefaultAsync();
 
 
@@ -114,7 +114,7 @@ namespace FS.FruitStore.Pages.Payments
                 {
                     case "پرداخت در محل":
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-                        currentUser.Address = CIModel.ApplicationUser.PostalCode;
+                        currentUser.Address = CIModel.ApplicationUser.Address;
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
                         factor.Payment_Type = CIModel.SelectedPaymentType;
@@ -140,7 +140,7 @@ namespace FS.FruitStore.Pages.Payments
 
                     case "پرداخت اینترنتی":
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-                        currentUser.Address = CIModel.ApplicationUser.PostalCode;
+                        currentUser.Address = CIModel.ApplicationUser.Address;
                         currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
 
                         factor.Payment_Type = CIModel.SelectedPaymentType;

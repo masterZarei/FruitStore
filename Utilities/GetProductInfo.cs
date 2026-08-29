@@ -3,6 +3,7 @@ using FS.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Utilities
 {
@@ -16,26 +17,14 @@ namespace Utilities
             _db = db;
         }
 
-        public List<Unit> GetUnit(int productId)
+        public async Task<List<Unit>> GetUnitAsync(int productId)
         {
-            try
-            {
+            var data = await _db.UnitToProducts
+                 .Where(a => a.ProductId == productId)
+                 .Include(u => u.Unit)
+                 .ToListAsync();
 
-                var data =  _db.UnitToProducts
-                     .Where(a => a.ProductId == productId)
-                     .Include(u => u.Unit)
-                     .ToList();
-                if (data == null)
-                    return null;
-
-                return (List<Unit>)data.Select(a=>a.Unit);
-            }
-            catch
-            {
-                return null;
-
-            }
-
+            return data.Select(a => a.Unit).ToList();
         }
 
 

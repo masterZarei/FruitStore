@@ -46,7 +46,6 @@ namespace FS.FruitStore.Pages.Admin.Products
         public Product Product { get; set; }
 
 
-        //Made THis method Async
         public async Task<IActionResult> OnGetAsync(int Id)
         {
             ProdCats = await (from a in _db.Categories

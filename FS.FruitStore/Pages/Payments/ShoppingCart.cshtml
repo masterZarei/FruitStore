@@ -68,7 +68,7 @@
                         </tbody>
                     </table>
                     <h5 class="h5 text-left"> قیمت کل: @(Model.Factor.FactorDetails.Sum(s=>s.Count * s.Price).ToToman()) </h5>
-                    <h5 class="h5 text-left"> قیمت با تخفیف: @(Model.Factor.FactorDetails.Sum(s => s.Count * (DiscountApplier.Apply(s.Product.Price, s.Product.Discount)) ).ToToman()) </h5>
+                    <h5 class="h5 text-left"> قیمت با تخفیف: @(Model.Factor.FactorDetails.Sum(s => s.Count * (DiscountApplier.Apply(s.Product.Price, s.Product.Discount))).ToToman()) </h5>
                     <hr>
                     <a asp-page="ConfirmInformation" asp-route-Id="@Model.Factor.FactorId" class="btn btn-info float-left mt-3"> ادامه ثبت سفارش | <i class="fa fa-solid fa-chevron-left align-middle mx-1"></i></a>
                 }
