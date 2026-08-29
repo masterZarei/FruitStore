@@ -22,7 +22,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
             _db = db;
         }
         [BindProperty]
-        public List<Comments> Comments { get; set; }
+        public List<Comment> Comments { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int Id)
         {

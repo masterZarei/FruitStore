@@ -11,12 +11,12 @@ namespace FS.DataAccess
         {
         }
 
-        public DbSet<User> Users { get; set; }
+        public new DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<UnitToProduct> UnitToProducts { get; set; }
-        public DbSet<Comments> Comments { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Factor> Factors { get; set; }
         public DbSet<FactorDetail> FactorDetails { get; set; }
         public DbSet<Category> Categories { get; set; }

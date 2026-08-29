@@ -20,7 +20,7 @@ namespace FS.FruitStore.Pages.Admin.CommentManagement
             _db = db;
         }
         [BindProperty]
-        public Comments Comments { get; set; }
+        public Comment Comments { get; set; }
         public async Task<IActionResult> OnGetAsync(int Id)
         {
             if (Id == 0)

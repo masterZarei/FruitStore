@@ -22,6 +22,7 @@ namespace FS.FruitStore.Pages
         }
         public string ProductUnit;
 
+
         [BindProperty]
         public Product Product { get; set; }
         public List<Product> SuggestProduct { get; set; }
@@ -30,9 +31,9 @@ namespace FS.FruitStore.Pages
 
         #region Comments
         [BindProperty]
-        public Comments Comments { get; set; }
+        public Comment Comments { get; set; }
         [BindProperty]
-        public List<Comments> lstComments { get; set; }
+        public List<Comment> lstComments { get; set; }
         #endregion
         #region Icons
         //لیست رو پر میکنه
@@ -262,7 +263,7 @@ namespace FS.FruitStore.Pages
             }
 
 
-            var cmt = new Comments();
+            var cmt = new Comment();
 
             cmt.Text = Comments.Text;
             cmt.User_Id = userId;

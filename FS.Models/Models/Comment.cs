@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FS.Models.Models
 {
-    public class Comments : BaseClass
+    public class Comment : BaseClass
     {
         public int Id { get; set; }
         //
