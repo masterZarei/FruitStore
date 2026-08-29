@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mahshop.Pages.FactorManagement
+namespace FS.FruitStore.Pages.Admin.FactorManagement
 {
     public class DetailsModel : PageModel
     {

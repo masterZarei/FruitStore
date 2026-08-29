@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Convertors;
 
-namespace Mahshop.ViewComponents
+namespace FS.FruitStore.ViewComponents
 {
 
     public class LoggedInUserViewComponent : ViewComponent

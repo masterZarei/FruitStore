@@ -1,4 +1,4 @@
-﻿using FS.DataAccess;
+using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FS.FruitStore.Pages.Admin.Wallet
+namespace FS.FruitStore.Pages.Panel.Wallet
 {
     [Authorize]
     public class ChargeModel : PageModel

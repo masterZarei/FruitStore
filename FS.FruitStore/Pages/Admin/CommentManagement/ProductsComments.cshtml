@@ -23,7 +23,7 @@
                     @foreach (var item in Model.Comments)
                     {
                         <tr>
-                            <td class="text-center"><a asp-page="/User/Details" asp-route-userId="@item.User_Id"> @item.Product.User.Name @item.Product.User.LastName</a> </td>
+                            <td class="text-center"><a asp-page="/Admin/Users/Details" asp-route-userId="@item.User_Id"> @item.Product.User.Name @item.Product.User.LastName</a> </td>
                             <td class="text-center"> @item.CreateDate </td>
                             <td class="text-center"> <a asp-page="CommentDetails" asp-route-Id="@item.Id"> مرور </a> </td>
                         </tr>

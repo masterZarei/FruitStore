@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Utilities.Convertors;
 
-namespace Mahshop.Pages.Payment
+namespace FS.FruitStore.Pages.Payments
 {
     [Authorize]
     public class PaymentInfoModel : PageModel

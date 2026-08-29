@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mahshop.Pages.FactorManagement
+namespace FS.FruitStore.Pages.Admin.FactorManagement
 {
     [Authorize]
     public class IndexModel : PageModel

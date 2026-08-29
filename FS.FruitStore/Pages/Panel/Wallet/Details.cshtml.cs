@@ -1,11 +1,11 @@
-﻿using FS.DataAccess;
+using FS.DataAccess;
 using FS.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace FS.FruitStore.Pages.Admin.Wallet
+namespace FS.FruitStore.Pages.Panel.Wallet
 {
     public class DetailsModel : PageModel
     {

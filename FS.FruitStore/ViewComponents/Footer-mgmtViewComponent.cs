@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mahshop.ViewComponents
+namespace FS.FruitStore.ViewComponents
 {
 
     public class FooterMgmtViewComponent : ViewComponent
