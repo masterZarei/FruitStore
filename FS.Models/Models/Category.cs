@@ -1,5 +1,4 @@
 ﻿using FS.Models.BaseEntities;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FS.Models.Models
@@ -8,12 +7,11 @@ namespace FS.Models.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "لطفا نام دسته بندی را وارد کنید")]
-        [Display(Name = "نام دسته بندی")]
+        [Required(ErrorMessage = "???? ??? ???? ???? ?? ???? ????")]
+        [Display(Name = "??? ???? ????")]
         public string Name { get; set; }
 
-        [Display(Name = "توضیحات دسته بندی")]
+        [Display(Name = "??????? ???? ????")]
         public string Description { get; set; }
-        public List<Product> Products { get; set; }
     }
 }
