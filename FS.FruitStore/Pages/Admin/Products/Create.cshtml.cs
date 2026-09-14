@@ -10,8 +10,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Services.AppServices;
 using Utilities;
-using Utilities.Convertors;
 using Utilities.Roles;
 
 namespace FS.FruitStore.Pages.Admin.Products
@@ -20,10 +20,12 @@ namespace FS.FruitStore.Pages.Admin.Products
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _db;
+        private readonly IUserService _userService;
 
-        public CreateModel(ApplicationDbContext db)
+        public CreateModel(ApplicationDbContext db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
         }
         [BindProperty]
         public Product Product { get; set; }
@@ -137,8 +139,8 @@ namespace FS.FruitStore.Pages.Admin.Products
             {
                 Product.Discount = Convert.ToDouble(SelectedDiscount);
             }
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name);
-            Product.UserId = userId.Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
+            Product.UserId = userId;
             _db.Products.Add(Product);
             await _db.SaveChangesAsync();
 

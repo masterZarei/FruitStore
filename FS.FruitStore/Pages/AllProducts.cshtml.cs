@@ -1,5 +1,6 @@
 ﻿using FS.DataAccess;
 using FS.Models.Models;
+using FS.Models.Paging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,8 @@ namespace FS.FruitStore.Pages
 {
     public class AllProductsModel : PageModel
     {
+        private const int PageSize = 8;
+
         private readonly ApplicationDbContext _context;
 
         public AllProductsModel(ApplicationDbContext context)
@@ -32,8 +35,12 @@ namespace FS.FruitStore.Pages
 
         public IList<Product> Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(string SC, string search)
+        public PagingInfo PagingInfo { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(string SC, string search, int page = 1)
         {
+            page = page < 1 ? 1 : page;
+
             Category = await (from a in _context.Categories
                               select a).ToListAsync();
 
@@ -41,32 +48,47 @@ namespace FS.FruitStore.Pages
             {
                 Cats = new SelectList(Category, "Name", "Name");
             }
-            if (SC != null)
-            {
-                if (SC == "همه")
-                {
-                    Product = await _context.Products
-                                    .Where(a => a.isVerified).ToListAsync();
-                    return Page();
-                }
 
-                Product = await (from p in _context.Products
-                                 join ctp in _context.CategoryToProducts on p.ProductId equals ctp.ProductId
-                                 where ctp.Category.Name == SC && ctp.Product.ProductId == p.ProductId && p.isVerified == true
-                                 select p).ToListAsync();
-                return Page();
-            }
-            if (search != null)
+            IQueryable<Product> query;
+            if (SC != null && SC != "همه")
             {
-                Product = await _context.Products
-                    .Where(a => a.Name.Contains(search))
-                    .ToListAsync();
-                return Page();
+                query = from p in _context.Products
+                        join ctp in _context.CategoryToProducts on p.ProductId equals ctp.ProductId
+                        where ctp.Category.Name == SC && p.isVerified
+                        select p;
+                SelectedCat = SC;
             }
-            Product = await _context.Products
-                .Where(a => a.isVerified).ToListAsync();
+            else if (SC == "همه")
+            {
+                query = _context.Products.Where(a => a.isVerified);
+                SelectedCat = SC;
+            }
+            else if (search != null)
+            {
+                query = _context.Products.Where(a => a.Name.Contains(search));
+            }
+            else
+            {
+                query = _context.Products.Where(a => a.isVerified);
+            }
 
-            SelectedCat = SC;
+            int totalItems = await query.CountAsync();
+
+            Product = await query
+                .OrderByDescending(a => a.CreateDate)
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
+
+            string urlParam = $"?SC={SC ?? ""}&search={search ?? ""}";
+            PagingInfo = new PagingInfo
+            {
+                TotalItems = totalItems,
+                ItemPerPage = PageSize,
+                CurrentPage = page,
+                UrlParam = urlParam
+            };
+
             return Page();
 
         }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages.Panel.Wallet
 {
@@ -15,16 +15,18 @@ namespace FS.FruitStore.Pages.Panel.Wallet
     public class HistoryModel : PageModel
     {
         private readonly ApplicationDbContext _db;
-        public HistoryModel(ApplicationDbContext db)
+        private readonly IUserService _userService;
+        public HistoryModel(ApplicationDbContext db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
         }
         public List<WalletHistory> WalletHistory { get; set; }
         public async Task<IActionResult> OnGet()
         {
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name);
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
             WalletHistory = await _db.WalletHistories
-                .Where(a=>a.UserId == userId.Id)
+                .Where(a=>a.UserId == userId)
                 .ToListAsync();
 
             return Page();

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages.Payments
 {
@@ -14,15 +14,17 @@ namespace FS.FruitStore.Pages.Payments
     public class PaymentInfoModel : PageModel
     {
         private readonly ApplicationDbContext _db;
-        public PaymentInfoModel(ApplicationDbContext db)
+        private readonly IUserService _userService;
+        public PaymentInfoModel(ApplicationDbContext db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
         }
 
         public async Task<IActionResult> OnGet(int Id, string Authority, string Status)
         {
 
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
 
 
             var crntFactor = await _db.Factors

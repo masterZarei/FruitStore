@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages.Panel.Wallet
 {
@@ -14,16 +14,18 @@ namespace FS.FruitStore.Pages.Panel.Wallet
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _db;
-        public IndexModel(ApplicationDbContext db)
+        private readonly IUserService _userService;
+        public IndexModel(ApplicationDbContext db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
         }
         [BindProperty]
         public UserWalletVM UserWalletVM { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
-            var CurrentUser = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name);
+            var CurrentUser = _userService.GetByUsername(User.Identity.Name);
             UserWalletVM = new UserWalletVM()
             {
                 ApplicationUser = CurrentUser,

@@ -6,19 +6,22 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities;
-using Utilities.Convertors;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages
 {
     public class Product_DetailsModel : PageModel
     {
         private readonly ApplicationDbContext _db;
+        private readonly IUserService _userService;
+        private readonly IOrderService _orderService;
 
-        public Product_DetailsModel(ApplicationDbContext db)
+        public Product_DetailsModel(ApplicationDbContext db, IUserService userService, IOrderService orderService)
         {
             _db = db;
+            _userService = userService;
+            _orderService = orderService;
         }
         public string ProductUnit;
 
@@ -114,115 +117,29 @@ namespace FS.FruitStore.Pages
         }
         public async Task<IActionResult> OnPost(int ProductId)
         {
-            var currentProduct = _db.Products
-                .Where(a => a.ProductId == ProductId)
-                .FirstOrDefault();
-
-            if (currentProduct == null)
-            {
-                #region Notif
-                TempData["State"] = Notifs.Error;
-                TempData["Msg"] = Notifs.NOTFOUND;
-                #endregion
-                return RedirectToPage("/NotFound");
-            }
-
             if (string.IsNullOrEmpty(User.Identity.Name))
             {
                 return Redirect("/Identity/Account/Login");
             }
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
 
-            var factor = _db.Factors
-                .FirstOrDefault(o => o.UserId == userId && !o.IsFinally);
-            //اگه فاکتور باز داشت
-            if (factor != null)
+            var result = await _orderService.AddToCartAsync(userId, ProductId, Product.Count, SelectedUnit);
+
+            if (result.Success)
             {
-                var factorDetail = _db.FactorDetails
-                    .FirstOrDefault(f => f.FactorId == factor.FactorId &&
-                                         f.ProductId == currentProduct.ProductId);
-                //اگه محصول تو سبدش بود
-                if (factorDetail != null)
-                {
-
-
-                    if (currentProduct.Count >= factorDetail.Count + Product.Count)
-                        factorDetail.Count += Product.Count;
-                    else
-                    {
-                        #region Notif
-                        TempData["State"] = Notifs.Error;
-                        TempData["Msg"] = "لطفا به تعداد موجود ،محصول به سبد خریدتان اضافه نمایید.";
-                        #endregion
-                        return RedirectToPage("Product-Details", new { Id = ProductId });
-                    }
-                }
-                // اگه نبود
-                else
-                {
-                    if (currentProduct.Count >= Product.Count)
-                    {
-                        _db.FactorDetails.Add(new FactorDetail()
-                        {
-                            FactorId = factor.FactorId,
-                            ProductId = currentProduct.ProductId,
-                            Price = currentProduct.Price,
-                            Count = Product.Count,
-                            Unit = SelectedUnit
-                        });
-                    }
-                    else
-                    {
-                        #region Notif
-                        TempData["State"] = Notifs.Error;
-                        TempData["Msg"] = "لطفا به تعداد موجود ،محصول به سبد خریدتان اضافه نمایید.";
-                        #endregion
-                        return RedirectToPage("Product-Details", new { Id = ProductId });
-                    }
-
-                }
+                #region Notif
+                TempData["State"] = Notifs.Success;
+                TempData["Msg"] = Notifs.SUCCEEDED;
+                #endregion
             }
-            // اگه فاکتور باز نداشت
             else
             {
-                if (currentProduct.Count >= Product.Count)
-                {
-                    factor = new Factor
-                    {
-                        IsFinally = false,
-                        UserId = userId
-                    };
-                    _db.Factors.Add(factor);
-                    _db.SaveChanges();
-                    _db.FactorDetails.Add(new FactorDetail()
-                    {
-                        FactorId = factor.FactorId,
-                        ProductId = currentProduct.ProductId,
-                        Price = currentProduct.Price,
-                        Count = Product.Count,
-                        Unit = SelectedUnit
-                    });
-
-                }
-                else
-                {
-                    #region Notif
-                    TempData["State"] = Notifs.Error;
-                    TempData["Msg"] = "لطفا به تعداد موجود،محصول به سبد خریدتان اضافه نمایید.";
-                    #endregion
-                    return RedirectToPage("Product-Details", new { Id = ProductId });
-                }
-
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = result.Message;
+                #endregion
             }
-            #region Notif
-            TempData["State"] = Notifs.Success;
-            TempData["Msg"] = Notifs.SUCCEEDED;
-            #endregion
-
-            await _db.SaveChangesAsync();
-
             return RedirectToPage("Product-Details", new { Id = ProductId });
-
         }
         public async Task<IActionResult> OnPostAddCmt(int ProductId)
         {
@@ -238,7 +155,7 @@ namespace FS.FruitStore.Pages
             {
                 return Redirect("/Identity/Account/Login");
             }
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
 
             var currentProduct = await _db.Products
                 .Where(a => a.ProductId == ProductId)
@@ -294,7 +211,7 @@ namespace FS.FruitStore.Pages
             {
                 return Redirect("/Identity/Account/Login");
             }
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
 
 
             var checkIfRatedAlready = await _db.Ratings

@@ -43,6 +43,21 @@
 
                 }
             </div>
+
+            @if (Model.PagingInfo.TotalPage > 1)
+            {
+                <nav aria-label="صفحه بندی">
+                    <ul class="pagination justify-content-center my-4">
+                        @for (int i = 1; i <= Model.PagingInfo.TotalPage; i++)
+                        {
+                            var link = $"/AllProducts{Model.PagingInfo.UrlParam}&page={i}";
+                            <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@link">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
         }
         else
         {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.ViewComponents
 {
@@ -12,20 +12,22 @@ namespace FS.FruitStore.ViewComponents
     public class LoggedInUserViewComponent : ViewComponent
     {
         private readonly ApplicationDbContext _context;
+        private readonly IUserService _userService;
 
-        public LoggedInUserViewComponent(ApplicationDbContext context)
+        public LoggedInUserViewComponent(ApplicationDbContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            GetUserInfo mtd = new GetUserInfo(_context);
+            var currentUser = _userService.GetByUsername(User.Identity.Name);
 
             LoggedInUserViewModel logged = new LoggedInUserViewModel()
             {
-                Name = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Name,
-                Factor = await _context.Factors.Where(o => o.UserId == (mtd.GetInfoByUsername(User.Identity.Name).Id) && !o.IsFinally)
+                Name = currentUser?.Name,
+                Factor = await _context.Factors.Where(o => o.UserId == currentUser.Id && !o.IsFinally)
                 .Include(o => o.FactorDetails)
                 .ThenInclude(c => c.Product).FirstOrDefaultAsync()
             };

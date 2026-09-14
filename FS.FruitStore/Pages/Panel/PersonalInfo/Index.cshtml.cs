@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages.Panel.PersonalInfo
 {
@@ -14,10 +14,12 @@ namespace FS.FruitStore.Pages.Panel.PersonalInfo
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _db;
+        private readonly IUserService _userService;
 
-        public IndexModel(ApplicationDbContext db)
+        public IndexModel(ApplicationDbContext db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
         }
         [BindProperty]
         public User ApplicationUser { get; set; }
@@ -26,7 +28,7 @@ namespace FS.FruitStore.Pages.Panel.PersonalInfo
         public async Task<IActionResult> OnGetAsync()
         {
 
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
 
             ApplicationUser = await _db
                 .Users
@@ -42,9 +44,7 @@ namespace FS.FruitStore.Pages.Panel.PersonalInfo
             }
 
             #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
+            if (_userService.IsDisabled(User.Identity.Name))
                 return Redirect("/Identity/Account/AccessDenied");
             #endregion
 

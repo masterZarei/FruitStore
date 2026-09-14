@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages.Panel.Wallet
 {
@@ -14,9 +14,11 @@ namespace FS.FruitStore.Pages.Panel.Wallet
     public class ChargeModel : PageModel
     {
         private readonly ApplicationDbContext _db;
-        public ChargeModel(ApplicationDbContext db)
+        private readonly IWalletService _walletService;
+        public ChargeModel(ApplicationDbContext db, IWalletService walletService)
         {
             _db = db;
+            _walletService = walletService;
         }
         [BindProperty]
         public User ApplicationUser { get; set; }
@@ -44,32 +46,17 @@ namespace FS.FruitStore.Pages.Panel.Wallet
         }
         public async Task<IActionResult> OnPost()
         {
-            if (Amount < 1000)
+            var result = await _walletService.ChargeAsync(ApplicationUser.Id, Amount);
+
+            if (!result.Success)
             {
                 #region Notif
                 TempData["State"] = Notifs.Error;
-                TempData["Msg"] = "لطفا مبلغی بالاتر از هزارتومان وارد کنید";
+                TempData["Msg"] = result.Message;
                 #endregion
                 return Page();
             }
 
-            var currentUser = await _db.Users
-                .FindAsync(ApplicationUser.Id);
-
-            currentUser.WalletAmount += Amount;
-
-            var newTransactionHistory = new WalletHistory()
-            {
-                NewWalletAmount = currentUser.WalletAmount,
-                State = true,
-                TrackingCode = new Random().Next(0, 1024),
-                UserId = currentUser.Id,
-                TransactionAmount = Amount
-            };
-
-            _db.Add(newTransactionHistory);
-            _db.Update(currentUser);
-            await _db.SaveChangesAsync();
             #region Notif
             TempData["State"] = Notifs.Success;
             TempData["Msg"] = Notifs.SUCCEEDED;

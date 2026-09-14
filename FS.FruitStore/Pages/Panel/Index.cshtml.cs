@@ -1,23 +1,20 @@
-using FS.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages.Panel
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _db;
-        public IndexModel(ApplicationDbContext db)
+        private readonly IUserService _userService;
+        public IndexModel(IUserService userService)
         {
-            _db = db;
+            _userService = userService;
         }
         public IActionResult OnGet()
         {
             #region isDisabled?
-            GetUserInfo mtd = new GetUserInfo(_db);
-            int isAuthorized = mtd.AuthorizeUser(User.Identity.Name);
-            if (isAuthorized == 1)
+            if (_userService.IsDisabled(User.Identity.Name))
                 return Redirect("/Identity/Account/AccessDenied");
             #endregion
             return Page();

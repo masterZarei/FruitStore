@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Services.AppServices;
 using Utilities;
 using Utilities.Roles;
 
@@ -20,10 +21,12 @@ namespace FS.FruitStore.Pages.Admin.Products
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IProductService _productService;
 
-        public EditModel(ApplicationDbContext context)
+        public EditModel(ApplicationDbContext context, IProductService productService)
         {
             _context = context;
+            _productService = productService;
         }
         [BindProperty]
         public Product Product { get; set; }
@@ -201,7 +204,7 @@ namespace FS.FruitStore.Pages.Admin.Products
                 }
             }
 
-            var currentUnit = await new GetProductInfo(_context).GetUnitAsync(Product.ProductId);
+            var currentUnit = await _productService.GetUnitsByProductAsync(Product.ProductId);
 
             if (currentUnit.Any())
             {

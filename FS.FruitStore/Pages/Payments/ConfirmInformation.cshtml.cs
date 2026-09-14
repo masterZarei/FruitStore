@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Services.AppServices;
 using Utilities;
 using Utilities.Convertors;
 
@@ -19,10 +20,14 @@ namespace FS.FruitStore.Pages.Payments
     public class ConfirmInformationModel : PageModel
     {
         private readonly ApplicationDbContext _db;
+        private readonly IUserService _userService;
+        private readonly IOrderService _orderService;
 
-        public ConfirmInformationModel(ApplicationDbContext db)
+        public ConfirmInformationModel(ApplicationDbContext db, IUserService userService, IOrderService orderService)
         {
             _db = db;
+            _userService = userService;
+            _orderService = orderService;
         }
         [BindProperty]
         public ConfirmInformationVM CIModel { get; set; }
@@ -31,7 +36,7 @@ namespace FS.FruitStore.Pages.Payments
 
         public async Task<IActionResult> OnGet(int Id)
         {
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
 
             if (Id == 0)
             {
@@ -85,18 +90,18 @@ namespace FS.FruitStore.Pages.Payments
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var userId = new GetUserInfo(_db).GetInfoByUsername(User.Identity.Name).Id;
+            var userId = _userService.GetByUsername(User.Identity.Name).Id;
 
-            var currentUser = await _db.Users
-                .FirstOrDefaultAsync(a => a.Id == userId);
+            var factor = await _orderService.GetOpenFactorAsync(userId);
 
-
-
-              Factor factor = await _db.Factors
-                .Include(a => a.FactorDetails).
-                 ThenInclude(b => b.Product)
-                .Where(a => a.UserId == userId && !a.IsFinally)
-                .FirstOrDefaultAsync();
+            if (factor == null)
+            {
+                #region Notif
+                TempData["State"] = Notifs.Error;
+                TempData["Msg"] = Notifs.NOTFOUND;
+                #endregion
+                return RedirectToPage("/NotFound");
+            }
 
             if (string.IsNullOrEmpty(CIModel.ApplicationUser.PostalCode) ||
                 string.IsNullOrEmpty(CIModel.ApplicationUser.Address))
@@ -106,157 +111,52 @@ namespace FS.FruitStore.Pages.Payments
                 TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
                 #endregion
                 return RedirectToPage("ConfirmInformation", new { Id = factor.FactorId });
-
             }
-            else
+
+            var result = await _orderService.FinalizeAsync(new FinalizeOrderInput
             {
-                switch (CIModel.SelectedPaymentType)
-                {
-                    case "پرداخت در محل":
-                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-                        currentUser.Address = CIModel.ApplicationUser.Address;
-                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
+                UserId = userId,
+                PaymentType = CIModel.SelectedPaymentType,
+                PostalCode = CIModel.ApplicationUser.PostalCode,
+                Address = CIModel.ApplicationUser.Address,
+                Description = CIModel.Description,
+                DeliverDate = CIModel.SelectedDeliverDate,
+                DeliverTime = CIModel.SelectedDeliverTime
+            });
 
-                        factor.Payment_Type = CIModel.SelectedPaymentType;
-                        factor.Description = CIModel.Description;
-                        factor.DeliverState = 1;
-                        factor.Deliver_Date = CIModel.SelectedDeliverDate;
-                        factor.Deliver_Time = CIModel.SelectedDeliverTime;
-                        factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
-                        factor.IsFinally = true;
+            switch (result.Status)
+            {
+                case FinalizeStatus.Success:
+                    return RedirectToPage("PaymentInfo", new { Id = result.FactorId });
 
+                case FinalizeStatus.InsufficientWallet:
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = "موجودی کیف پول شما کافی نمی‌باشد";
+                    #endregion
+                    return RedirectToPage("/");
 
-                        foreach (var item in factor.FactorDetails)
-                        {
-                            var products = await _db.Products.FindAsync(item.ProductId);
-                            products.Count -= item.Count;
-                            _db.Update(products);
-                        }
+                case FinalizeStatus.InvalidAddress:
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = Notifs.FILLREQUESTEDDATA;
+                    #endregion
+                    return RedirectToPage("ConfirmInformation", new { Id = factor.FactorId });
 
-                        _db.Update(currentUser);
-                        _db.Update(factor);
-                        await _db.SaveChangesAsync();
-                        return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
+                case FinalizeStatus.EmptyCart:
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = Notifs.NOTFOUND;
+                    #endregion
+                    return RedirectToPage("/NotFound");
 
-                    case "پرداخت اینترنتی":
-                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-                        currentUser.Address = CIModel.ApplicationUser.Address;
-                        currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-
-                        factor.Payment_Type = CIModel.SelectedPaymentType;
-                        factor.Description = CIModel.Description;
-                        factor.DeliverState = 1;
-                        factor.Deliver_Date = CIModel.SelectedDeliverDate;
-                        factor.Deliver_Time = CIModel.SelectedDeliverTime;
-                        factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
-                        factor.IsFinally = true;
-
-                        foreach (var item in factor.FactorDetails)
-                        {
-                            var products = await _db.Products.FindAsync(item.ProductId);
-                            products.Count -= item.Count;
-                            _db.Update(products);
-                        }
-
-                        _db.Update(currentUser);
-                        _db.Update(factor);
-                        await _db.SaveChangesAsync();
-                        return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
-
-                    case "پرداخت با کیف پول":
-                        double FullFactorPrice = factor.FactorDetails.Sum(a => a.Price);
-                        if (currentUser.WalletAmount >= FullFactorPrice)
-                        {
-                            currentUser.WalletAmount -= FullFactorPrice;
-
-                            currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-                            currentUser.Address = CIModel.ApplicationUser.PostalCode;
-                            currentUser.PostalCode = CIModel.ApplicationUser.PostalCode;
-
-
-                            factor.Payment_Type = CIModel.SelectedPaymentType;
-                            factor.Description = CIModel.Description;
-                            factor.DeliverState = 1;
-                            factor.Deliver_Date = CIModel.SelectedDeliverDate;
-                            factor.Deliver_Time = CIModel.SelectedDeliverTime;
-                            factor.PurchaseNumber = (new Random().Next(0, 500)).ToString(); ;
-                            factor.IsFinally = true;
-
-                            foreach (var item in factor.FactorDetails)
-                            {
-                                var products = await _db.Products.FindAsync(item.ProductId);
-                                products.Count -= item.Count;
-
-                                if (products.Discount > 0)
-                                {
-                                    products.Price = DiscountApplier.Apply(products.Price, products.Discount);
-                                }
-                                _db.Update(products);
-                            }
-                            _db.Add(new WalletHistory
-                            {
-                                NewWalletAmount = currentUser.WalletAmount,
-                                State = false,
-                                TrackingCode = int.Parse(factor.PurchaseNumber),
-                                UserId = currentUser.Id,
-                                TransactionAmount = FullFactorPrice,
-
-                            });
-
-                            _db.Update(currentUser);
-                            _db.Update(factor);
-                            await _db.SaveChangesAsync();
-                            return RedirectToPage("PaymentInfo", new { Id = factor.FactorId });
-                        }
-                        else
-                        {
-                            #region Notif
-                            TempData["State"] = Notifs.Error;
-                            TempData["Msg"] = "موجودی کیف پول شما کافی نمی‌باشد";
-                            #endregion
-                            return RedirectToPage("/");
-                        }
-
-                    default:
-                        #region Notif
-                        TempData["State"] = Notifs.Error;
-                        TempData["Msg"] = Notifs.ERRORHAPPEDNED;
-                        #endregion
-                        return RedirectToPage("/NotFound");
-                }
-
-
+                default:
+                    #region Notif
+                    TempData["State"] = Notifs.Error;
+                    TempData["Msg"] = Notifs.ERRORHAPPEDNED;
+                    #endregion
+                    return RedirectToPage("/NotFound");
             }
-
         }
-        //public async Task<IActionResult> OnPostAsync(int Id)
-        //{
-        //    var claimsIdentity = (ClaimsIdentity)User.Identity;
-        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-        //    if (claim == null)
-        //        return Redirect("/Identity/Account/Login");
-        //    var userId = claim.Value;
-
-        //    var currentOrder = await _db.Factors.Where(o => o.UserId == userId && !o.IsFinally && o.FactorId == Id)
-        //        .Include(o => o.FactorDetails)
-        //        .ThenInclude(c => c.Product).FirstOrDefaultAsync();
-
-        //    int FullPrice = Convert.ToInt32(currentOrder.FactorDetails.Sum((s => s.Count * s.Price)));
-
-        //    var payment = await new ZarinpalSandbox.Payment(FullPrice).PaymentRequest("عنوان", $"https://localhost:44371/Payment/OnlinePayment?Id={currentOrder.FactorId}&");
-
-
-        //    if (payment.Status == 100)
-        //    {
-
-        //        return Redirect(payment.Link);
-        //    }
-        //    else
-        //    {
-        //        //return errorPage;
-        //        return RedirectToAction("ErrorPage", "Home");
-        //    }
-
-        //}
     }
 }

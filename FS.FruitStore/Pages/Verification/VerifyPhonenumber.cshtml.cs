@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.Pages.Verification
 {
@@ -12,10 +12,12 @@ namespace FS.FruitStore.Pages.Verification
     public class VerifyPhonenumberModel : PageModel
     {
         private readonly ApplicationDbContext _db;
+        private readonly IUserService _userService;
 
-        public VerifyPhonenumberModel(ApplicationDbContext db)
+        public VerifyPhonenumberModel(ApplicationDbContext db, IUserService userService)
         {
             _db = db;
+            _userService = userService;
         }
         [BindProperty]
         public User ApplicationUser { get; set; }
@@ -28,9 +30,8 @@ namespace FS.FruitStore.Pages.Verification
                 ApplicationUser = await _db.Users.FindAsync(Id);
             else
             {
-                var userId = new GetUserInfo(_db)
-                                .GetInfoByUsername(User.Identity.Name);
-                ApplicationUser = await _db.Users.FindAsync(userId);
+                var user = _userService.GetByUsername(User.Identity.Name);
+                ApplicationUser = await _db.Users.FindAsync(user.Id);
             }
             return Page();
         }

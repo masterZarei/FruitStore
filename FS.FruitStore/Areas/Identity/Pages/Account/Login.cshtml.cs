@@ -1,5 +1,4 @@
-﻿using FS.DataAccess;
-using FS.Models.Models;
+﻿using FS.Models.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,23 +6,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Utilities.Convertors;
+using Services.AppServices;
 
 namespace FS.FruitStore.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUserService _userService;
         SignInManager<IdentityUser> _signInManager;
 
         public LoginModel(SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<IdentityUser> userManager,
-            ApplicationDbContext db)
+            IUserService userService)
         {
             _signInManager = signInManager;
-            _db = db;
+            _userService = userService;
         }
 
         [BindProperty]
@@ -68,9 +67,7 @@ namespace FS.FruitStore.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     #region isDisabled?
-                    GetUserInfo mtd = new GetUserInfo(_db);
-                    int isAuthorized = mtd.AuthorizeUser(Input.PhoneNumber);
-                    if (isAuthorized == 1)
+                    if (_userService.IsDisabled(Input.PhoneNumber))
                         return Redirect("/Identity/Account/AccessDenied");
                     #endregion
 
