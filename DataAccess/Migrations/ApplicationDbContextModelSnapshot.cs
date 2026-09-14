@@ -337,9 +337,6 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
@@ -352,9 +349,6 @@ namespace DataAccess.Migrations
 
                     b.Property<double>("Discount")
                         .HasColumnType("float");
-
-                    b.Property<int?>("DiscountId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -370,9 +364,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("ProductPic2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UnitId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -380,12 +371,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("ProductId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasIndex("UnitId");
 
                     b.HasIndex("UserId");
 
@@ -851,18 +836,6 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("FS.Models.Models.Product", b =>
                 {
-                    b.HasOne("FS.Models.Models.Category", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("FS.Models.Models.Discount", null)
-                        .WithMany("Products")
-                        .HasForeignKey("DiscountId");
-
-                    b.HasOne("FS.Models.Models.Unit", null)
-                        .WithMany("Products")
-                        .HasForeignKey("UnitId");
-
                     b.HasOne("FS.Models.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -966,24 +939,9 @@ namespace DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FS.Models.Models.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("FS.Models.Models.Discount", b =>
-                {
-                    b.Navigation("Products");
-                });
-
             modelBuilder.Entity("FS.Models.Models.Factor", b =>
                 {
                     b.Navigation("FactorDetails");
-                });
-
-            modelBuilder.Entity("FS.Models.Models.Unit", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
