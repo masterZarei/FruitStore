@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using Services.AppServices;
 using Services.SMSService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +17,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+//اضافه کردن Serilog برای لاگینگ ساختار یافته
+builder.Services.AddSerilog((services, configuration) => configuration
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day));
+
 builder.Services.Configure<KavenegarInfoVM>(builder.Configuration.GetSection("KavenegarInfo"));
 builder.Services.AddScoped<ISMSService, SMSService>();
+
+// >>> ثبت سرویس‌های لایه بیزینس (به جای منطق درون PageModel)
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 #region Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -41,7 +56,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 #endregion
 
-builder.Services.AddControllers();
 builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation();
 
@@ -66,9 +80,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();
