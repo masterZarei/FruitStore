@@ -1,4 +1,8 @@
-# Online FruitStore
+# Online FruitStore 🍎
+
+> **An online store for fresh fruit and vegetables** built with ASP.NET Core Razor Pages — shopping cart, checkout, wallet & SMS verification.
+
+[فارسی / Persian](README.fa.md)
 
 ASP.NET Core Razor Pages (net10.0) online fruit/vegetable store with SQL Server, ASP.NET Identity, Kavenegar SMS verification, and Serilog logging.
 
