@@ -1,53 +1,57 @@
 # فروشگاه آنلاین میوه و سبزیجات
 
-فروشگاه آنلاین میوه و سبزیجات با ASP.NET Core Razor Pages (نسخه net10.0) به همراه SQL Server، ASP.NET Identity، تأیید پیامکی کاوه‌نگار (Kavenegar) و ثبت گزارش با Serilog.
+یه فروشگاه اینترنتی کامل برای خرید میوه و سبزیجات که با **ASP.NET Core Razor Pages** (net10.0) نوشته شده. امکاناتش شامل ثبت‌نام و ورود با Identity، تأیید شماره موبایل با پیامک کاوه‌نگار، سبد خرید، کیف پول، پرداخت اینترنتی، پنل کاربری و بخش مدیریت کامل محصولات و سفارشات می‌شه.
 
 [نسخه انگلیسی / English](README.md)
 
-## معماری برنامه
+## ساختار پروژه
+
+پروژه از چند پروژه مجزا تشکیل شده که هر کدوم یه مسئولیت مشخص دارن:
 
 ```
-FS/ (حل solution)
-├── FS.FruitStore/        میزبان وب ASP.NET Core — Razor Pages، Identity، DI، Serilog
-├── FS.Models/            کلاس‌های موجودیت (POCO) + ویژگی‌های EF (Product، User، Factor، FactorDetail، WalletHistory و…)
-├── DataAccess/           DbContext و مایگریشن‌های EF Core (SQL Server)
-├── Services/             سرویس‌های لایه کاربردی (Application Layer) ثبت‌شده از طریق DI
+FS/ (solution)
+├── FS.FruitStore/        پروژه اصلی وب — Pagesها، Identity، DI، Serilog
+├── FS.Models/            مدل‌های دیتا یا همون Entity های EF
+├── DataAccess/           ApplicationDbContext و migrations
+├── Services/             لایه سرویس برنامه
 │   └── AppServices/      IUserService، IProductService، IWalletService، IOrderService
-├── Utilities/            کلاس‌های کمکی (DateConvertor، PriceConverter، Generator و…)
-└── FS.Tests/             تست‌های واحد xUnit + تست یکپارچه InMemory
+├── Utilities/            توابع کمکی (DateConvertor، PriceConverter، Generator و…)
+└── FS.Tests/             تست‌های xUnit و تست یکپارچه با EF InMemory
 ```
 
-### لایه سرویس (ایجادشده در بازآرایی/refactor)
+## لایه سرویس
 
-| سرویس | وظایف |
+تو روند refactor یک لایه سرویس درست شد تا صفحات دیگه مستقیم با DbContext کار نکنن:
+
+| سرویس | کارش |
 |---|---|
-| `IUserService` | `GetByUsername`، `GetById`، `IsDisabled` |
-| `IProductService` | `GetUnitsByProductAsync` |
-| `IWalletService` | `ChargeAsync` (حداقل ۱۰۰۰ تومان)، `TryDebitAsync` (اتمیک همراه با کد پیگیری ۹ رقمی یکتا و مقاوم در برابر تصادم) |
-| `IOrderService` | جریان کامل خرید: `AddToCartAsync`، `DecrementDetailAsync`، `IncrementDetailAsync`، `RemoveDetailAsync`، `RemoveAllCartAsync`، `GetOpenFactorAsync`، `GetOrderAsync`، **`FinalizeAsync`** (تخفیف با `Price×Count`، برداشت از کیف پول، تولید شماره فاکتور، اطلاعات ارسال کاربر، کاهش موجودی) |
+| `IUserService` | کاربر رو بر اساس نام کاربری یا Id برمی‌گردونه و وضعیت فعال/غیرفعال بودنش |
+| `IProductService` | واحدهای یه محصول رو برمی‌گردونه |
+| `IWalletService` | افزایش موجودی کیف پول (حداقل ۱۰۰۰ تومان) و برداشت از اون. کد پیگیری ۹ رقمی یکتا هم اینجا ساخته می‌شه |
+| `IOrderService` | تمام جریان خرید: افزودن به سبد، کم و زیاد کردن تعداد، حذف، و نهایی‌سازی سفارش |
 
-### محاسبه تخفیف و مبلغ کل
+### نحوه محاسبه تخفیف و مبلغ کل
 
-- `FactorDetail.Price` **فقط هنگام نهایی‌سازی سفارش** با قیمت واحد تخفیف‌خورده بازنویسی می‌شود (`DiscountApplier.Apply`)؛ `Product.Price` هرگز تغییر نمی‌کند.
-- `Factor.Total = Σ (قیمت تخفیف‌خورده × تعداد)` — همیشه `قیمت×تعداد`، نه `تعداد×قیمت اصلی`.
-- تخفیف برای **همه روش‌های پرداخت** (کیف پول، پرداخت در محل، پرداخت اینترنتی) اعمال می‌شود.
+- موقع نهایی‌سازی سفارش، قیمت هر آیتم با احتساب تخفیف محاسبه و ذخیره می‌شه؛ قیمت اصلی محصول داخل جدول `Product` دست نمی‌خوره.
+- مبلغ کل سفارش همیشه `قیمت × تعداد`ه (نه تعداد × قیمت اصلی).
+- تخفیف برای همه روش‌های پرداخت (کیف پول، در محل، اینترنتی) اعمال می‌شه.
 
 ## راه‌اندازی
 
 ### پیش‌نیازها
 
-- SDK دات‌نت ۱۰ (۱۰٫۰٫۴۰۱ به بالا)
+- .NET 10 SDK
 - SQL Server (محلی یا راه دور)
-- (اختیاری) ابزار `dotnet ef` نسخه ۱۰: `dotnet tool install --global dotnet-ef`
+- (اختیاری) ابزار dotnet-ef نسخه ۱۰
 
-### پایگاه داده
+### ساخت دیتابیس
 
 ```bash
-# پس از کلون، مایگریشن‌ها را اعمال کنید (یا دیتابیس را از صفر بسازید):
+# بعد از clone، migrations رو اعمال کن:
 dotnet ef database update --project DataAccess --startup-project FS.FruitStore
 ```
 
-> **مهم:** مایگریشن اولیه نشان‌دهنده **کل** اسکیمای تمیز است (بدون ستون‌های FK قدیمی جدول Products). اگر از دیتابیس قدیمی مهاجرت می‌کنید، به‌جای اعمال InitialCreate روی تاریخچه قدیمی، **دیتابیس را حذف و دوباره بسازید**.
+> **نکته:** جدول های migrations قبلی با یه InitialCreate تمیز جایگزین شدن. اگه دیتابیس قدیمی داری، بهترین کار اینه که دیتابیس رو drop کنی و از صفر بسازی.
 
 ### اجرا
 
@@ -56,68 +60,44 @@ dotnet run --project FS.FruitStore
 # → http://localhost:5001
 ```
 
-### اجرای تست‌ها
+### تست
 
 ```bash
 dotnet test FS.sln
-# 33 تست — تست واحد (Utilities) + تست بدون یکپارچه‌سازی (OrderService، WalletService، UserService روی EF InMemory)
+# ۳۳ تست — تست واحد (Utilities) + تست یکپارچه سرویس‌ها روی EF InMemory
 ```
 
-## بهبودهای کلیدی (خلاصه بازآرایی)
+## خلاصه تعییرات اصلی
 
-| مورد | تغییر |
+| مورد | توضیح |
 |---|---|
-| **لایه سرویس** | `IUserService`، `IProductService`، `IWalletService`، `IOrderService` جایگزین استفاده مستقیم `GetUserInfo` / `GetProductInfo` و `_db` در صفحات شدند |
-| **Utilities** | کلاس‌های `GetUserInfo` / `GetProductInfo` حذف شدند؛ `Utilities.csproj` دیگر به `DataAccess` ارجاع نمی‌دهد |
-| **Program.cs** | کنترلرها حذف شدند (فقط Razor Pages)؛ Serilog (کنسول + فایل `Logs/log-.txt`) ثبت شد؛ چهار سرویس ثبت شدند |
-| **تک‌تکه‌کردن مایگریشن‌ها** | هر ۸۷ فایل قدیمی با یک `InitialCreate` تمیز جایگزین شدند |
-| **FKهای قدیمی Product** | ستون‌های shadow `CategoryId`، `UnitId`، `DiscountId` از جدول Products حذف شدند (رابطه چندبه‌چند حالا فقط از جداول میانی `CategoryToProducts` و `UnitToProducts` استفاده می‌کند) |
-| **اصلاح فرایند خرید** | `OrderService.FinalizeAsync`: محاسبه تخفیف *قبل از* برداشت کیف پول (بدون تغییر در حافظه در صورت شکست)، مبلغ کل = Σ قیمت تخفیف‌خورده×تعداد، کاهش موجودی *بعد از* موفقیت پرداخت |
-| **کیف پول** | `IWalletService.ChargeAsync` (حداقل ۱۰۰۰ تومان)، `TryDebitAsync`؛ کد پیگیری ۹ رقمی یکتا با `Generator.GenerateSecureDigits(9)` و تلاش مجدد هنگام تصادم در دیتابیس |
-| **شماره فاکتور** | رشته عددی (`Generator.GeneratePurchaseNumber()`) — بدون Guid و بدون تغییر ساختار دیتابیس |
-| **تخفیف** | برای همه روش‌های پرداخت اعمال می‌شود؛ قیمت واحد تخفیف‌خورده در `FactorDetail.Price` ذخیره می‌شود؛ قیمت محصول تغییر نمی‌کند |
-| **صفحه‌بندی** | صفحه `AllProducts` با ۸ محصول در هر صفحه و با استفاده از `FS.Models.Paging.PagingInfo` صفحه‌بندی شد؛ `PagingInfo` نگه داشته شد (حذف نشد) |
-| **تست‌ها** | پروژه xUnit `FS.Tests`: `DiscountApplierTests`، `PriceConverterTests`، `DateConvertorTests`، `GeneratorTests`، `UserServiceTests`، `WalletServiceTests`، `OrderServiceTests` (همه در حال عبور) |
-| **ثبت گزارش (Logging)** | Serilog کنسول + فایل روزانه (`Logs/log-*.txt`) |
+| **لایه سرویس** | افزودن `IUserService`، `IProductService`، `IWalletService`، `IOrderService` و حذف استفاده مستقیم DbContext از صفحات |
+| **Utilities** | کلاس‌های `GetUserInfo` و `GetProductInfo` حذف شدن و ارجاع Utilities به DataAccess قطع شد |
+| **Program.cs** | Controller ها حذف شدن (فقط Razor Pages)، Serilog اضافه شد و سرویس‌ها در DI ثبت شدن |
+| **Migrations** | هر ۸۷ فایل migration قدیمی با یه `InitialCreate` واحد تمیز جایگزین شد |
+| **FK های قدیمی** | ستون‌های `CategoryId`، `UnitId`، `DiscountId` از جدول محصولات حذف شدن؛ رابطه چندبه‌چند حالا فقط از جداول واسط انجام می‌شه |
+| **اصلاح فرایند خرید** | تخفیف و کسر موجودی بعد از موفقیت پرداخت اعمال می‌شه؛ اگه موجودی کیف پول کافی نباشه هیچ تغییری روی سفارش و محصول اعمال نمی‌شه |
+| **شماره فاکتور** | به صورت عددی ساخته می‌شه (`GeneratePurchaseNumber`) — بدون Guid و بدون تغییر ساختار دیتابیس |
+| **صفحه‌بندی** | صفحه همه محصولات با ۸ محصول در هر صفحه صفحه‌بندی شد |
+| **تست** | پروژه xUnit اضافه شد با تست‌هایی برای Generator، تبدیل ارز و سرویس‌های کیف پول و سفارش |
+| **لاگ** | Serilog با خروجی کنسول و فایل روزانه `Logs/log-*.txt` |
 
-## ساختار پروژه (بعد از بازآرایی)
+## ساختار صفحات
 
 ```
-FS.FruitStore/
-├── Program.cs                        میزبان + DI + Serilog
-├── Pages/
-│   ├── AllProducts.cshtml(.cs)       فهرست محصولات با صفحه‌بندی
-│   ├── Product-Details.cshtml(.cs)   نمایش محصول + دیدگاه‌ها و امتیازها
-│   ├── Payments/
-│   │   ├── ShoppingCart.cshtml(.cs)
-│   │   ├── PaymentInfo.cshtml(.cs)
-│   │   └── ConfirmInformation.cshtml(.cs)   پرداخت → OrderService.FinalizeAsync
-│   ├── Panel/                         داشبورد کاربر، کیف پول، فاکتورها
-│   └── Admin/Products/                عملیات CRUD (از نظر سرویس بدون تغییر)
-├── ViewComponents/
-│   └── LoggedInUserViewComponent.cs   استفاده از IUserService
-
-Services/
-├── Services.csproj                    ارجاع به DataAccess، FS.Models، Utilities
-├── AppServices/
-│   ├── IUserService.cs + UserService.cs
-│   ├── IProductService.cs + ProductService.cs
-│   ├── IWalletService.cs + WalletService.cs
-│   └── IOrderService.cs + OrderService.cs
-
-DataAccess/
-├── ApplicationDbContext.cs
-└── Migrations/
-    └── *_InitialCreate.cs            اسکیمای کامل و تمیز
-
-FS.Tests/
-├── TestDb.cs                         ساخت InMemory
-├── Utilities/                        DiscountApplierTests، PriceConverterTests، DateConvertorTests، GeneratorTests
-└── Services/                         UserServiceTests، WalletServiceTests، OrderServiceTests
+FS.FruitStore/Pages/
+├── AllProducts.cshtml(.cs)       فهرست همه محصولات (با صفحه‌بندی)
+├── Product-Details.cshtml(.cs)   صفحه محصول + دیدگاه‌ها و امتیازها
+├── Payments/
+│   ├── ShoppingCart.cshtml(.cs)  سبد خرید
+│   ├── PaymentInfo.cshtml(.cs)   انتخاب روش پرداخت
+│   └── ConfirmInformation.cshtml(.cs)  تأیید نهایی و ثبت سفارش
+├── Panel/                        پنل کاربری، کیف پول، فاکتورها
+└── Admin/Products/               مدیریت محصولات (ساخت، ویرایش، حذف)
 ```
 
-## نکات
+## چند نکته
 
-- **مسیر ورودهای Serilog:** `Logs/log-<date>.txt` (نسبی به پوشه اجرا).
-- **پیامک:** API کاوه‌نگار — اطلاعات اعتبارسنجی در `appsettings.json` (`KavenegarSms`) قرار دارد. در صورت انتشار، حذف یا تغییر دهید.
-- **Identity:** صفحات Identity مبتنی بر Razor Pages (`/Identity/Account/Login`، `/Identity/Account/Register`).
+- لاگ‌های Serilog تو پوشه `Logs` ذخیره می‌شن.
+- کلید کاوه‌نگار تو `appsettings.json` تحت `KavenegarSms` قرار داره — قبل از انتشار حتماً امنیتش رو بررسی کن.
+- صفحات ورود و ثبت‌نام همون صفحات پیش‌فرض Identity هستن (`/Identity/Account/Login` و `/Identity/Account/Register`).
